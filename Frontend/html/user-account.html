@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar Example</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="../css/admin-dashboard.css">
+    <link rel="stylesheet" href="../css/User-Account.css">
 </head>
 <body>
     <div class="sidebar">
@@ -43,7 +43,17 @@
             <div class="dashh">
                 <a href="user-account.html" class="flex items-center space-x-2">
                     <i class="fas fa-user"></i>
-                    <span class="dash">User Acoounts</span>
+                    <span class="dash">User Accounts</span>
+                </a>
+            </div>
+            <a href="exports.html" class="flex items-center space-x-2">
+                <i class="fas fa-file-export"></i>
+                <span class="dash">Exports</span>
+            </a>
+            <div class="log">
+                <a href="admin-log.html" class="flex items-center space-x-2">
+                    <i class="fas fa-right-from-bracket"></i>
+                    <span class="dash">Log out</span>
                 </a>
             </div>
         </div>
@@ -57,10 +67,72 @@
               <p>;wurojkldnvsx</p>
             </div>
           </div>
-          
-
         <hr>
+
+        <div class="title">
+          <!-- First row -->
+          <div class="row">
+            <h1>KK Accounts</h1>
+            <div class="filter-row">
+              <label for="cycleNumber" class="cycle">Year:</label>
+              <select id="cycleNumber" class="cycle-select">
+                <option value="">All</option>
+                <option value="1">2025</option>
+                <option value="2">2024</option>
+                <option value="3">2023</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Second row -->
+          <div class="row">
+            <p>List of KK Accounts...</p>
+            <div class="filter-rows">
+              <label for="year" class="year">Cycle Number:</label>
+              <select id="year" class="cycle-select">
+                <option value="">All</option>
+                <option value="2023">Cycle 1</option>
+                <option value="2024">Cycle 2</option>
+                <option value="2025">Cycle 3</option>
+              </select>
+              <button id="yearFilterBtn" class="filt">Filter</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="buts">
+          <div class="search-container">
+              <input type="text" class="search-input" placeholder="Search Resident" />
+          </div>
+
+        <div class="tables">
+            <table>
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Birthday</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+
+
+
     </div>
+
+    <script src="../js/user-profile.js" defer></script>
 
 </body>
 </html>

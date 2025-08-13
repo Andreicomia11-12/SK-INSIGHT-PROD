@@ -89,6 +89,10 @@ body{
     margin-left: 13px;
 }
 
+.log{
+    margin-top: 90%;
+}
+
 .content{
     margin-left: 250px;
     padding: 10px;
@@ -108,6 +112,16 @@ body{
     position: relative;
     display: inline-block;
     font-family: Arial, sans-serif;
-    margin-left: 16%;
-    margin-top: 30px;
+    margin-left: 66%;
+    margin-top: 50px;
   }
+
+.add{
+    background-color: #ffffffcc;
+    color: #000000;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: rgba(0, 0, 0, 0.605) 0.2px solid;
+}
