@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidebar Example</title>
+    <title>SK-INSIGHT</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="../css/KK-Profile.css">
 </head>
@@ -18,11 +18,10 @@
             </div>
         </div>
         
-        
         <div class="menu">
             <a href="admin-dashboard.html" class="flex items-center space-x-2">
-                    <i class="dashs fas fa-columns"></i>
-                    <span class="dashb">Dashboard</span>
+                <i class="dashs fas fa-columns"></i>
+                <span class="dashb">Dashboard</span>
             </a>
             <div class="dashh">
                 <a href="KK-Profile.html" class="flex items-center space-x-2">
@@ -57,7 +56,6 @@
                 </a>
             </div>
         </div>
-        
     </div>
 
     <div class="content">
@@ -66,7 +64,7 @@
               <p>Good Morning</p>
               <p>;wurojkldnvsx</p>
             </div>
-          </div>
+        </div>
         <hr>
 
         <div class="title">
@@ -102,7 +100,7 @@
 
         <div class="buts">
           <div class="search-container">
-              <input type="text" class="search-input" placeholder="Search Resident" />
+              <input type="text" class="search-input" placeholder="🔍 Search Resident" />
           </div>
 
           <div class="dropdown">
@@ -120,9 +118,9 @@
           <div class="dropdowns">
               <button class="dropdown-buttons" type="button">Select Group</button>
               <div class="dropdown-content">
-                  <a href="#">Filter Classification</a>
-                  <a href="#">Select Group</a>
-                  <a href="#">Download List</a>
+                  <a href="#">-</a>
+                  <a href="#">-</a>
+                  <a href="#">-</a>
               </div>
           </div>
         </div>
@@ -152,10 +150,25 @@
               </table>
         </div>
 
+        <!-- ===================== MODAL ===================== -->
+        <div id="profileModal" class="modal" style="display:none;">
+          <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-header">
+              <img src="../assets/logo.png" alt="logo" class="modal-logo">
+              <h2>Sangguniang Kabataan</h2>
+              <button id="printBtn">🖨️ Print</button>
+            </div>
 
+            <div class="modal-body" id="profileDetails">
+              <!-- Profile details will be dynamically injected -->
+            </div>
+          </div>
+        </div>
+        <!-- ================================================== -->
 
     </div>
 
-    <script src="/js/adminProfile.js"></script>
+    <script src="/js/kkprofile.js"></script>
 </body>
 </html>
