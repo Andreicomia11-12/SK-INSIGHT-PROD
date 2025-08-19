@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchProfiles(selectedCycle, selectedYear);
     });
 
+
     // ================= SEARCH BAR =================
     const searchInput = document.querySelector(".search-input");
 
@@ -113,6 +114,141 @@ document.addEventListener("DOMContentLoaded", () => {
 
             row.style.display = match ? "" : "none";
         });
+
+    await newProfile.save();
+    res
+      .status(201)
+      .json({ message: "LGBTQIA+ Profile submitted successfully" });
+  } catch (error) {
+    console.error("LGBTQ submit error:", error);
+    res.status(500).json({ error: "Server error while submitting form" });
+  }
+};
+
+// Helper to enrich profile with KK info
+const attachKKInfo = async (profile) => {
+  const kk = await KKProfile.findOne({ user: profile.user });
+  const profileObj = profile.toObject();
+  profileObj.kkInfo = kk
+    ? {
+        lastname: kk.lastname,
+        firstname: kk.firstname,
+        middlename: kk.middlename,
+        birthday: kk.birthday,
+        age: kk.age,
+        gender: kk.gender,
+        region: kk.region,
+        province: kk.province,
+        municipality: kk.municipality,
+        barangay: kk.barangay,
+        purok: kk.purok,
+      }
+    : null;
+  return profileObj;
+};
+
+// Get all profiles (optionally filter by cycleId)
+exports.getAllProfiles = async (req, res) => {
+  try {
+    const {
+      year,
+      cycle,
+      all,
+      sexAssignedAtBirth,
+      lgbtqClassification,
+      purok, // if you want to allow filtering by purok from KK info
+    } = req.query;
+    let cycleDoc = null;
+    let filter = {};
+
+    // 1. If all=true, return all cycles (optionally filter by fields)
+    if (all === "true") {
+      if (sexAssignedAtBirth) filter.sexAssignedAtBirth = sexAssignedAtBirth;
+      if (lgbtqClassification) filter.lgbtqClassification = lgbtqClassification;
+      const profiles = await LGBTQProfile.find(filter)
+        .populate("formCycle")
+        .populate("user", "username email");
+      // Optionally filter by purok from KK info
+      if (purok) {
+        const attachKKInfo = async (profile) => {
+          const kk = await KKProfile.findOne({ user: profile.user });
+          return { ...profile.toObject(), kkInfo: kk };
+        };
+        const enriched = await Promise.all(profiles.map(attachKKInfo));
+        return res.json(
+          enriched.filter((p) => p.kkInfo && p.kkInfo.purok === purok)
+        );
+      }
+      return res.json(profiles);
+    }
+
+    // 2. If year & cycle specified, use that cycle
+    if (year && cycle) {
+      cycleDoc = await FormCycle.findOne({
+        formName: "LGBTQIA+ Profiling",
+        year: Number(year),
+        cycleNumber: Number(cycle),
+      });
+      if (!cycleDoc) {
+        return res.status(404).json({ error: "Specified cycle not found" });
+      }
+    } else {
+      // 3. Otherwise, use present (open) cycle
+      try {
+        cycleDoc = await getPresentCycle("LGBTQIA+ Profiling");
+      } catch (err) {
+        return res.status(404).json({ error: err.message });
+      }
+    }
+
+    filter.formCycle = cycleDoc._id;
+    if (sexAssignedAtBirth) filter.sexAssignedAtBirth = sexAssignedAtBirth;
+    if (lgbtqClassification) filter.lgbtqClassification = lgbtqClassification;
+
+    const profiles = await LGBTQProfile.find(filter)
+      .populate("formCycle")
+      .populate("user", "username email");
+
+    // Optionally filter by purok from KK info
+    if (purok) {
+      const attachKKInfo = async (profile) => {
+        const kk = await KKProfile.findOne({ user: profile.user });
+        return { ...profile.toObject(), kkInfo: kk };
+      };
+      const enriched = await Promise.all(profiles.map(attachKKInfo));
+      return res.json(
+        enriched.filter((p) => p.kkInfo && p.kkInfo.purok === purok)
+      );
+    }
+
+    res.json(profiles);
+  } catch (err) {
+    console.error("getAllProfiles error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+// Get single profile by ID
+exports.getProfileById = async (req, res) => {
+  try {
+    const profile = await LGBTQProfile.findById(req.params.id).populate(
+      "user",
+      "username email"
+    );
+    if (!profile) return res.status(404).json({ error: "Profile not found" });
+    const enriched = await attachKKInfo(profile);
+    res.status(200).json(enriched);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+// Get my profile for current cycle
+exports.getMyProfile = async (req, res) => {
+  try {
+    const formStatus = await FormStatus.findOne({
+      formName: "LGBTQIA+ Profiling",
+
     });
 
     // ================= CLASSIFICATION DROPDOWN =================
@@ -191,6 +327,34 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
+
     // ================= LOAD ON PAGE START =================
     fetchProfiles();
 });
+
+    // Find all profiles that match the cycle
+    const profiles = await LGBTQProfile.find({ formCycle: cycle._id }).populate(
+      "user",
+      "username email"
+    );
+
+    // Enrich with KK Info
+    const enriched = await Promise.all(profiles.map(attachKKInfo));
+
+    res.status(200).json(enriched);
+  } catch (error) {
+    console.error("Error filtering profiles by cycle:", error);
+    res.status(500).json({ error: "Server error while filtering profiles" });
+  }
+};
+
+async function getPresentCycle(formName) {
+  const status = await FormStatus.findOne({ formName, isOpen: true }).populate(
+    "cycleId"
+  );
+  if (!status || !status.cycleId) {
+    throw new Error("No active form cycle");
+  }
+  return status.cycleId;
+}
+

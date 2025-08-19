@@ -6,7 +6,9 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const lgbtqRoutes = require("./routes/lgbtqProfileRoutes");
 const educationalRoutes = require("./routes/educationalAssistanceRoutes");
+const AnnouncementRoutes = require("./routes/announcementRoutes");
 const path = require("path");
+const Announcement = require("./models/Announcement");
 
 require("dotenv").config();
 
@@ -25,6 +27,7 @@ app.use("/api/kkprofiling", require("./routes/kkProfileRoutes"));
 app.use("/api/formstatus", require("./routes/formStatusRoutes"));
 app.use("/api/lgbtqprofiling", lgbtqRoutes);
 app.use("/api/educational-assistance", educationalRoutes);
+app.use("/api/announcements", AnnouncementRoutes);
 
 app.use(express.static("public"));
 app.use("/api/formcycle", require("./routes/formCycleRoutes"));
