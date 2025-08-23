@@ -1,8 +1,21 @@
 const KKProfile = require("../models/KKProfile");
-const FormStatus = require("../models/FormStatus");
 const FormCycle = require("../models/FormCycle");
+const FormStatus = require("../models/FormStatus");
 const ExcelJS = require("exceljs");
 const mongoose = require("mongoose");
+
+// Helper to get the present (open) cycle
+async function getPresentCycle(formName) {
+  console.log("getPresentCycle called with formName:", formName);
+  const status = await FormStatus.findOne({ formName, isOpen: true }).populate(
+    "cycleId"
+  );
+  console.log("FormStatus found:", status ? status._id : null);
+  if (!status || !status.cycleId) {
+    throw new Error("No active form cycle");
+  }
+  return status.cycleId;
+}
 
 // POST /api/kkprofiling
 exports.submitKKProfile = async (req, res) => {
@@ -112,23 +125,23 @@ exports.submitKKProfile = async (req, res) => {
   }
 };
 
-// GET /api/kkprofiling/all?cycleId=<formCycleId>
-exports.getAllKKProfiles = async (req, res) => {
-  try {
-    const { cycleId } = req.query;
-    const filter = cycleId ? { formCycle: cycleId } : {};
+// // GET /api/kkprofiling/all?cycleId=<formCycleId>
+// exports.getAllKKProfiles = async (req, res) => {
+//   try {
+//     const { cycleId } = req.query;
+//     const filter = cycleId ? { formCycle: cycleId } : {};
 
-    const profiles = await KKProfile.find(filter)
-      .populate("user", "username email")
-      .populate("formCycle", "cycleNumber year")
-      .sort({ submittedAt: -1 });
+//     const profiles = await KKProfile.find(filter)
+//       .populate("user", "username email")
+//       .populate("formCycle", "cycleNumber year")
+//       .sort({ submittedAt: -1 });
 
-    res.status(200).json(profiles);
-  } catch (error) {
-    console.error("Error fetching KK Profiles:", error);
-    res.status(500).json({ error: "Failed to fetch KK Profiles" });
-  }
-};
+//     res.status(200).json(profiles);
+//   } catch (error) {
+//     console.error("Error fetching KK Profiles:", error);
+//     res.status(500).json({ error: "Failed to fetch KK Profiles" });
+//   }
+// };
 
 // GET /api/kkprofiling/:id
 exports.getProfileById = async (req, res) => {
@@ -345,5 +358,110 @@ exports.filterProfilesByCycle = async (req, res) => {
   } catch (error) {
     console.error("KK filter error:", error);
     res.status(500).json({ error: "Failed to filter KK profiles" });
+  }
+};
+
+// Main filter endpoint
+exports.getAllProfiles = async (req, res) => {
+  try {
+    const {
+      year,
+      cycle,
+      all,
+      classification,
+      purok,
+      civilStatus,
+      youthAgeGroup,
+      youthClassification,
+      educationalBackground,
+      workStatus,
+      registeredSKVoter,
+      registeredNationalVoter,
+      votedLastSKElection,
+    } = req.query;
+    let cycleDoc = null;
+    let filter = {};
+
+    if (all === "true") {
+      if (classification) filter.youthClassification = classification;
+      if (purok) filter.purok = purok;
+      if (civilStatus) filter.civilStatus = civilStatus;
+      if (youthAgeGroup) filter.youthAgeGroup = youthAgeGroup;
+      if (youthClassification) filter.youthClassification = youthClassification;
+      if (educationalBackground)
+        filter.educationalBackground = educationalBackground;
+      if (workStatus) filter.workStatus = workStatus;
+      if (registeredSKVoter !== undefined)
+        filter.registeredSKVoter = registeredSKVoter === "true";
+      if (registeredNationalVoter !== undefined)
+        filter.registeredNationalVoter = registeredNationalVoter === "true";
+      if (votedLastSKElection !== undefined)
+        filter.votedLastSKElection = votedLastSKElection === "true";
+      const profiles = await KKProfile.find(filter)
+        .populate("formCycle")
+        .populate("user", "username email");
+      return res.json(profiles);
+    }
+
+    if (year && cycle) {
+      cycleDoc = await FormCycle.findOne({
+        formName: "KK Profiling",
+        year: Number(year),
+        cycleNumber: Number(cycle),
+      });
+      if (!cycleDoc) {
+        return res.status(404).json({ error: "Specified cycle not found" });
+      }
+    } else {
+      try {
+        cycleDoc = await getPresentCycle("KK Profiling");
+      } catch (err) {
+        return res.status(404).json({ error: err.message });
+      }
+    }
+
+    filter.formCycle = cycleDoc._id;
+    if (classification) filter.youthClassification = classification;
+    if (purok) filter.purok = purok;
+    if (civilStatus) filter.civilStatus = civilStatus;
+    if (youthAgeGroup) filter.youthAgeGroup = youthAgeGroup;
+    if (youthClassification) filter.youthClassification = youthClassification;
+    if (educationalBackground)
+      filter.educationalBackground = educationalBackground;
+    if (workStatus) filter.workStatus = workStatus;
+    if (registeredSKVoter !== undefined)
+      filter.registeredSKVoter = registeredSKVoter === "true";
+    if (registeredNationalVoter !== undefined)
+      filter.registeredNationalVoter = registeredNationalVoter === "true";
+    if (votedLastSKElection !== undefined)
+      filter.votedLastSKElection = votedLastSKElection === "true";
+
+    const profiles = await KKProfile.find(filter)
+      .populate("formCycle")
+      .populate("user", "username email");
+
+    res.json(profiles);
+  } catch (err) {
+    console.error("getAllProfiles error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+// Endpoint to get all cycles and present cycle
+exports.getCyclesAndPresent = async (req, res) => {
+  try {
+    const allCycles = await FormCycle.find({ formName: "KK Profiling" }).sort({
+      year: -1,
+      cycleNumber: -1,
+    });
+    let presentCycle = null;
+    try {
+      presentCycle = await getPresentCycle("KK Profiling");
+    } catch {
+      presentCycle = null;
+    }
+    res.json({ allCycles, presentCycle });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to load cycles" });
   }
 };

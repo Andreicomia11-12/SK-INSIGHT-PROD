@@ -46,6 +46,15 @@ const educationalAssistanceSchema = new mongoose.Schema({
   siblings: [siblingSchema],
   expenses: [expenseSchema],
   signature: { type: String }, // base64 or file path
+
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
+  },
+  rejectionReason: { type: String },
+  resubmissionCount: { type: Number, default: 0 },
+
   createdAt: { type: Date, default: Date.now },
 });
 
