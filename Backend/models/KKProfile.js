@@ -34,13 +34,31 @@ const kkProfileSchema = new mongoose.Schema({
     type: String,
     enum: ["In School Youth","Out of School Youth","Working Youth","Youth with Specific Needs"],
   },
+    specificNeedType: {
+    type: String,
+    enum: [
+      'Person w/Disability',
+      'Children in Conflict w/Law',
+      'Indigenous People'
+    ],
+    default: null
+  },
   educationalBackground: {
     type: String,
-    enum: ["Elementary Undergraduate", "Elementary Graduate", "High School Undergraduate", "High School Graduate", "Vocational Graduate", "College Undergraduate", "College Graduate", "Masters Graduate", "Doctorate Level", "Doctorate Graduate"],
+    enum: [
+      "Elementary Undergraduate", "Elementary Graduate",
+      "High School Undergraduate", "High School Graduate",
+      "Vocational Graduate", "College Undergraduate",
+      "College Graduate", "Masters Level", "Masters Graduate",
+      "Doctorate Level", "Doctorate Graduate"
+    ],
   },
   workStatus: {
     type: String,
-    enum: ["Employed", "Unemployed", "Self-Employed", "Currently looking for a Job", "Not interested in looking for a Job"],
+    enum: [
+      "Employed", "Unemployed", "Self-Employed",
+      "Currently looking for a Job", "Not interested in looking for a Job"
+    ],
   },
 
   registeredSKVoter: Boolean,
@@ -54,14 +72,19 @@ const kkProfileSchema = new mongoose.Schema({
   },
   reasonDidNotAttend: {
     type: String,
-    enum: ["there was no kk assembly", "not interested"],
+    enum: ["There was no KK Assembly", "Not interested"],
   },
   profileImage: { type: String, required: true },
+  idImagePath: { type: String },
+  signatureImagePath: { type: String },
+  birthday: { type: Date, required: true },
 
   submittedAt: {
     type: Date,
     default: Date.now,
   },
+  isDeleted: { type: Boolean, default: false },
+  deletedAt: { type: Date, default: null },
 });
 
 module.exports = mongoose.model("KKProfile", kkProfileSchema);

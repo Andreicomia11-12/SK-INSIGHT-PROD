@@ -10,6 +10,7 @@ body{
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background-color: #F5F7FA;
+    overflow: hidden;
 }
 
 .sidebar {
@@ -137,362 +138,265 @@ body{
   margin-bottom: 10px;
 }
 
+/* Filter Bar Container */
 .filters-bar {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  gap: 18px;
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 2px 8px #0001;
-  margin: 28px 10px 24px 415px;  /* top right bottom left */
-  width: calc(100% - 425px);
-  flex-wrap: wrap;
-  height: 75px;
+  margin: 32px 24px 24px 24px;
+  padding: 16px 24px;
+  width: 50%;           /* Only half the parent width */
+  min-width: 55%;     /* Prevent it from being too small */     /* Optional: limit max width */
+  margin-left: auto;    /* Push to right side */
 }
 
+/* Filter Row and Group */
 .filter-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-width: 350px; 
+  width: 100%;
 }
 
 .filter-group {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: 12px;
+}
+
+/* All filter controls: dropdowns & buttons */
+.filter-select,
+.dropdown-button.filter-select,
+.filt-btn {
+  height: 42px;
+  width: 140px;
+  font-size: 1rem;
+  border-radius: 7px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  color: #333;
+  padding: 0 16px;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border 0.2s, background 0.2s;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Disabled state for dropdowns */
+.filter-select:disabled,
+.dropdown-button.filter-select:disabled {
+  background: #f5f5f5;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Classification dropdown button */
+.dropdown-button.filter-select {
+  font-weight: 400;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  min-width: 140px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Filter and Clear buttons */
+.filt-btn {
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: #0A2C59;
+  color: #fff;
+  transition: background 0.2s, color 0.2s;
+}
+
+.filt-btn:hover {
+  background: #143d77;
+}
+
+.clear-btn {
+  background: #f0f0f0;
   color: #333;
 }
 
-.cycle-select {
-  width: 7.5rem;
-  padding: 10px 12px;
-  margin-top: -1%;
-  font-size: 13.5px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #fff;
-  flex: 1;
+.clear-btn:hover {
+  background: #e0e0e0;
 }
 
-.search-container{
-    width: 40%;
+/* --- Educational Assistance Table Design for KK Profile --- */
+.tables {
+  margin: 24px 0 0 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(10,44,89,0.07);
+  padding: 18px 18px 18px 18px;
+  /* Fixed height for the container */
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make the table head sticky and tbody scrollable */
+.tables table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  background: #fff;
+  table-layout: fixed;
+}
+
+.tables thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fff;
+}
+
+.tables tbody {
+  display: block;
+  height: 380px; /* Adjust: container height - thead height - search bar height */
+  overflow-y: auto;
+  width: 100%;
+}
+
+.tables thead, .tables tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tables tbody td, .tables thead th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 12px 10px;
+}
+
+/* Optional: Hide scrollbar for a cleaner look */
+.tables tbody::-webkit-scrollbar {
+  width: 8px;
+  background: #f4f6f8;
+  border-radius: 6px;
+}
+.tables tbody::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 6px;
+}
+
+thead th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f4f6f8;
+    border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+  color: #222;
+
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 9px 12px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+tbody tr:nth-child(even) {
+  background: #fafbfd;
+}
+
+tbody tr {
+  background: #f7f8fa;
+  transition: background 0.18s;
+}
+
+tbody tr:hover {
+  background: #e1e8ff;
+}
+
+.view-btn, .action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #0A2C59;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.view-btn:hover, .action-btn:hover {
+  background: #08305e;
+}
+
+.delete-btn, .action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  background: #b80c0c;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover, .action-btn:hover {
+  background: #08305e;
+}
+/* Make the search bar fit the table width and look modern */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 260px;
+  margin-bottom: 10px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: #0A2C59;
+  font-size: 1.1rem;
+  pointer-events: none;
+  z-index: 2;
+  margin-bottom: 10px;
 }
 
 .search-input {
   width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-    
-}
-
-.filt{
-  padding: 7px 18px;
-  width: 70px;
-  background: #0A2C59;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 1s;
-  margin-top: 0.5rem;
-}
-
-.filts{
-  margin-top: -18px;
-}
-
-.filter-group{
-  width: 100%;
-  display: flex;
-}
-
-.filt:hover{
-  background: #174a8c;
-}
-
-.buts {
-  display: flex;
-  justify-content: space-between; /* pushes left & right apart */
-  align-items: center;
-  padding-bottom: 10px;
-}
-
-.fil {
-  flex: 1; /* keeps search aligned left */
-}
-
-.right-filters {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* spacing between dropdowns */
-}
-
-
-/* Main dropdown */
-.dropdown {
-  position: relative;
-  display: inline-block;
-  margin-top: -1%;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background: white;
-  min-width: 200px;
-  /* Remove max-height and overflow-y to prevent clipping */
-  border: 1px solid #ccc;
-  z-index: 1000;
-  /* Allow submenu to overflow */
-  overflow: visible;
-}
-
-.dropdown-content .submenu {
-  position: relative;
-}
-
-.dropdown-content a {
-  display: block;
-  padding: 8px 12px;
-  text-decoration: none;
-  color: black;
-}
-
-.dropdown-content a:hover {
-  background-color: #f0f0f0;
-}
-
-.dropdown-button{
-  height: 44px;             /* match search bar */
-  padding: 0 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 8px 12px 8px 36px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 7px;
+  font-size: 1rem;
   background: #fff;
-  font-size: 14px;
-  display: flex;
-  align-items: center;       /* vertically center text */
-  cursor: pointer;
-  width: 20rem;
-}
-
-/* Submenu */
-.submenu {
-  position: relative; 
-}
-
-.submenu-content {
-  display: none;
-  position: absolute;
-  left: 100%;   /* Place it directly beside the parent */
-  top: 0;
-  min-width: 180px;
-  max-height: 250px;     /* Set max height for scroll */
-  overflow-y: auto;      /* Enable vertical scroll if needed */
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  z-index: 2001;
-}
-
-.submenu:hover .submenu-content {
-  display: block;
-}
-
-
-  .tables {
-    margin: 28px 11px 24px 11px;  /* top right bottom left */
-    width: calc(100% - 22px);
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-    padding: 20px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-  }
-
-  thead tr {
-    background-color: #f4f6f8;
-    color: rgb(0, 0, 0);
-    text-align: left;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
-  }
-
-  thead th {
-    padding: 12px 15px;
-    font-weight: 600;
-  }
-
-  tbody tr {
-    background-color: #f4f6f8;
-    box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
-    transition: background-color 0.3s ease;
-    border-radius: 8px;
-  }
-
-  tbody tr:hover {
-    background-color: #e1e8ff;
-  }
-
-  tbody td {
-    padding: 12px 15px;
-    vertical-align: middle;
-  }
-
-  .view-btn{
-    padding: 7px 14px;
-    background: #0A2C59;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  .modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid #ddd;
-  padding: 10px 15px;
-}
-
-.modal {
-  display: none; 
-  position: fixed; 
-  z-index: 1000; 
-  left: 0;
-  top: 0;
-  width: 100%; 
-  height: 100%; 
-  background: rgba(0,0,0,0.6); 
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background: #ffffff;
-  padding: 20px;
-  width: 50vw;
-  max-height: 80vh;
-  overflow-y: auto;
-  border-radius: 12px;
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.close-btn {
-  float: right;
-  font-size: 24px;
-  font-weight: bold;
-  color: #000000;
-  cursor: pointer;
-}
-
-.close-btn:hover {
-  color: red;
-}
-
-.modal-logo {
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
-}
-
-/* Center modal relative to .content */
-#profileModal {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  justify-content: center;
-  align-items: center;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
-  width: 100%;
-  height: 100%;
-}
-
-.profile-info p {
-  padding: 10px 15px;
-  margin: 8px 0;
-  font-size: 17px;
-  color: #000000;
-}
-
-.profile-info .label {
-  font-weight: bold;
-}
-.profile-info .bott {
-  margin-bottom: 3px;
-}
-
-#profileDetails hr {
-  border: none;
-  border-top: 1px solid #ccc;
-  margin: 0 15px;
-}
-
-
-.top-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #F5F7FA;
-  border-bottom: 1px solid #F5F7FA;
-}
-
-.header-left .header-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #183153;
-  margin-left: 24px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.header-right .greeting-block {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.greeting-text {
-  font-weight: 500;
-  color: #183153;
-  font-size: 18px;
-  margin-bottom: 2px;
-}
-
-.header-datetime {
-  font-size: 1px;
   color: #222;
-  letter-spacing: 0.04em;
-  margin-bottom: 5px;
+  transition: border 0.2s;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 0.6rem;
 }
 
-#header-date {
-  font-size: 0.98rem;
-  color: #222;
-}
-
-#datetime {
-  font-size: 0.98rem;
-  letter-spacing: 0.04em;
- letter-spacing: 0.04em;
+.search-input:focus {
+  border-color: #0A2C59;
+  background: #f4f6fa;
 }
 
 /* Disable sidebar when modal is open
@@ -500,6 +404,460 @@ body.modal-open .sidebar,
 body.modal-open .sidebar * {
   filter: grayscale(0.4) brightness(0.6);
 } */
+
+/* Stack buttons vertically */
+.filts-vertical {
+  display: flex;
+  flex-direction: row;  /* Changed from column to row */
+  gap: 6px;  /* Reduced from 8px */
+  margin-left: 8px;  /* Reduced from 16px */
+  align-items: center;  /* Changed from stretch to center */
+}
+
+/* Update button styles */
+.filt-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 10%;
+  min-width: 70px;  /* Reduced from 80px */
+}
+
+#filterBtn {
+  background: #0A2C59;
+  color: #fff;
+}
+
+#filterBtn:hover {
+  background: #143d77;
+}
+
+.clear-btn {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.clear-btn:hover {
+  background: #e0e0e0;
+}
+
+/* Classification Dropdown Styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button.filter-select {
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  min-width: 140px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 110%; /* Just below the button */
+  left: 0;
+  z-index: 100;
+  background: #fff;
+  min-width: 180px;
+  box-shadow: 0 4px 16px rgba(10,44,89,0.10);
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  padding: 8px 0;
+}
+
+/* Show dropdown when active */
+.dropdown-content[style*="display: block"] {
+  display: block !important;
+}
+
+/* Primary category styling */
+.dropdown-content .submenu {
+  position: relative;
+}
+
+.dropdown-content .submenu > a {
+  font-weight: bold;
+  padding: 10px 15px 10px 15px;
+  color: #0A2C59;
+  text-decoration: none;
+  display: block;
+  background: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.15s;
+  position: relative;
+}
+
+.dropdown-content .submenu > a:hover {
+  background: #e1e8ff;
+  color: #0A2C59;
+}
+
+/* Secondary dropdown (submenu-content) styling */
+.dropdown-content .submenu-content {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  min-width: 150px;
+  max-height: 220px;      /* Set your preferred max height */
+  overflow-y: auto;       /* Enable vertical scroll */
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(10,44,89,0.10);
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  z-index: 101;
+  padding: 8px 0;
+}
+
+.dropdown-content .submenu:hover > .submenu-content {
+  display: block;
+}
+
+/* Secondary choices styling */
+.dropdown-content .submenu-content a {
+  padding: 10px 18px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  background: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.15s, color 0.15s;
+  font-weight: 400;
+}
+
+.dropdown-content .submenu-content a:hover {
+  background: #e1e8ff;
+  color: #0A2C59;
+}
+
+.dropdown-content .dropdown-option {
+  padding: 10px 18px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  background: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.15s, color 0.15s;
+  font-weight: 400;
+}
+
+.dropdown-content .dropdown-option:hover {
+  background: #e1e8ff;
+  color: #0A2C59;
+}
+
+/* Modal Overlay */
+.modal {
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(10, 44, 89, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;   /* Align modal to the right */
+  padding-right: 60px;         /* Space from the right edge */
+  /* Remove padding-left and left: 130px */
+}
+
+/* Modal Content Box */
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(10,44,89,0.18);
+  /* padding: 32px 28px 24px 28px; */
+  min-width: 340px;
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  margin-right: 11%;
+  animation: modalPop 0.18s cubic-bezier(.4,1.4,.6,1) 1;
+}
+
+/* --- Landscape, Modern, Symmetric Modal --- */
+.modern-modal {
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 12px 40px rgba(10,44,89,0.18);
+  width: 900px;              /* Just right for landscape, not too wide */
+  max-width: 96vw;
+  min-width: 500px;
+  min-height: 420px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  animation: modalPop 0.18s cubic-bezier(.4,1.4,.6,1) 1;
+}
+
+.modern-modal-header {
+  background: #0A2C59;
+  padding: 32px 48px 20px 48px;
+  display: flex;
+  align-items: center;
+  border-radius: 28px 28px 0 0;
+  position: relative;
+  gap: 24px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.profile-header img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.profile-header .profile-name {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.modern-modal-print {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 18px;
+}
+
+.modern-modal-print:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateY(-1px);
+}
+
+.modern-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  color: rgba(255,255,255,0.8);
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+  padding: 4px;
+  line-height: 0.8;
+}
+
+.modern-modal-close:hover {
+  color: #fff;
+  transform: rotate(90deg) scale(1.1);
+}
+
+.modern-modal-body {
+  padding: 5px 48px 32px 48px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.profile-details-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.profile-details-row {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 0;
+}
+
+.profile-details-row.full {
+  flex-direction: row;
+  gap: 0;
+}
+
+.profile-detail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 20px;
+  box-shadow: 0 2px 8px rgba(10,44,89,0.06);
+  border: 1px solid #f0f4fa;
+}
+
+.profile-detail .label {
+  color: #64748b;
+  font-size: 1.01rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+  letter-spacing: 0.02em;
+}
+
+.profile-detail .value {
+  color: #0A2C59;
+  font-size: 1.13rem;
+  font-weight: 600;
+  word-break: break-word;
+  letter-spacing: 0.01em;
+}
+
+.profile-details-row.full .profile-detail {
+  flex: 3;
+  background: #f8fafc;
+  box-shadow: none;
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Table header and cell alignment */
+.tables th, .tables td {
+  text-align: left;
+  vertical-align: middle;
+  padding: 12px 10px;
+}
+
+.tables th:nth-child(1), .tables td:nth-child(1) { width: 10%; text-align: center; }
+.tables th:nth-child(2), .tables td:nth-child(2) { width: 25%; }
+.tables th:nth-child(3), .tables td:nth-child(3) { width: 15%; text-align: center; }
+.tables th:nth-child(4), .tables td:nth-child(4) { width: 10%; text-align: center; }
+.tables th:nth-child(5), .tables td:nth-child(5) { width: 15%; text-align: center; }
+.tables th:nth-child(6), .tables td:nth-child(6) { width: 15%; text-align: center; }
+.tables th:nth-child(7), .tables td:nth-child(7) { width: 15%; text-align: center; }
+.tables th:nth-child(8), .tables td:nth-child(8) { width: 15%; text-align: center; }
+
+.modern-modal-download{
+  position: absolute;
+  top: 45px;
+  right: 90px;
+  background-color: #0A2C59;
+  color: white;
+  font-size: 14px;
+  font-weight: normal;
+  letter-spacing: 1px;
+  min-width: 120px;
+  min-height: 40px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: white 2px solid;
+  z-index: 10;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .modern-modal {
+    width: 98vw;
+    min-width: 0;
+    height: auto;
+  }
+  .modal {
+    padding-right: 0;
+    justify-content: center;
+  }
+  .modern-modal-header,
+  .modern-modal_body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .profile-info {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .profile-details-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .profile-details-row.full .profile-detail {
+    flex: 1;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .modern-modal-download {
+    top: 18px;
+    right: 18px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .modern-modal {
+    width: 98vw;
+    min-width: 0;
+    height: auto;
+  }
+  .modern-modal-header,
+  .modern-modal-body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .profile-details-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .profile-details-row.full .profile-detail {
+    flex: 1;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .modern-modal {
+    width: 98vw;
+    min-width: 0;
+  }
+  .modern-modal-header,
+  .modern-modal-body {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .profile-details-row {
+    gap: 18px;
+  }
+}
+
+@keyframes modalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 
 
 

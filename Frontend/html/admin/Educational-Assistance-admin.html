@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SK-INSIGHT</title>
+  <!-- Add this in your <head> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="/Frontend/css/Educational-Assistance-admin.css">
+  <link rel="stylesheet" href="/Frontend/css/header.css">
 </head>
 <body>
   <!-- Sidebar (unchanged) -->
@@ -20,40 +23,40 @@
     </div>
     <div class="menu">
           <a
-            href="/Frontend/html/admin/admin-dashboard.html"
+            href="./admin-dashboard.html"
             class="flex items-center space-x-2"
           >
             <i class="dashs fas fa-columns"></i>
             <span class="dashb">Dashboard</span>
           </a>
-        <a href="/Frontend/html/admin/KK-Profile.html" class="flex items-center space-x-2">
+        <a href="./KK-Profile.html" class="flex items-center space-x-2">
           <i class="Kk fas fa-id-badge"></i>
           <span class="kk">KK Profile</span>
         </a>
-        <a href="/Frontend/html/admin/LGBTQ-Profile.html" class="flex items-center space-x-2">
+        <a href="./LGBTQ-Profile.html" class="flex items-center space-x-2">
           <i class="fas fa-rainbow"></i>
           <span class="dash">LGBTQ Profile</span>
         </a>
         <div class="dashh">
-          <a href="/Frontend/html/admin/Educational-Assistance-admin.html" class="flex items-center space-x-2">
+          <a href="./Educational-Assistance-admin.html" class="flex items-center space-x-2">
             <i class="fas fa-graduation-cap"></i>
             <span class="educ">Educational Assistance</span>
           </a>
         </div>
-        <a href="/Frontend/html/admin/Announcement-admin.html" class="flex items-center space-x-2">
+        <a href="./Announcement-admin.html" class="flex items-center space-x-2">
           <i class="fas fa-bell"></i>
           <span class="dash">Announcement</span>
         </a>
-        <a href="/Frontend/html/admin/user-account.html" class="flex items-center space-x-2">
+        <a href="./user-account.html" class="flex items-center space-x-2">
           <i class="fas fa-user"></i>
           <span class="dash">User Accounts</span>
         </a>
-        <a href="/Frontend/html/admin/exports.html" class="flex items-center space-x-2">
-          <i class="fas fa-file-export"></i>
-          <span class="dash">Exports</span>
+        <a href="./exports.html" class="flex items-center space-x-2">
+          <i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+          <span class="dash">Settings</span>
         </a>
         <div class="log">
-          <a href="/Frontend/html/admin/admin-log.html" class="flex items-center space-x-2">
+          <a href="./admin-log.html" class="flex items-center space-x-2">
             <i class="fas fa-right-from-bracket"></i>
             <span class="dash">Log out</span>
           </a>
@@ -68,31 +71,14 @@
 
    
   <div class="content">
-<div class="dates">
-      <div class="top-header">
-          <div class="header-left">
-            <span class="header-title"></span>
-          </div>
-          <div class="header-right">
-            <div class="greeting-block">
-              <span>
-                <i id="greeting-icon" class="fa-solid fa-sun" style="color: #f7c948; margin-right: 6px;"></i>
-                <span id="greeting" class="greeting-text">Good Morning</span>
-              </span>
-              <div class="header-datetime">
-                <span id="header-date">January 25, 2025</span>
-                -
-                <span id="datetime">08:48</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      <hr>
-    </div>
+
+     <div id="header-container"></div>
+<div class="content-container">
+
 
     <!-- Notification Bell & Dropdown -->
   <div class="notification-bell" id="notifBell" style="position:absolute; right:40px; top:65px; cursor:pointer; z-index:200;">
-    <i class="fas fa-bell" style="font-size: 1.7em; color: #0A2C59;"></i>
+    <i class="fas fa-bell" id="bell1" style="font-size: 1.7em; color: #0A2C59;"></i>
   </div>
   <div class="notification-dropdown" id="notifDropdown" style="display:none;">
     <div class="notif-tabs">
@@ -110,28 +96,23 @@
 
     <!-- Filters Bar -->
     <section class="filters-bar">
-      <div class="filter-group">
-        <label for="cycleNumber">Year:</label>
-        <select id="cycleNumber" class="cycle-select">
-          <option value="">All</option>
-          <option value="2025">2025</option>
-          <option value="2024">2024</option>
-          <option value="2023">2023</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label for="year">Cycle:</label>
-        <select id="year" class="cycle-select">
-          <option value="">All</option>
-          <option value="1">Cycle 1</option>
-          <option value="2">Cycle 2</option>
-          <option value="3">Cycle 3</option>
-        </select>
-      </div>
-
-      <div class="filter-group search-wrapper">
-        <input type="text" class="search-input" placeholder="🔍 Search Resident...">
+      <div class="filter-row">
+        <div class="filter-group">
+          <div class="dropdown" id="yearDropdown" style="position:relative;">
+            <button class="dropdown-button filter-select" type="button" id="yearButton">Year</button>
+            <div class="dropdown-content" id="yearContent"></div>
+          </div>
+          <div class="dropdown" id="cycleDropdown" style="position:relative;">
+            <button class="dropdown-button filter-select" type="button" id="cycleButton" disabled>Cycle</button>
+            <div class="dropdown-content" id="cycleContent"></div>
+          </div>
+          <div class="search-container" style="margin-bottom:0;">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search Resident...">
+          </div>
+          <button id="filterBtn" class="filt-btn">Filter</button>
+          <button id="clearFilterBtn" class="filt-btn clear-btn">Clear</button>
+        </div>
       </div>
     </section>
 
@@ -144,60 +125,60 @@
 
     <!-- Tables -->
     <section class="tables">
-      <div class="tab-content active" id="pending">
+      <div class="tab-content active" data-tab="pending">
         <table>
           <thead>
             <tr>
               <th>No.</th>
-              <th>Resident's Name</th>
+              <th>Name</th>
               <th>Age</th>
-              <th>Purok</th>
+              <th>School</th>
+              <th>Civil Status</th>
+              <th>Religion</th>
+              <th>Year Level</th>
               <th>Gender</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td>1</td><td>Juan Dela Cruz</td><td>18</td><td>Purok 1</td><td>Male</td>
-              <td><button class="action-btn"><i class="fas fa-eye"></i> Review</button></td></tr>
-          </tbody>
+          <tbody id="pending"></tbody>
         </table>
       </div>
 
-      <div class="tab-content" id="approved">
+      <div class="tab-content" data-tab="approved">
         <table>
           <thead>
             <tr>
               <th>No.</th>
-              <th>Resident's Name</th>
+              <th>Name</th>
               <th>Age</th>
-              <th>Purok</th>
+              <th>School</th>
+              <th>Civil Status</th>
+              <th>Religion</th>
+              <th>Grade/Year Level</th>
               <th>Gender</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td>1</td><td>Maria Santos</td><td>20</td><td>Purok 2</td><td>Female</td>
-              <td><button class="action-btn"><i class="fas fa-file-alt"></i> View</button></td></tr>
-          </tbody>
+          <tbody id="approved"></tbody>
         </table>
       </div>
 
-      <div class="tab-content" id="rejected">
+      <div class="tab-content" data-tab="rejected">
         <table>
           <thead>
             <tr>
               <th>No.</th>
-              <th>Resident's Name</th>
+              <th>Name</th>
               <th>Age</th>
-              <th>Purok</th>
+              <th>School</th>
+              <th>Civil Status</th>
+              <th>Religion</th>
+              <th>Grade/Year Level</th>
               <th>Gender</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td>1</td><td>Carlos Reyes</td><td>19</td><td>Purok 3</td><td>Male</td>
-              <td><button class="action-btn"><i class="fas fa-file-alt"></i> View</button></td></tr>
-          </tbody>
+          <tbody id="rejected"></tbody>
         </table>
       </div>
     </section>
@@ -212,6 +193,70 @@
     </div>
   </div>
 
-  <script src="/Frontend/js/Educational-Assistance-admin.js"></script>
+  <!-- Rejection Reason Modal -->
+  <div id="rejectionModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>Reject Application</span>
+        <span id="closeRejectionModal" class="close-btn" style="position:absolute;top:18px;right:24px;cursor:pointer;">&times;</span>
+      </div>
+      <div class="modal-body">
+        <label for="rejectionReasonInput">Rejection Reason</label>
+        <textarea id="rejectionReasonInput" rows="4" placeholder="Enter reason for rejection..." style="width:100%;"></textarea>
+        <div style="margin-top:18px;text-align:right;">
+          <button id="submitRejectionBtn">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+
+  <script src="../../js/Educational-Assistance-admin.js"></script>
+  <script>
+      fetch('./header.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('header-container').innerHTML = html;
+          // After injecting, run the header JS
+          const script = document.createElement('script');
+          script.src = '/Frontend/js/admin/header.js';
+          document.body.appendChild(script);
+        });
+  </script>
+
+  <script>
+      // Fade in on load
+      const content = document.querySelector('.content');
+      content.classList.add('page-fade');
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          content.classList.remove('page-fade');
+          content.classList.add('page-fade-in');
+        }, 10);
+      });
+
+      // Fade out on navigation for all internal links
+      document.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href');
+        if (
+          href &&
+          !href.startsWith('http') &&
+          !href.startsWith('mailto:') &&
+          !href.startsWith('#') &&
+          !link.hasAttribute('target')
+        ) {
+          link.addEventListener('click', function(e) {
+            // Only fade if not a sidebar link
+            // (Sidebar links are outside .content, so always fade .content)
+            e.preventDefault();
+            content.classList.remove('page-fade-in');
+            content.classList.add('page-fade');
+            setTimeout(() => {
+              window.location.href = href;
+            }, 180); // match the CSS transition duration
+          });
+        }
+      });
+    </script>
 </body>
 </html>

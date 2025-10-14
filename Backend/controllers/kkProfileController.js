@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const User = require("../models/User"); // Assuming the User model is in the same directory
 const path = require("path");
 const fs = require("fs");
+const PizZip = require("pizzip");
+const Docxtemplater = require("docxtemplater");
 
 // Helper to get the present (open) cycle
 async function getPresentCycle(formName) {
@@ -64,6 +66,7 @@ exports.submitKKProfile = async (req, res) => {
       civilStatus,
       youthAgeGroup,
       youthClassification,
+      specificNeedType,
       educationalBackground,
       workStatus,
       registeredSKVoter,
@@ -84,7 +87,7 @@ exports.submitKKProfile = async (req, res) => {
     }
 
     // Check for uploaded profile image
-    if (!req.file || !req.file.filename) {
+    if (!req.files || !req.files.profileImage || !req.files.profileImage[0]) {
       return res.status(400).json({ error: "Profile image is required to submit KK Profile." });
     }
 
@@ -109,27 +112,42 @@ exports.submitKKProfile = async (req, res) => {
       civilStatus,
       youthAgeGroup,
       youthClassification,
+      specificNeedType: youthClassification === "Youth with Specific Needs" ? specificNeedType : null,
       educationalBackground,
       workStatus,
       registeredSKVoter,
       registeredNationalVoter,
       votedLastSKElection,
       attendedKKAssembly,
-      attendanceCount: req.body.attendedKKAssembly
-        ? req.body.attendanceCount
-        : undefined,
-      reasonDidNotAttend: !req.body.attendedKKAssembly
-        ? req.body.reasonDidNotAttend
-        : undefined,
-      profileImage: req.file.filename, // <-- use uploaded file
+      attendanceCount:
+        req.body.attendedKKAssembly === "true" || req.body.attendedKKAssembly === true
+          ? req.body.attendanceCount
+          : undefined,
+      reasonDidNotAttend:
+        req.body.attendedKKAssembly === "false" || req.body.attendedKKAssembly === false
+          ? req.body.reasonDidNotAttend
+          : undefined,
+
+      // ✅ Save uploaded images if present
+      profileImage: req.files?.profileImage
+        ? req.files.profileImage[0].filename
+        : null,
+      idImagePath: req.files?.idImage
+        ? req.files.idImage[0].path
+        : null,
+      signatureImagePath: req.files?.signatureImage
+        ? req.files.signatureImage[0].filename
+        : null,
+
       birthday,
     });
 
     await newProfile.save();
     res.status(201).json({ message: "Profile submitted successfully" });
+
   } catch (error) {
-    console.error("Submit error:", error);
-    res.status(500).json({ error: "Server error while submitting form" });
+    console.error("Error submitting KK Profile:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -189,8 +207,12 @@ exports.deleteProfileById = async (req, res) => {
     const profile = await KKProfile.findById(req.params.id);
     if (!profile) return res.status(404).json({ error: "Profile not found" });
 
-    await profile.deleteOne();
-    res.json({ message: "Profile deleted" });
+    // Soft delete: set isDeleted and deletedAt
+    profile.isDeleted = true;
+    profile.deletedAt = new Date();
+    await profile.save();
+
+    res.json({ message: "Profile moved to recycle bin" });
   } catch (err) {
     res.status(500).json({ error: "Server error" });
   }
@@ -526,4 +548,113 @@ exports.getKKProfileImageById = async (req, res) => {
     res.sendFile(imagePath);
   });
 };
+
+// GET /api/kkprofiling/export/:id
+exports.exportKKProfileDocx = async (req, res) => {
+  try {
+    const profile = await KKProfile.findById(req.params.id).populate("user");
+    if (!profile) {
+      return res.status(404).json({ error: "Profile not found" });
+    }
+
+    // Load the template
+    const templatePath = path.join(__dirname, "../kk_profiling_template.docx");
+    if (!fs.existsSync(templatePath)) {
+      return res.status(500).json({ error: "Template file not found" });
+    }
+    const content = fs.readFileSync(templatePath, "binary");
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip);
+
+    // Prepare data for template
+    const data = {
+      lastname: profile.lastname || "",
+      firstname: profile.firstname || "",
+      middlename: profile.middlename || "",
+      suffix: profile.suffix || "",
+      gender: profile.gender || "",
+      region: profile.region || "",
+      province: profile.province || "",
+      municipality: profile.municipality || "",
+      barangay: profile.barangay || "",
+      purok: profile.purok || "",
+      email: profile.email || "",
+      contactNumber: profile.contactNumber || "",
+      civilStatus: profile.civilStatus || "",
+      youthAgeGroup: profile.youthAgeGroup || "",
+      youthClassification: profile.youthClassification || "",
+      educationalBackground: profile.educationalBackground || "",
+      workStatus: profile.workStatus || "",
+      registeredSKVoter: profile.registeredSKVoter ? "Yes" : "No",
+      registeredNationalVoter: profile.registeredNationalVoter ? "Yes" : "No",
+      votedLastSKElection: profile.votedLastSKElection ? "Yes" : "No",
+      attendedKKAssembly: profile.attendedKKAssembly ? "Yes" : "No",
+      attendanceCount: profile.attendanceCount || "",
+      reasonDidNotAttend: profile.reasonDidNotAttend || "",
+      birthday: profile.user?.birthday
+        ? new Date(profile.user.birthday).toLocaleDateString()
+        : "",
+      age: profile.user?.age || "",
+      // Add this line for the dropdown value:
+      specificNeedType: profile.specificNeedType || "",
+    };
+
+    doc.render(data);
+
+    const buf = doc.getZip().generate({ type: "nodebuffer" });
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${profile.lastname || "KKProfile"}.docx`
+    );
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    );
+    res.send(buf);
+  } catch (err) {
+    console.error("Error exporting DOCX:", err);
+    res.status(500).json({ error: "Failed to export DOCX" });
+  }
+};
+
+exports.restoreProfileById = async (req, res) => {
+  try {
+    const profile = await KKProfile.findById(req.params.id);
+    if (!profile || !profile.isDeleted) return res.status(404).json({ error: "Profile not found or not deleted" });
+
+    profile.isDeleted = false;
+    profile.deletedAt = null;
+    await profile.save();
+
+    res.json({ message: "Profile restored" });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.getDeletedProfiles = async (req, res) => {
+  try {
+    const profiles = await KKProfile.find({ isDeleted: true });
+    res.json(profiles);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.permanentlyDeleteProfileById = async (req, res) => {
+  try {
+    const profile = await KKProfile.findById(req.params.id);
+    if (!profile || !profile.isDeleted) return res.status(404).json({ error: "Profile not found or not deleted" });
+
+    await profile.deleteOne();
+    res.json({ message: "Profile permanently deleted" });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+
+// Use isPWD, isCICL, isIP as needed here
 

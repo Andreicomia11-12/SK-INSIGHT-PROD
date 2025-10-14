@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SK-INSIGHT</title>
+    <!-- Add this in your <head> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="/Frontend/css/Announcemnet-admin.css">
 </head>
@@ -21,40 +23,40 @@
         
         <div class="menu">
           <a
-            href="/Frontend/html/admin/admin-dashboard.html"
+            href="./admin-dashboard.html"
             class="flex items-center space-x-2"
           >
             <i class="dashs fas fa-columns"></i>
             <span class="dashb">Dashboard</span>
           </a>
-        <a href="/Frontend/html/admin/KK-Profile.html" class="flex items-center space-x-2">
+        <a href="./KK-Profile.html" class="flex items-center space-x-2">
           <i class="Kk fas fa-id-badge"></i>
           <span class="kk">KK Profile</span>
         </a>
-        <a href="/Frontend/html/admin/LGBTQ-Profile.html" class="flex items-center space-x-2">
+        <a href="./LGBTQ-Profile.html" class="flex items-center space-x-2">
           <i class="fas fa-rainbow"></i>
           <span class="dash">LGBTQ Profile</span>
         </a>
-        <a href="/Frontend/html/admin/Educational-Assistance-admin.html" class="flex items-center space-x-2">
+        <a href="./Educational-Assistance-admin.html" class="flex items-center space-x-2">
           <i class="fas fa-graduation-cap"></i>
           <span class="educ">Educational Assistance</span>
         </a>
         <div class="dashh">
-            <a href="/Frontend/html/admin/Announcement-admin.html" class="flex items-center space-x-2">
+            <a href="./Announcement-admin.html" class="flex items-center space-x-2">
             <i class="fas fa-bell"></i>
             <span class="dash">Announcement</span>
             </a>
         </div>
-        <a href="/Frontend/html/admin/user-account.html" class="flex items-center space-x-2">
+        <a href="./user-account.html" class="flex items-center space-x-2">
           <i class="fas fa-user"></i>
           <span class="dash">User Accounts</span>
         </a>
-        <a href="/Frontend/html/admin/exports.html" class="flex items-center space-x-2">
-          <i class="fas fa-file-export"></i>
-          <span class="dash">Exports</span>
+        <a href="./exports.html" class="flex items-center space-x-2">
+          <i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+          <span class="dash">Settings</span>
         </a>
         <div class="log">
-          <a href="/Frontend/html/admin/admin-log.html" class="flex items-center space-x-2">
+          <a href="./admin-log.html" class="flex items-center space-x-2">
             <i class="fas fa-right-from-bracket"></i>
             <span class="dash">Log out</span>
           </a>
@@ -64,34 +66,20 @@
     </div>
 
     <div class="content">
-        <div class="top-header">
-          <div class="header-left">
-            <span class="header-title"></span>
-          </div>
-          <div class="header-right">
-            <div class="greeting-block">
-              <span>
-                <i id="greeting-icon" class="fa-solid fa-sun" style="color: #f7c948; margin-right: 6px;"></i>
-                <span id="greeting" class="greeting-text">Good Morning</span>
-              </span>
-              <div class="header-datetime">
-                <span id="header-date">January 25, 2025</span>
-                -
-                <span id="datetime">08:48</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div id="header-container"></div>
+      <div class="content-container">
 
-        <hr>
+
 
         <div class="title">
             <h1>Announcements</h1>
             <p class="subtitle">Lists of Announcements</p>
         </div>
 
-        <div class="dropdown">
-            <button id="myBtn" class="add">+ Add Announcement</button>
+        <div class="add-announcement-bar" style="display: flex; justify-content: flex-end; margin-bottom: 18px;">
+          <button id="myBtn" class="add-announcement-btn">
+            <i class="fa-solid fa-plus"></i> Add Announcement
+          </button>
         </div>
 
         <nav class="tabs">
@@ -119,28 +107,30 @@
         <div id="myModal" class="modal">
           <div class="modal-content">
             <span class="close">&times;</span>
-              <div class="row header-row">
-                <img src="/Frontend/assets/logo.png" alt="..." class="logo1">
-                <h2>Add New Announcement</h2>
-              </div>
-              <form id="announcementForm">
-                <label>Title:</label>
-                <input type="text" id="title" required>
+            <div class="row header-row">
+              <img src="/Frontend/assets/logo.png" alt="SK Logo" class="logo1">
+              <h2>Add Announcement</h2>
+            </div>
+            <form id="announcementForm" autocomplete="off">
+              <label for="title">Title:</label>
+              <input type="text" id="title" required placeholder="Announcement title">
 
-                <div class="row header-rows">
+              <div class="row header-rows">
+                <div style="width:48%">
                   <label for="date">Date:</label>
-                  <input type="date" id="date" class="dates" required>
-
+                  <input type="date" id="date" required>
+                </div>
+                <div style="width:48%">
                   <label for="time">Time:</label>
                   <input type="time" id="time" required>
                 </div>
+              </div>
 
-                <label>Content:</label>
-                <textarea id="content" required></textarea>
+              <label for="content">Content:</label>
+              <textarea id="content" required placeholder="Write your announcement here..."></textarea>
 
-                <button type="submit">Save</button>
-              </form>
-
+              <button type="submit">Save Announcement</button>
+            </form>
           </div>
         </div>
       </div>
@@ -164,9 +154,55 @@
           <div class="modal-body" id="modalContent"></div>
         </div>
       </div>
-
+      </div>
     </div>
+    <script>
+      fetch('./header.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('header-container').innerHTML = html;
+          // After injecting, run the header JS
+          const script = document.createElement('script');
+          script.src = '/Frontend/js/admin/header.js';
+          document.body.appendChild(script);
+        });
+  </script>
 <script src="/Frontend/js/announcement-admin.js"></script>
+ <link rel="stylesheet" href="/Frontend/css/header.css">
+    <script>
+      // Fade in on load
+      const content = document.querySelector('.content');
+      content.classList.add('page-fade');
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          content.classList.remove('page-fade');
+          content.classList.add('page-fade-in');
+        }, 10);
+      });
+
+      // Fade out on navigation for all internal links
+      document.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href');
+        if (
+          href &&
+          !href.startsWith('http') &&
+          !href.startsWith('mailto:') &&
+          !href.startsWith('#') &&
+          !link.hasAttribute('target')
+        ) {
+          link.addEventListener('click', function(e) {
+            // Only fade if not a sidebar link
+            // (Sidebar links are outside .content, so always fade .content)
+            e.preventDefault();
+            content.classList.remove('page-fade-in');
+            content.classList.add('page-fade');
+            setTimeout(() => {
+              window.location.href = href;
+            }, 180); // match the CSS transition duration
+          });
+        }
+      });
+    </script>
 
 </body>
 </html>

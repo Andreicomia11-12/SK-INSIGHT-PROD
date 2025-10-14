@@ -89,7 +89,7 @@ exports.forgotPassword = async (req, res) => {
   user.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
   await user.save();
 
-  const resetUrl = `${process.env.CLIENT_URL}/api/auth/reset-password/${resetToken}`;
+  const resetUrl = `${process.env.CLIENT_URL}/Frontend/html/user/forgot3.html?token=${resetToken}`;
   const html = getResetPasswordEmail(resetUrl);
 
   try {

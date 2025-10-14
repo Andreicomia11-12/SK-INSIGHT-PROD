@@ -3,76 +3,235 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SK-INSIGHT</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      rel="stylesheet"
-    />
+    <title>KK Profiling Dashboard | SK-INSIGHT</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="/Frontend/css/admin-dashboard.css" />
+    <link rel="stylesheet" href="/Frontend/css/header.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
   </head>
   <body>
     <div class="sidebar">
       <h3 class="text-2xl font-normal">Sangguniang Kabataan</h3>
       <div class="logos">
-        <img src="/Frontend/assets/logo.png" alt="logo" class="logo" />
+        <img src="/Frontend/assets/logo.png" alt="logo" class="logo">
         <div class="title-container">
           <p class="text-lg font-semibold">SK Officials</p>
           <p class="admin">Admin</p>
         </div>
       </div>
-
       <div class="menu">
         <div class="dashh">
-          <a
-            href="/Frontend/html/admin/admin-dashboard.html"
-            class="flex items-center space-x-2"
-          >
-            <i class="dashs fas fa-columns"></i>
-            <span class="dashb">Dashboard</span>
+          <a href="./admin-dashboard.html" class="flex items-center space-x-2">
+          <i class="dashs fas fa-columns"></i>
+          <span class="dashb">Dashboard</span>
+        </a>
+        </div>
+        <div >
+          <a href="./KK-Profile.html" class="flex items-center space-x-2">
+            <i class="Kk fas fa-id-badge"></i>
+            <span class="kk">KK Profile</span>
           </a>
         </div>
-        <a href="/Frontend/html/admin/KK-Profile.html" class="flex items-center space-x-2">
-          <i class="Kk fas fa-id-badge"></i>
-          <span class="kk">KK Profile</span>
-        </a>
-        <a href="/Frontend/html/admin/LGBTQ-Profile.html" class="flex items-center space-x-2">
+        <a href="./LGBTQ-Profile.html" class="flex items-center space-x-2">
           <i class="fas fa-rainbow"></i>
           <span class="dash">LGBTQ Profile</span>
         </a>
-        <a href="/Frontend/html/admin/Educational-Assistance-admin.html" class="flex items-center space-x-2">
+        <a href="./Educational-Assistance-admin.html" class="flex items-center space-x-2">
           <i class="fas fa-graduation-cap"></i>
           <span class="educ">Educational Assistance</span>
         </a>
-        <a href="/Frontend/html/admin/Announcement-admin.html" class="flex items-center space-x-2">
+        <a href="./Announcement-admin.html" class="flex items-center space-x-2">
           <i class="fas fa-bell"></i>
           <span class="dash">Announcement</span>
         </a>
-        <a href="/Frontend/html/admin/user-account.html" class="flex items-center space-x-2">
+        <a href="./user-account.html" class="flex items-center space-x-2">
           <i class="fas fa-user"></i>
           <span class="dash">User Accounts</span>
         </a>
-        <a href="/Frontend/html/admin/exports.html" class="flex items-center space-x-2">
-          <i class="fas fa-file-export"></i>
-          <span class="dash">Exports</span>
+        <a href="./exports.html" class="flex items-center space-x-2">
+          <i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+          <span class="dash">Settings</span>
         </a>
         <div class="log">
-          <a href="/Frontend/html/admin/admin-log.html" class="flex items-center space-x-2">
+          <a href="./admin-log.html" class="flex items-center space-x-2">
             <i class="fas fa-right-from-bracket"></i>
             <span class="dash">Log out</span>
           </a>
         </div>
       </div>
     </div>
-
     <div class="content">
-      <div class="parent">
-        <div class="date">
-          <p id="greeting"></p>
-          <p id="datetime"></p>
+      <div id="header-container"></div>
+      <div class="dashboard-header">
+        <div>
+          <h1 class="dashboard-title">Dashboard</h1>
+          <p class="dashboard-subtitle">Visualize and explore data</p>
+        </div>
+        <div class="dashboard-filter-bar">
+          <div class="filter-group">
+            <div class="dropdown" id="yearDropdown">
+              <button class="dropdown-button filter-select">Year</button>
+              <div class="dropdown-content" id="yearContent"></div>
+            </div>
+            <div class="dropdown" id="cycleDropdown">
+              <button class="dropdown-button filter-select">Cycle</button>
+              <div class="dropdown-content" id="cycleContent"></div>
+            </div>
+            <button id="filterBtn" class="filt-btn">Filter</button>
+            <button id="clearFilterBtn" class="filt-btn clear-btn">Clear</button>
+          </div>
         </div>
       </div>
+      <div class="dashboard-summary-row">
+        <div class="summary-card" id="userAccountSummary">
+          <div class="summary-icon"><i class="fas fa-user"></i></div>
+          <div class="summary-label">User Accounts</div>
+          <div class="summary-value" id="userAccountCount">—</div>
+        </div>
+        <div class="summary-card" id="kkProfilingSummary">
+          <div class="summary-icon"><i class="fas fa-id-badge"></i></div>
+          <div class="summary-label">KK Profiling</div>
+          <div class="summary-value" id="kkProfilingCount">—</div>
+        </div>
+        <div class="summary-card" id="lgbtqProfilingSummary">
+          <div class="summary-icon"><i class="fas fa-rainbow"></i></div>
+          <div class="summary-label">LGBTQ Profiling</div>
+          <div class="summary-value" id="lgbtqProfilingCount">—</div>
+        </div>
+        <div class="summary-card" id="educationalAssistanceSummary">
+          <div class="summary-icon"><i class="fas fa-graduation-cap"></i></div>
+          <div class="summary-label">Educational Assistance</div>
+          <div class="summary-value" id="educationalAssistanceCount">—</div>
+        </div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="chart-card prediction-card">
+          <h2 class="chart-title"><i class="fas fa-chart-line"></i> KK Profile Trends & Predictions</h2>
+          <div class="chart-info">
+            <span class="info-label">Last Updated:</span>
+            <span class="info-value">June 2025</span>
+            <span class="info-label">Prediction Model:</span>
+            <span class="info-value">Linear Regression (Demo)</span>
+          </div>
+          <canvas id="predictionChart"></canvas>
+          <div class="prediction-chart-legend">
+            <div class="legend-item"><span class="legend-dot actual"></span> Actual Data</div>
+            <div class="legend-item"><span class="legend-dot predicted"></span> Predicted Trend</div>
+          </div>
+        </div>
+        <div class="chart-card civil-status-card">
+          <h2 class="chart-title">
+            <i class="fas fa-heart"></i> Civil Status
+          </h2>
+          <div class="chart-content" style="display: flex; flex-direction: column; align-items: center;">
+            <canvas id="civilStatusDonut"></canvas>
+            <div class="civil-status-summary">
+              <div class="civil-status-legend"></div>
+              <div class="civil-status-summary-row">
+                <span class="summary-label" id="civil-status-most-common">Most Common: </span>
+                <span class="summary-value" id="civilStatusMost">—</span>
+              </div>
+              <div class="civil-status-percentages" id="civilStatusPercentages"></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card educational-background-card">
+          <h2 class="chart-title">
+            <i class="fas fa-graduation-cap"></i> Educational Background
+          </h2>
+          <div class="educational-background-content">
+            <div class="educational-background-chart-area">
+              <canvas id="educationalBackgroundBar" style="max-width: 900px; max-height: 260px;"></canvas>
+              <div class="educational-background-legend"></div> <!-- Move legend here -->
+            </div>
+            <div class="educational-background-side">
+              <div id="educationalBackgroundSummary" class="educational-background-summary"></div>
+            </div>
+          </div>
+        </div>
+        <div class="third-row">
+          <!-- Youth Age Group Chart -->
+          <div class="chart-card youth-age-group-card">
+            <h2 class="chart-title">
+              <i class="fas fa-users"></i> Youth Age Group
+            </h2>
+            <div class="portrait-chart-content">
+              <div class="chart-area">
+                <canvas id="youthAgeGroupBar"></canvas>
+              </div>
+              <div class="youth-age-group-legend educational-background-legend"></div>
+              <div id="youthAgeGroupSummary" class="educational-background-summary"></div>
+            </div>  
+          </div>
 
-      <hr />
+          <!-- Youth Classification Chart -->
+          <div class="chart-card youth-classification-card">
+            <h2 class="chart-title">
+              <i class="fas fa-user-graduate"></i> Youth Classification
+            </h2>
+            <div class="portrait-chart-content">
+              <canvas id="youthClassificationBar"></canvas>
+              <div class="youth-classification-legend educational-background-legend"></div>
+              <div id="youthClassificationSummary" class="educational-background-summary"></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card work-status-card">
+          <h2 class="chart-title"><i class="fas fa-briefcase"></i> Work Status</h2>
+          <div class="work-status-content">
+            <div class="work-status-chart-area">
+              <canvas id="workStatusBar"></canvas>
+            </div>
+            <div class="work-status-side">
+              <div class="work-status-legend educational-background-legend"></div>
+              <div id="workStatusSummary" class="work-status-summary"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../js/admin/admin-dashboard.js" type="module"></script>
+    <script>
+      fetch('./header.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('header-container').innerHTML = html;
+          const script = document.createElement('script');
+          script.src = '/Frontend/js/admin/header.js';
+          document.body.appendChild(script);
+        });
+    </script>
+    <link rel="stylesheet" href="/Frontend/css/header.css">
+    <script>
+      const content = document.querySelector('.content');
+      content.classList.add('page-fade');
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          content.classList.remove('page-fade');
+          content.classList.add('page-fade-in');
+        }, 10);
+      });
+      document.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href');
+        if (
+          href &&
+          !href.startsWith('http') &&
+          !href.startsWith('mailto:') &&
+          !href.startsWith('#') &&
+          !link.hasAttribute('target')
+        ) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            content.classList.remove('page-fade-in');
+            content.classList.add('page-fade');
+            setTimeout(() => {
+              window.location.href = href;
+            }, 180);
+          });
+        }
+      });
+    </script>
   </body>
 </html>

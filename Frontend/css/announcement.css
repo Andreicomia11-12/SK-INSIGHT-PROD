@@ -6,6 +6,11 @@
 }
 
 /* Body */
+body, html {
+    overflow: hidden !important;
+    height: 100vh;
+}
+
 body {
     font-family: 'Poppins', Arial, sans-serif;
     background-color: #D1E1F5;
@@ -38,6 +43,8 @@ body {
 }
 
 .navbar .title {
+    color: white;
+    text-decoration: none;
     font-size: 18px;
     font-weight: bold;
     margin-left: 10px;
@@ -53,10 +60,50 @@ body {
     gap: 15px;
     font-size: 20px;
 }
+.bell {
+    color: white;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 5px;
+    font-size: 22px;
+}
+.prof {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.navbar-hamburger {
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    margin-right: 10px;
+}
 
 @media (max-width: 600px) {
     .navbar-left .title {
         font-size: 1rem;
+    }
+}
+
+@media (max-width: 1048px) {
+    .navbar-center {
+        display: none !important;
+    }
+    .navbar-hamburger {
+        display: inline-block !important;
+    }
+}
+@media (min-width: 1049px) {
+    .navbar-center {
+        display: flex !important;
+    }
+    .navbar-hamburger {
+        display: none !important;
     }
 }
 
@@ -88,6 +135,8 @@ body {
     box-shadow: 0 6px 12px rgba(0,0,0,0.10);
     padding: 20px;
     overflow-x: auto;
+    max-height: 420px; /* Adjust height as needed for 5 rows */
+    overflow-y: auto;
 }
 
 /* Table Styling */
@@ -105,6 +154,16 @@ body {
     border-bottom: 1px solid #e2e8f0;
     vertical-align: middle;
     word-wrap: break-word;
+}
+
+/* Equal height for announcement table rows */
+.announcement-table tr {
+  height: 70px; /* Adjust as needed */
+  vertical-align: middle;
+}
+
+.announcement-table td {
+  vertical-align: middle;
 }
 
 /* Define specific column widths */
@@ -274,6 +333,9 @@ body {
 .description {
     color: #334155;
     line-height: 1.625;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 8px;
 }
 
 /* Responsive Adjustments */
@@ -336,4 +398,98 @@ body {
     .announcement-table a {
         font-size: 13px;
     }
+}
+
+/* Responsive: Stack announcement cards and buttons on small screens */
+@media (max-width: 600px) {
+  .announcement-heading-container {
+    width: 88%;
+    padding: 10px;
+    margin: 120px auto 10px auto;
+  }
+
+  .announcement-container {
+    width: 88%;
+    padding: 10px;
+    margin: 10px auto 30px auto;
+  }
+
+  .announcement-card {
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 16px;
+    background: #fff;
+    display: block;
+  }
+
+  .announcement-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .announcement-card p,
+  .announcement-card small {
+    font-size: 0.95rem;
+  }
+
+  .announcement-card .pinned {
+    font-size: 1rem;
+    margin-left: 6px;
+  }
+
+  .announcement-card button,
+  .announcement-card .view-btn {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1rem;
+    padding: 10px 0;
+    border-radius: 6px;
+  }
+}
+
+.navbar-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    right: 16px;
+    width: 240px;
+    background: #fff;
+    flex-direction: column;
+    align-items: stretch;
+    z-index: 2000;
+    padding: 18px 12px;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(20, 61, 119, 0.18);
+    border: 1px solid #e3eaf3;
+}
+.navbar-mobile-menu.active {
+    display: flex !important;
+}
+.navbar-mobile-menu .nav-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1rem;
+    border-radius: 8px;
+    color: #143d77;
+    background: none;
+    text-align: left;
+    border: none;
+    margin-bottom: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.18s, color 0.18s;
+}
+.navbar-mobile-menu .nav-btn:last-child {
+    margin-bottom: 0;
+}
+.navbar-mobile-menu .nav-btn:hover {
+    background: #eaf3fa;
+    color: #1e4e9e;
+}
+
+.announcement-table {
+  margin-top: 0 !important;
 }

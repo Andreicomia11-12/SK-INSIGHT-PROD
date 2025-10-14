@@ -2,20 +2,32 @@ const multer = require('multer');
 const path = require('path');
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/profile_images');
+  destination: function (req, file, cb) {
+    if (file.fieldname === 'profileImage') {
+      cb(null, path.join(__dirname, '../uploads/profile_images'));
+    } else if (file.fieldname === 'signatureImage') {
+      cb(null, path.join(__dirname, '../uploads/signatures'));
+    } else if (file.fieldname === 'idImage') {
+      cb(null, path.join(__dirname, '../uploads/id_images'));
+    } else {
+      cb(null, path.join(__dirname, '../uploads/other'));
+    }
   },
-  filename: (req, file, cb) => {
-    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, unique + path.extname(file.originalname));
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname.replace(/\s+/g, '_'));
   }
 });
 
-const fileFilter = (req, file, cb) => {
-  const allowed = ['image/jpeg', 'image/png', 'image/jpg'];
-  allowed.includes(file.mimetype)
-    ? cb(null, true)
-    : cb(new Error('Only JPG/PNG files allowed'));
-};
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    // Accept only image files
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+  }
+});
 
-module.exports = multer({ storage, fileFilter });
+module.exports = upload;

@@ -31,13 +31,7 @@ const protect = asyncHandler(async (req, res, next) => {
       // Attach user to request
       req.user = user;
 
-      // ✅ Only allow verified users — EXCEPT admins
-      if (!user.isVerified && user.role !== 'admin') {
-        console.log("User not verified and not admin:", user.email);
-        return res
-          .status(403)
-          .json({ message: 'Please verify your email to access this feature.' });
-      }
+      // Allow all authenticated users, regardless of verification status
       console.log("protect passed for user:", user.email, user.role);
 
       next(); // Proceed to route

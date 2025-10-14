@@ -1,102 +1,112 @@
-@media (min-width: 1024px) {
-    * {
+* {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
     
-    body{
-        font-family: 'Poppins', sans-serif;
-        background-color: #F5F7FA;
+    body {
+      display: flex;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background-color: #F5F7FA;
+      overflow-x: hidden;
     }
     
-    .sidebar {
-        height: 100vh;
-        width: 250px;
-        background-color: #0A2C59; 
-        color: white;
-        position: fixed;
-        left: 0;
-        top: 0;
-        padding: 20px;
-    }
-    
-    .logos{
-        display: flex;
-        align-items: center;   
-        gap: 10px;               
-    }
-    
-    .title-container {
-        margin-top: 10px;
-        display: flex;
-        flex-direction: column; 
-        line-height: 1.2; 
-    }
-    
-    .admin{
-        font-size: small;
-        color: #FED600;
-    }
-    
-    .logo{
-        width: 20vw;
-        max-width: 100px;
-        height: auto;
-        margin-top: 20px;
-    }
-    
-    .sidebar a {
-        display: block;
-        color: white;
-        padding: 12px;
-        text-decoration: none;
-        border-radius: 5px;
-        margin: 5px 0;
-        transition: background 0.3s;
-    }
-    
-    .menu{
-        margin-top: 20px;
-    }
-    
-    .dashh{
-        background-color: #07B0F2;
-        border-radius: 5px;
-    }
-    
-    .dash{
-        margin-left: 10px;
-    }
-    
-    .educ{
-        margin-left: 5px;
-        font-size: 15.2px;
-    }
-    
-    .dashs{
-        margin-left: 3px;
-    }
-    
-    .dashb{
-        margin-left: 10px;
-    }
-    
-    .Kk{
-        margin-left: 5px;
-    }
-    
-    .kk{
-        margin-left: 13px;
-    }
+    /* Sidebar styles from KK-Profile */
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #0A2C59; 
+    left: 0;
+    top: 0;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    z-index: 100;
+    overflow: hidden;
+}
 
-    .log{
-        margin-top: 90%;
-    }
+.logos {
+    display: flex;
+    align-items: center;   
+    gap: 10px;               
+}
+
+.title-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; 
+    line-height: 1.2; 
+}
+
+.admin {
+    font-size: small;
+    color: #FED600;
+}
+
+.logo {
+    width: 20vw;
+    max-width: 100px;
+    height: auto;
+    margin-top: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 5px 0;
+    transition: background 0.3s;
+}
+
+.menu {
+    margin-top: 20px;
+}
+
+.dashh {
+    background-color: #07B0F2;
+    border-radius: 5px;
+}
+
+.dash {
+    margin-left: 10px;
+}
+
+.educ {
+    margin-left: 5px;
+    font-size: 15.2px;
+}
+
+.dashs {
+    margin-left: 3px;
+}
+
+.dashb {
+    margin-left: 10px;
+}
+
+.Kk {
+    margin-left: 5px;
+}
+
+.kk {
+    margin-left: 13px;
+}
+
+.log {
+    margin-top: 90%;
+}
     
     .content{
-        margin-left: 250px;
-        padding: 10px;
+        flex: 1;
+        padding: 15px;
+        background: #F5F7FA;
+        overflow-y: auto;
+        position: relative;
+        margin-left: 250px; /* <-- add this so content doesn't go under sidebar */
+        min-height: 100vh;
     }
     
     .parent {
@@ -104,7 +114,871 @@
         justify-content: flex-end;
         padding-bottom: 10px;
     }
-    
+
+    .title{
+    padding: 20px;
+    width: 100%;
+    }
+    .tit{
+      color: #0A2C59;
+    }
+    .subtitle{
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 5px;
+
+    }
+    .page-header {
+        
+    }
+
+/* Optional: Fade transitions for content */
+.content.page-fade {
+  opacity: 0;
+  transition: opacity 180ms cubic-bezier(.4,1.4,.6,1);
+}
+.content.page-fade-in {
+  opacity: 1;
+  transition: opacity 180ms cubic-bezier(.4,1.4,.6,1);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  align-items: flex-end;
+  background: #fff;
+
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0A2C59;
+  margin-bottom: 0.2rem;
+}
+
+.dashboard-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+/* Dashboard header (keeps external navbar/header intact) */
+.dashboard-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  padding:1rem 3rem;
+  background:transparent;
+}
+
+/* Title area */
+.dashboard-title-area { display:flex; flex-direction:column; gap:0.1rem; }
+.dashboard-title { font-size:1.6rem; color:#0A2C59; margin:0; font-weight:700; }
+.dashboard-subtitle { font-size:0.95rem; color:#6b7280; margin:0; }
+
+/* Filter bar refined */
+.dashboard-filter-bar {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(10,44,89,0.04);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 320px;
+  height: 52px;
+}
+
+.filter-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Compact controls */
+.dropdown { position:relative; }
+.dropdown-button.filter-select {
+  height: 38px;
+  min-width: 110px;
+  padding: 0 1rem;
+  border: 1px solid #e1e8ff;
+  border-radius: 8px;
+  background: #f8faff;
+  color: #0A2C59;
+  font-size: 0.97rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  box-shadow: 0 1px 4px rgba(10,44,89,0.03);
+}
+.dropdown-content {
+  display:none; position:absolute; z-index:120;
+  top:110%; left:0;
+  background:#fff; border:1px solid #e6eefb; border-radius:8px;
+  box-shadow:0 8px 24px rgba(10,44,89,0.07); padding:6px 0;
+}
+.dropdown-content .dropdown-option { padding:8px 14px; color:#0A2C59; cursor:pointer; }
+.dropdown-content .dropdown-option:hover { background:#eaf6ff; color:#074f8f; }
+
+/* Buttons */
+.filt-btn {
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: #0A2C59;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0 1.2rem;
+  height: 38px;
+  font-size: 0.97rem;
+  transition: background 0.2s;
+  box-shadow: 0 1px 4px rgba(10,44,89,0.03);
+}
+
+.clear-btn {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #e1e8ff;
+}
+
+/* Grid layout: compact and balanced */
+.dashboard-grid{
+  display: grid;
+  grid-template-columns: 3fr 1fr;      /* First two rows: 3/4 and 1/4 */
+  grid-template-rows: auto auto auto;  /* Add a third row */
+  gap: 2rem;
+  align-items: stretch;
+}
+
+/* Make prediction card span all columns on first row */
+.prediction-card {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  min-height: 220px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(10,44,89,0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+  min-height: 470px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  animation: fadeInUp 0.5s cubic-bezier(.4,1.4,.6,1);
+  padding: 24px 20px 18px 20px; /* <-- more breathing space */
+  box-sizing: border-box;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+.chart-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0A2C59;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.chart-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: #555;
+  background: #f8faff;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  align-items: center;
+}
+
+.info-label {
+  font-weight: 500;
+  color: #0A2C59;
+  margin-right: 0.3rem;
+}
+
+.info-value {
+  font-weight: 600;
+  color: #07B0F2;
+  margin-right: 1.2rem;
+}
+
+.prediction-card canvas#predictionChart {
+  width: 100% !important;
+  height: 350px !important;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+  background: transparent;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.prediction-chart-legend {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 0.6rem;
+  padding: 0.5rem;
+  background: #f8faff;
+  border-radius: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #333;
+}
+
+#educational-legend-item{
+  margin-bottom: 0.5rem;
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2px;
+  border: 1.5px solid #e1e8ff;
+  vertical-align: middle;
+  background: #ccc;
+  box-sizing: border-box;
+}
+
+/* Fade transitions for content */
+.content.page-fade {
+  opacity: 0;
+  transition: opacity 180ms cubic-bezier(.4,1.4,.6,1);
+}
+.content.page-fade-in {
+  opacity: 1;
+  transition: opacity 180ms cubic-bezier(.4,1.4,.6,1);
+}
+
+.civil-status-card {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  min-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.civil-status-summary {
+  width: 100%;
+  background: #f8faff;
+  border-radius: 10px;
+  padding: 0.4rem 0.4rem 1rem 1.2rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 3px 3px 4px rgba(10,44,89,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.civil-status-summary-row {
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+  display: flex;
+  justify-content: center;
+    margin-left: -12px;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+
+    background: #fef9e7;
+    font-weight: 600;
+    color: #FED600;
+    font-size: 0.8rem;
 }
 
 
+.civil-status-percentages {
+  margin-top: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.civil-status-percentages span {
+  font-size: 0.8rem;
+  color: #333;
+}
+
+.civil-status-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two columns */
+  gap: 0.5rem 1.2rem;
+  justify-items: start;
+  margin-top: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.civil-status-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #0A2C59;
+}
+
+.civil-status-legend .legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+#civilStatusDonut {
+  max-width: 160px;
+  max-height: 160px;
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin-bottom: 1.3rem;
+}
+
+.educational-background-card {
+  grid-column: 1 / 3;   /* Span both columns */
+  grid-row: 2 / 3;      /* Place in the second row */
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(10,44,89,0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  animation: fadeInUp 0.5s cubic-bezier(.4,1.4,.6,1);
+  margin-bottom: 0; /* Remove if present */
+  padding-bottom: 0; /* Reduce if too large */
+  min-height: 42vh;    /* Lower this value as needed */
+  max-height: 100vh;    /* Lower this value as needed */
+  padding: 25px 20px 25px 20px; /* Reduce padding */
+}
+
+/* Educational background chart layout */
+.educational-background-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  gap: 1rem; /* Reduce gap if needed */
+  align-items: stretch;
+  margin-bottom: 0; /* Remove if present */
+}
+
+.educational-background-chart-area {
+  flex: 3 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  
+}
+
+.educational-background-side {
+  flex: 1 1 0;
+  background: #f8faff;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 280px;
+  max-width: 360px;
+  box-sizing: border-box;
+  margin-top: -1rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Legend styles for educational background section */
+.educational-background-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.3rem 2.5rem;
+  width: 100%;
+  margin-top: 0.2rem;    /* Reduce */
+  margin-bottom: 0.2rem; /* Reduce */
+  justify-items: start;
+  padding: 0rem 2rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Summary styles within educational background section */
+.educational-background-summary {
+  width: 100%;
+  /* background: #94949627; */
+  border-radius: 10px;
+  padding: 13px 0 0 0;
+  margin-bottom: 0.5rem;
+  /* box-shadow: 3px 3px 4px rgba(10,44,89,0.04); */
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1rem 0.8rem 0rem 0.5rem;
+}
+
+.educational-background-summary-row {
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #0A2C59;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.educational-background-summary-list {
+  display: flex;
+  gap: 2rem;
+  margin-top: 0.3rem;
+}
+
+.educational-background-summary-list span {
+  font-size: 0.8rem;
+  color: #333;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.summary-label {
+  color: #090909;
+  font-weight: 400;
+}
+
+.summary-value {
+  color: #07B0F2;
+  font-weight: 700;
+  margin-left: 10px;
+}
+
+/* Hide any Chart.js-generated HTML legend */
+.chartjs-legend,
+ul.chartjs-legend,
+div.chartjs-legend {
+  display: none !important;
+}
+
+.educational-background-summary-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #333;
+  margin-bottom: 0.2rem;
+}
+
+.educational-background-summary-item .summary-label {
+  color: #0A2C59;
+  font-weight: 700;
+  /* Optional: set a fixed width for perfect alignment */
+  min-width: 120px;
+  display: inline-block;
+}
+
+.educational-background-summary-item .summary-value {
+  color: #07B0F2;
+  font-weight: 700;
+  text-align: right;
+  min-width: 0px;
+  display: inline-block;
+}
+
+/* Make the dashboard grid treat the third row as a single cell spanning both columns */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 2rem;
+  padding: 0rem 2.5rem 2rem 2.5rem;
+  align-items: stretch;
+}
+
+.educational-background-card {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+}
+
+.third-row {
+  grid-column: 1 / 3;
+  grid-row: 3 / 4;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+}
+
+.youth-age-group-card,
+.youth-classification-card {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(10,44,89,0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  animation: fadeInUp 0.5s cubic-bezier(.4,1.4,.6,1);
+  min-height: 5vh;
+  max-height: 100vh;
+  padding: 25px 20px 25px 20px;
+}
+
+/* Responsive: On small screens, stack the third row */
+@media (max-width: 1100px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+  .educational-background-card {
+    grid-column: 1 / 2;
+  }
+  .youth-age-group-card,
+  .youth-classification-card {
+    grid-column: 1 / 2;
+  }
+  .third-row {
+    grid-column: 1 / 2;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.portrait-chart-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  width: 100%;
+  min-height: 400px;
+}
+
+.portrait-chart-content .chart-area {
+  width: 100%;
+  height: 260px; /* or 300px, adjust as needed */
+  position: relative;
+}
+
+.portrait-chart-content .educational-background-legend,
+.portrait-chart-content .youth-age-group-legend,
+.portrait-chart-content .youth-classification-legend {
+  margin: 0.5rem 0 0.5rem 0;
+  padding: 0 1rem;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.portrait-chart-content .educational-background-summary {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  background: #f8faff;
+  border-radius: 10px;
+  min-height: 80px;
+}
+
+/* Modern summary for youth charts only */
+.modern-summary-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  color: #0A2C59;
+  padding: 0.2rem 0rem;
+}
+
+.modern-summary-icon {
+  background: #eaf6ff;
+  color: #07B0F2;
+  border-radius: 50%;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.modern-summary-title {
+  letter-spacing: 0.01em;
+  
+}
+
+.modern-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.18rem 0;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  padding: 0.2rem;
+}
+
+.modern-summary-total {
+  background: #f8faff;
+  font-weight: 600;
+  color: #0A2C59;
+  margin-bottom: 0.15rem;
+}
+
+.modern-summary-most {
+  background: #fef9e7;
+  font-weight: 600;
+  color: #FED600;
+  margin-bottom: 0.15rem;
+  padding: 0.3rem 1rem;
+}
+
+.modern-summary-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #0A2C59;
+  font-weight: 500;
+  margin-right: 2rem;
+}
+
+.modern-summary-value {
+  font-weight: 600;
+  color: #0A2C59;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.modern-summary-breakdown {
+  margin-top: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2px;
+  border: 1.5px solid #e1e8ff;
+  vertical-align: middle;
+  background: #ccc;
+  box-sizing: border-box;
+}
+
+
+
+#youthAgeGroupSummary{
+  min-height: 25vh;
+}
+
+/* Make the work status card span both columns */
+.work-status-card {
+  grid-column: 1 / 3 !important;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(10,44,89,0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  animation: fadeInUp 0.5s cubic-bezier(.4,1.4,.6,1);
+  margin-bottom: 0;
+  padding-bottom: 0;
+  min-height: 42vh;
+  max-height: 100vh;
+  padding: 25px 20px 25px 20px;
+}
+
+/* Make the chart area fill the card */
+.work-status-card .chart-area {
+  width: 100%;
+  height: 340px; /* Adjust as needed */
+  position: relative;
+}
+
+.work-status-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  gap: 1.5rem;
+  align-items: stretch;
+  min-height: 340px;
+}
+
+.work-status-chart-area {
+  flex: 3 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 340px;
+}
+
+.work-status-chart-area canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  max-height: 340px;
+  display: block;
+}
+
+.work-status-side {
+  background: #f8faff;
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 280px;
+  max-width: 360px;
+  box-sizing: border-box;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.work-status-legend {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.educational-background-summary1 {
+  width: 100%;
+  /* background: #94949627; */
+  border-radius: 10px;
+  padding: 13px 0 0 0;
+  margin-bottom: 0.5rem;
+  /* box-shadow: 3px 3px 4px rgba(10,44,89,0.04); */
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1rem 0.8rem 0rem 0.5rem;
+}
+
+/* --- Dashboard summary cards --- */
+.dashboard-summary-row {
+  display: flex;
+  gap: 2rem;
+  margin: 0rem 0rem 2.5rem 0rem;
+  justify-content: center;   /* Center horizontally */
+  align-items: center;       /* Center vertically */
+}
+
+.summary-card {
+  flex: 1 1 0;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(10,44,89,0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.2rem 0.5rem 1.1rem 0.5rem;
+  min-width: 260px;
+  max-width: 260px;
+  min-height: 120px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.summary-card .summary-icon {
+  font-size: 2.1rem;
+  margin-bottom: 0.5rem;
+  color: #0A2C59;
+  background: #eaf6ff;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#userAccountSummary .summary-icon { color: #0A2C59; background: #eaf6ff; }
+#kkProfilingSummary .summary-icon { color: #07B0F2; background: #eaf6ff; }
+#lgbtqProfilingSummary .summary-icon { color: #f472b6; background: #fce7f3; }
+#educationalAssistanceSummary .summary-icon { color: #FED600; background: #fff9db; }
+
+.summary-card .summary-label {
+  font-size: 1rem;
+  color: #0A2C59;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.01em;
+}
+
+.summary-card .summary-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #07B0F2;
+  margin-top: 0.2rem;
+  letter-spacing: 0.01em;
+}
+
+#kkProfilingSummary .summary-value { color: #07B0F2; }
+#lgbtqProfilingSummary .summary-value { color: #f472b6; }
+#educationalAssistanceSummary .summary-value { color: #FED600; }
+#userAccountSummary .summary-value { color: #0A2C59; }
+
+.summary-card:hover {
+  box-shadow: 0 6px 24px rgba(10,44,89,0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+.work-status-summary{
+
+}

@@ -30,8 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (res.ok) {
-        // Save token to localStorage
-        localStorage.setItem("token", data.token);
+        // Save token to sessionStorage
+        sessionStorage.setItem("token", data.token);
 
         Swal.fire({
           icon: "success",
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
           timer: 1000,
           showConfirmButton: false,
         }).then(() => {
-          window.location.href = "/Frontend/html/admin/admin-dashboard.html";
+          window.location.href = "../admin/admin-dashboard.html";
         });
       } else {
         Swal.fire({

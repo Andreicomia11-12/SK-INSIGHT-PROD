@@ -1,0 +1,74 @@
+.dates hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0.5rem 0 0 0;
+}
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 0 0.5rem 0;
+  margin: 0 2rem 0 2rem;
+}
+.top-header.minimal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0.3rem 0 0.3rem 0;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  min-width: 0;
+  max-width: 100%;
+}
+.header-left .header-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #143d77;
+}
+.header-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #143d77;
+  letter-spacing: 0.3px;
+  margin-right: 0.5rem;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+}
+.greeting-block {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+#greeting-icon {
+  font-size: 1.2rem;
+  vertical-align: middle;
+  color: #FED600; /* Sun yellow, or use #0A2C59 for blue */
+}
+.greeting-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #0A2C59;
+  letter-spacing: 0.2px;
+}
+.header-datetime {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 0.97rem;
+  color: #2d3a4a;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+#header-date {
+  margin-right: 0.1rem;
+}
+.header-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}

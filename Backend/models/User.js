@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  gender: { type: String },
+  civilStatus: { type: String },
 });
 
 // Hash password before saving

@@ -39,14 +39,47 @@ body {
 }
 
 .navbar .title {
+  color: white;
+  text-decoration: none;
   font-size: 18px;
   font-weight: bold;
   margin-left: 10px;
 }
 
+.nav-btn{
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.navbar-center {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
 .navbar-left {
   display: flex;
   align-items: center;
+}
+
+.bell {
+  color: white;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-right: 5px;
+  font-size: 22px;
+}
+
+.prof {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
 }
 
 .navbar-right {
@@ -57,6 +90,84 @@ body {
 
 .navbar-right a {
   text-decoration: none;
+}
+
+.nav-btn {
+  color: #ffffff;
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s;
+  border: none;
+  outline: none;
+}
+.nav-btn:hover, .nav-btn.active {
+  background: #1e4e9e;
+  color: #fff;
+}
+.notif{
+  color: white;
+}
+
+/* Responsive behavior */
+@media (max-width: 1048px) {
+  .navbar-center {
+    display: none !important;
+  }
+  .navbar-hamburger {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 1049px) {
+  .navbar-center {
+    display: flex !important;
+  }
+  .navbar-hamburger {
+    display: none !important;
+  }
+}
+
+.navbar-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  width: 220px;
+  background: #fff;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 2000;
+  padding: 18px 12px;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(20,61,119,0.18);
+  border: 1px solid #e3eaf3;
+}
+.navbar-mobile-menu.active {
+  display: flex !important;
+}
+.navbar-mobile-menu .nav-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1rem;
+  border-radius: 8px;
+  color: #143d77;
+  background: none;
+  text-align: left;
+  border: none;
+  margin-bottom: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.18s, color 0.18s;
+}
+.navbar-mobile-menu .nav-btn:last-child {
+  margin-bottom: 0;
+}
+.navbar-mobile-menu .nav-btn:hover {
+  background: #eaf3fa;
+  color: #1e4e9e;
 }
 
 /* ✅ Thank You Card */

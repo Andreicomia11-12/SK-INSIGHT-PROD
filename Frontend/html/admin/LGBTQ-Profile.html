@@ -5,170 +5,192 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SK-INSIGHT</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <!-- Add this in your <head> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="/Frontend/css/LGBTQ-Profile.css">
+    <link rel="stylesheet" href="/Frontend/css/header.css">
 </head>
 <body>
-    <div class="sidebar">
-        <h3 class="text-2xl font-normal">Sangguniang Kabataan</h3>
-        <div class="logos">
-            <img src="/Frontend/assets/logo.png" alt="logo" class="logo">
-            <div class="title-container">
-                <p class="text-lg font-semibold">SK Officials</p>
-                <p class="admin">Admin</p>
-            </div>
+  <div class="sidebar">
+    <h3 class="text-2xl font-normal">Sangguniang Kabataan</h3>
+    <div class="logos">
+        <img src="/Frontend/assets/logo.png" alt="logo" class="logo">
+        <div class="title-container">
+            <p class="text-lg font-semibold">SK Officials</p>
+            <p class="admin">Admin</p>
         </div>
-        
-        
-        <div class="menu">
-          <a
-            href="/Frontend/html/admin/admin-dashboard.html"
-            class="flex items-center space-x-2"
-          >
-            <i class="dashs fas fa-columns"></i>
-            <span class="dashb">Dashboard</span>
-          </a>
-        <a href="/Frontend/html/admin/KK-Profile.html" class="flex items-center space-x-2">
-          <i class="Kk fas fa-id-badge"></i>
-          <span class="kk">KK Profile</span>
-        </a>
-        <div class="dashh">
-          <a href="/Frontend/html/admin/LGBTQ-Profile.html" class="flex items-center space-x-2">
-            <i class="fas fa-rainbow"></i>
-            <span class="dash">LGBTQ Profile</span>
-          </a>
-        </div>
-        <a href="/Frontend/html/admin/Educational-Assistance-admin.html" class="flex items-center space-x-2">
-          <i class="fas fa-graduation-cap"></i>
-          <span class="educ">Educational Assistance</span>
-        </a>
-        <a href="/Frontend/html/admin/Announcement-admin.html" class="flex items-center space-x-2">
-          <i class="fas fa-bell"></i>
-          <span class="dash">Announcement</span>
-        </a>
-        <a href="/Frontend/html/admin/user-account.html" class="flex items-center space-x-2">
-          <i class="fas fa-user"></i>
-          <span class="dash">User Accounts</span>
-        </a>
-        <a href="/Frontend/html/admin/exports.html" class="flex items-center space-x-2">
-          <i class="fas fa-file-export"></i>
-          <span class="dash">Exports</span>
-        </a>
-        <div class="log">
-          <a href="/Frontend/html/admin/admin-log.html" class="flex items-center space-x-2">
-            <i class="fas fa-right-from-bracket"></i>
-            <span class="dash">Log out</span>
-          </a>
+    </div>
+    
+    
+    <div class="menu">
+      <a
+        href="./admin-dashboard.html"
+        class="flex items-center space-x-2"
+      >
+        <i class="dashs fas fa-columns"></i>
+        <span class="dashb">Dashboard</span>
+      </a>
+    <a href="./KK-Profile.html" class="flex items-center space-x-2">
+      <i class="Kk fas fa-id-badge"></i>
+      <span class="kk">KK Profile</span>
+    </a>
+    <div class="dashh">
+      <a href="./LGBTQ-Profile.html" class="flex items-center space-x-2">
+        <i class="fas fa-rainbow"></i>
+        <span class="dash">LGBTQ Profile</span>
+      </a>
+    </div>
+    <a href="./Educational-Assistance-admin.html" class="flex items-center space-x-2">
+      <i class="fas fa-graduation-cap"></i>
+      <span class="educ">Educational Assistance</span>
+    </a>
+    <a href="./Announcement-admin.html" class="flex items-center space-x-2">
+      <i class="fas fa-bell"></i>
+      <span class="dash">Announcement</span>
+    </a>
+    <a href="./user-account.html" class="flex items-center space-x-2">
+      <i class="fas fa-user"></i>
+      <span class="dash">User Accounts</span>
+    </a>
+    <a href="./exports.html" class="flex items-center space-x-2">
+      <i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+      <span class="dash">Settings</span>
+    </a>
+    <div class="log">
+      <a href="./admin-log.html" class="flex items-center space-x-2">
+        <i class="fas fa-right-from-bracket"></i>
+        <span class="dash">Log out</span>
+      </a>
+    </div>
+  </div>
+    
+  </div>
+
+  <div class="content">
+    <div id="header-container"></div>
+
+    <div class="title">
+      <header class="page-header">
+        <h1 class="tit">LGBTQIA+ Profile</h1>
+        <p class="subtitle">List of LGBTQIA+ Residents...</p>
+      </header>
+    
+    <section class="filters-bar">
+      <div class="filter-row">
+        <div class="filter-group">
+          <div class="dropdown" id="yearDropdown">
+            <button class="dropdown-button filter-select" type="button">
+              Year
+            </button>
+            <div class="dropdown-content" id="yearContent"></div>
+          </div>
+          <div class="dropdown" id="cycleDropdown">
+            <button class="dropdown-button filter-select" type="button">
+              Cycle
+            </button>
+            <div class="dropdown-content" id="cycleContent"></div>
+          </div>
+          <div class="dropdown" id="classificationDropdown">
+            <button class="dropdown-button filter-select" type="button">
+              Classification
+            </button>
+            <div class="dropdown-content"></div>
+          </div>
+          <button id="filterBtn" class="filt-btn">Filter</button>
+          <button id="clearFilterBtn" class="filt-btn clear-btn">Clear</button>
         </div>
       </div>
-        
-    </div>
+    </section>
 
-    
-
-    <div class="content">
-      <div class="dates">
-      <div class="top-header">
-          <div class="header-left">
-            <span class="header-title"></span>
-          </div>
-          <div class="header-right">
-            <div class="greeting-block">
-              <span>
-                <i id="greeting-icon" class="fa-solid fa-sun" style="color: #f7c948; margin-right: 6px;"></i>
-                <span id="greeting" class="greeting-text">Good Morning</span>
-              </span>
-              <div class="header-datetime">
-                <span id="header-date">January 25, 2025</span>
-                -
-                <span id="datetime">08:48</span>
-              </div>
+          <div class="tables">
+            <div class="search-container">
+              <span class="search-icon"><i class="fas fa-search"></i></span>
+              <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search Resident"
+              />
             </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Resident's Name</th>
+                  <th>Age</th>
+                  <th>Birthday</th>
+                  <th>LGBTQ Classification</th>
+                  <th>Sex Assigned at Birth</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
-        </div>
-      <hr>
-    </div>
-
-      <div class="title">
-        <header class="page-header">
-          <h1 class="tit">LGBTQIA+ Profile</h1>
-          <p class="subtitle">List of LGBTQIA+ Residents...</p>
-        </header>
-      
-      <section class="filters-bar">
-        <div class="title">
-          <div class="row">
-            <div class="filter-row">
-              <div class="filter-group">
-
-                  <div class="dropdown" id="classificationDropdown">
-                    <button class="dropdown-button" type="button">
-                      Classification
-                    </button>
-                    <div class="dropdown-content"></div>
-                  </div>
-                  <label for="cycleNumber" class="year">Year:</label>
-                  <select id="cycleNumber" class="cycle-select">
-                  </select>
-                  <label for="year" class="cycle">Cycle:</label>
-                  <select id="year" class="cycle-select">
-                  </select>
-              </div>
-              <div class="filts">
-                <button id="yearFilterBtn" class="filt">Filter</button>
-              </div>
-            </div>
-          </div>
-
-        
-        </div>
-
-      
-      </section>
-
-            <div class="tables">
-        <div class="rows">
-            <div class="buts">
-              <!-- Left side: search -->
-              <div class="fil">
-                <div class="search-container">
-                  <input
-                    type="text"
-                    id="searchInput"
-                    class="search-input"
-                    placeholder="🔍 Search Resident"
-                  />
+          <!-- Profile Modal -->
+          <div id="profileModal" class="modal" style="display: none">
+            <div class="modal-content modern-modal">
+              <div class="modern-modal-header">
+                <div class="profile-header" id="profileHeader">
+                  <!-- Name will be injected here -->
                 </div>
+                </button>
+                <button class="modern-modal-close close-btn" title="Close">&times;</button>
+              </div>
+              <div class="modern-modal-body" id="profileDetails">
+                <!-- Profile details will be injected here -->
               </div>
             </div>
-        
-        </div>
-        <div class="tables">
-          <table>
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Resident's Name</th>
-                <th>LGBTQ Classification</th>
-                <th>Sex Assigned at Birth</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <!-- Profile Modal -->
-        <div id="profileModal" class="modal">
-          <div class="modal-content">
-            <img id="profileImage" src="" alt="Resident Image" style="display:none; max-width:100%;"/>
-            <span class="close-btn">&times;</span>
-            <div id="profileHeader">
-            </div>
-            <div id="profileDetails"></div>
           </div>
-        </div>
-
-    </div>
-    
+          <div id="pagination" class="pagination-container"></div>
+      </div>
+  </div>
+  
 <script src="/Frontend/js/lgbtqprofile.js"></script>
+<script>
+  fetch('./header.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      // After injecting, run the header JS
+      const script = document.createElement('script');
+      script.src = '/Frontend/js/admin/header.js';
+      document.body.appendChild(script);
+    });
+</script>
+<script>
+  // Fade in on load
+  const content = document.querySelector('.content');
+  content.classList.add('page-fade');
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      content.classList.remove('page-fade');
+      content.classList.add('page-fade-in');
+    }, 10);
+  });
+
+  // Fade out on navigation for all internal links
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (
+      href &&
+      !href.startsWith('http') &&
+      !href.startsWith('mailto:') &&
+      !href.startsWith('#') &&
+      !link.hasAttribute('target')
+    ) {
+      link.addEventListener('click', function(e) {
+        // Only fade if not a sidebar link
+        // (Sidebar links are outside .content, so always fade .content)
+        e.preventDefault();
+        content.classList.remove('page-fade-in');
+        content.classList.add('page-fade');
+        setTimeout(() => {
+          window.location.href = href;
+        }, 180); // match the CSS transition duration
+      });
+    }
+  });
+</script>
 </body>
 </html>

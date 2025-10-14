@@ -1,23 +1,55 @@
-if (!localStorage.getItem("token")) {
-  window.location.href = "/html/admin-log.html"; // redirect to login
-}
-
-
+(function() {
+  const token = sessionStorage.getItem("token");
+  function sessionExpired() {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Session Expired',
+      text: 'Please login again.',
+      confirmButtonColor: '#0A2C59',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => {
+      window.location.href = "./admin-log.html";
+    });
+  }
+  if (!token) {
+    sessionExpired();
+    return;
+  }
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.exp && Date.now() >= payload.exp * 1000) {
+      sessionStorage.removeItem("token");
+      sessionExpired();
+    }
+  } catch (e) {
+    sessionStorage.removeItem("token");
+    sessionExpired();
+  }
+})();
 
 document.addEventListener("DOMContentLoaded", () => {
   const tabButtons = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
 
-  const yearSelect = document.getElementById("cycleNumber"); // Year dropdown
-  const cycleSelect = document.getElementById("year"); // Cycle dropdown
-  const searchInput = document.querySelector(".search-input");
+  // Dropdown elements
+  const yearDropdown = document.getElementById("yearDropdown");
+  const yearButton = document.getElementById("yearButton");
+  const yearContent = document.getElementById("yearContent");
+  const cycleDropdown = document.getElementById("cycleDropdown");
+  const cycleButton = document.getElementById("cycleButton");
+  const cycleContent = document.getElementById("cycleContent");
+  const filterBtn = document.getElementById("filterBtn");
+  const clearFilterBtn = document.getElementById("clearFilterBtn");
+  const searchInput = document.getElementById("searchInput");
 
-  const pendingTable = document.querySelector("#pending tbody");
-  const approvedTable = document.querySelector("#approved tbody");
-  const rejectedTable = document.querySelector("#rejected tbody");
+  let yearMap = {};
+  let selectedYear = null;
+  let selectedCycle = null;
 
-  let applicants = []; // Store fetched data
-  let formCycles = []; // Store available form cycles
+  const pendingTable = document.getElementById("pending");
+const approvedTable = document.getElementById("approved");
+const rejectedTable = document.getElementById("rejected");
 
   // ---------------- Tabs ----------------
   tabButtons.forEach(button => {
@@ -26,66 +58,137 @@ document.addEventListener("DOMContentLoaded", () => {
       tabContents.forEach(tab => tab.classList.remove("active"));
 
       button.classList.add("active");
-      document.getElementById(button.dataset.tab).classList.add("active");
+      document.querySelector(`.tab-content[data-tab="${button.dataset.tab}"]`).classList.add("active");
     });
   });
 
-  // ---------------- Fetch Form Cycles ----------------
+  // Fetch cycles and populate year dropdown
   async function fetchFormCycles() {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const res = await fetch("http://localhost:5000/api/formcycle/educ", {
         headers: {
           "Content-Type": "application/json",
           ...(token && { Authorization: `Bearer ${token}` })
         }
       });
-      formCycles = await res.json();
+      const formCycles = await res.json();
 
-      populateDropdowns(formCycles);
+      // Group cycles by year
+      yearMap = {};
+      formCycles.forEach((c) => {
+        if (!yearMap[c.year]) yearMap[c.year] = [];
+        yearMap[c.year].push(c.cycleNumber);
+      });
+
+      // Populate year dropdown
+      yearContent.innerHTML = "";
+      Object.keys(yearMap).sort((a, b) => b - a).forEach(year => {
+        const yearOption = document.createElement("a");
+        yearOption.href = "#";
+        yearOption.className = "dropdown-option";
+        yearOption.textContent = year;
+        yearOption.addEventListener("click", (e) => {
+          e.preventDefault();
+          yearButton.textContent = year;
+          selectedYear = year;
+          selectedCycle = null;
+          cycleButton.textContent = "Cycle";
+          cycleButton.disabled = false;
+          // Populate cycle dropdown for selected year
+          populateCycleDropdown(yearMap[year]);
+          yearDropdown.classList.remove("open");
+        });
+        yearContent.appendChild(yearOption);
+      });
+
+      // Reset buttons on load
+      yearButton.textContent = "Year";
+      cycleButton.textContent = "Cycle";
+      cycleButton.disabled = true;
     } catch (error) {
       console.error("Error fetching form cycles:", error);
     }
   }
 
-  // ---------------- Populate Dropdowns ----------------
-  function populateDropdowns(cycles) {
-    if (!Array.isArray(cycles)) {
-      yearSelect.innerHTML = `<option value="">No cycles found</option>`;
-      cycleSelect.innerHTML = `<option value="">No cycles found</option>`;
-      return;
-    }
-    // Reset
-    yearSelect.innerHTML = `<option value="">All</option>`;
-    cycleSelect.innerHTML = `<option value="">All</option>`;
-
-    // Collect unique years
-    const years = [...new Set(cycles.map(c => c.year))];
-    years.sort((a, b) => b - a); // sort descending
-
-    years.forEach(year => {
-      yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
-    });
-
-    // Populate cycle numbers (max available across years)
-    const cycleNumbers = [...new Set(cycles.map(c => c.cycleNumber))];
-    cycleNumbers.sort((a, b) => a - b);
-
-    cycleNumbers.forEach(num => {
-      cycleSelect.innerHTML += `<option value="${num}">Cycle ${num}</option>`;
+  function populateCycleDropdown(cycles) {
+    cycleContent.innerHTML = "";
+    cycles.sort((a, b) => a - b).forEach(cycle => {
+      const cycleOption = document.createElement("a");
+      cycleOption.href = "#";
+      cycleOption.className = "dropdown-option";
+      cycleOption.textContent = `Cycle ${cycle}`;
+      cycleOption.addEventListener("click", (e) => {
+        e.preventDefault();
+        cycleButton.textContent = `Cycle ${cycle}`;
+        selectedCycle = cycle;
+        cycleDropdown.classList.remove("open");
+      });
+      cycleContent.appendChild(cycleOption);
     });
   }
 
+  // Dropdown open/close logic
+  yearButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    yearDropdown.classList.toggle("open");
+    cycleDropdown.classList.remove("open");
+  });
+  cycleButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!cycleButton.disabled) {
+      cycleDropdown.classList.toggle("open");
+      yearDropdown.classList.remove("open");
+    }
+  });
+  window.addEventListener("click", () => {
+    yearDropdown.classList.remove("open");
+    cycleDropdown.classList.remove("open");
+  });
+
+  // Filter logic
+  filterBtn.addEventListener("click", () => {
+    if (!selectedYear || !selectedCycle) {
+      alert("Please select both year and cycle before filtering.");
+      return;
+    }
+    // Call your fetchApplicants or filter logic here, passing selectedYear, selectedCycle, and searchInput.value
+    fetchApplicants();
+  });
+
+  clearFilterBtn.addEventListener("click", () => {
+    yearButton.textContent = "Year";
+    cycleButton.textContent = "Cycle";
+    cycleButton.disabled = true;
+    selectedYear = null;
+    selectedCycle = null;
+    searchInput.value = "";
+    // Call your fetchApplicants or clear logic here
+    fetchApplicants();
+  });
+
   // ---------------- Fetch Applicants ----------------
   async function fetchApplicants() {
+    // Build query string for logging and fetching
+    const params = [];
+    if (selectedYear) params.push(`year=${selectedYear}`);
+    if (selectedCycle) params.push(`cycle=${selectedCycle}`);
+    if (searchInput.value) params.push(`search=${encodeURIComponent(searchInput.value)}`);
+    const queryString = params.length ? `?${params.join('&')}` : '';
+    const endpoint = `http://localhost:5000/api/educational-assistance/filter${queryString}`;
+    console.log("Fetching applicants with endpoint:", endpoint);
+
     try {
-      const res = await fetch("http://localhost:5000/api/educational-assistance", {
+      const token = sessionStorage.getItem("token");
+      const res = await fetch(endpoint, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (!res.ok) throw new Error("Failed to fetch applicants");
       const data = await res.json();
+
+      // No need to filter here, backend does it
       applicants = data;
       renderTables(applicants);
     } catch (err) {
@@ -103,19 +206,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     data.forEach((app, index) => {
       const mi = app.middlename ? app.middlename[0].toUpperCase() + "." : "";
-
       const fullName = `${app.firstname} ${mi} ${app.surname}`.trim();
-
       if (!fullName.toLowerCase().includes(searchTerm)) return;
 
+      let actionBtn = "";
+      if (app.status === "pending") {
+        actionBtn = `<button class="action-btn"><i class="fas fa-eye"></i></button>`;
+      } else {
+        actionBtn = `<button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>`;
+      }
+
+      // Removed School column
       const row = `
         <tr data-id="${app._id}">
           <td>${index + 1}</td>
           <td>${fullName}</td>
-          <td>${app.age}</td>
-          <td>${app.schoolAddress || "N/A"}</td>
-          <td>${app.sex}</td>
-          <td><button class="action-btn"><i class="fas fa-eye"></i> Review</button></td>
+          <td>${app.age ?? ""}</td>
+          <td>${app.civilStatus || "N/A"}</td>
+          <td>${app.religion || "N/A"}</td>
+          <td>${app.year || app.grade || "N/A"}</td>
+          <td>${app.sex || "N/A"}</td>
+          <td>${actionBtn}</td>
         </tr>
       `;
 
@@ -128,8 +239,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Attach modal openers after table rows are rendered
+    // Attach modal openers and delete handlers after table rows are rendered
     attachModalOpeners();
+    attachDeleteHandlers();
   }
 
   // Add this after renderTables function
@@ -141,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // If birthday is missing, fetch from user profile
     if (!birthday && app.user && app.user._id) {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const res = await fetch(`http://localhost:5000/api/users/${app.user._id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -205,14 +317,10 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
 
           <div class="form-field row">
-            <label>Course:</label>
-            <div class="form-box">${app.course || "-"}</div>
             <label>Year Level:</label>
-            <div class="form-box">${app.yearLevel || "-"}</div>
+            <div class="form-box">${app.year || "-"}</div>
           </div>
 
-          <div class="form-field">
-          </div>
 
           <div class="form-field">
             <label>E-mail:</label>
@@ -406,8 +514,9 @@ const approveBtn = modal.querySelector(".approve-btn");
 if (approveBtn) {
   approveBtn.textContent = "Accept";
   approveBtn.onclick = async () => {
+    modal.style.display = "none"; // Close modal first
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       await fetch(`http://localhost:5000/api/educational-assistance/${app._id}/status`, {
         method: "PUT",
         headers: {
@@ -417,9 +526,8 @@ if (approveBtn) {
         body: JSON.stringify({ status: "approved" })
       });
 
-      app.status = "approved";   
-      renderTables(applicants);  
-      modal.style.display = "none";
+      app.status = "approved";
+      renderTables(applicants);
     } catch (err) {
       console.error("Error approving:", err);
       alert("Failed to approve application.");
@@ -427,37 +535,84 @@ if (approveBtn) {
   };
 }
 
-// Reject button
 const rejectBtn = modal.querySelector(".reject-btn");
 if (rejectBtn) {
-  rejectBtn.onclick = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/educational-assistance/${app._id}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          status: "rejected",
-          rejectionReason: "Not eligible"
-        })
-      });
-
-      app.status = "rejected";   
-      renderTables(applicants);  
-      modal.style.display = "none";
-    } catch (err) {
-      console.error("Error rejecting:", err);
-      alert("Failed to reject application.");
-    }
+  rejectBtn.onclick = () => {
+    modal.style.display = "none"; // Close modal first
+    document.getElementById("rejectionModal").style.display = "flex";
+    document.getElementById("rejectionReasonInput").value = "";
+    document.getElementById("rejectionModal").dataset.appId = app._id;
   };
 }
 
+// Handle rejection modal close
+document.getElementById("closeRejectionModal").onclick = function() {
+  document.getElementById("rejectionModal").style.display = "none";
+};
 
-}
+// Handle rejection modal submit
+document.getElementById("submitRejectionBtn").onclick = async function() {
+  const submitBtn = document.getElementById("submitRejectionBtn");
+  const reason = document.getElementById("rejectionReasonInput").value.trim();
+  if (!reason) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Rejection Reason Required',
+      text: 'Please enter a reason for rejection.',
+      confirmButtonColor: '#0A2C59'
+    });
+    return;
+  }
+  submitBtn.disabled = true; // Prevent multiple clicks
 
+  // Hide the rejection modal BEFORE showing the loading alert
+  document.getElementById("rejectionModal").style.display = "none";
+
+  Swal.fire({
+    title: 'Processing...',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  const appId = document.getElementById("rejectionModal").dataset.appId;
+  try {
+    const token = sessionStorage.getItem("token");
+    await fetch(`http://localhost:5000/api/educational-assistance/${appId}/status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        status: "rejected",
+        rejectionReason: reason
+      })
+    });
+    modal.style.display = "none";
+    app.status = "rejected";
+    renderTables(applicants);
+    Swal.fire({
+      icon: 'success',
+      title: 'Application Rejected',
+      text: 'The applicant has been notified.',
+      confirmButtonColor: '#0A2C59'
+    });
+  } catch (err) {
+    console.error("Error rejecting:", err);
+    Swal.fire({
+      icon: 'error',
+      title: 'Failed to Reject',
+      text: 'There was an error rejecting the application.',
+      confirmButtonColor: '#0A2C59'
+    });
+  } finally {
+    submitBtn.disabled = false; // Re-enable after process
+  }
+};
+  }
 
 
   // After renderTables, attach modal openers for all .action-btn
@@ -472,11 +627,54 @@ if (rejectBtn) {
   });
 }
 
+function attachDeleteHandlers() {
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const row = btn.closest("tr");
+      const appId = row.dataset.id;
+      const confirm = await Swal.fire({
+        icon: 'warning',
+        title: 'Delete Application',
+        text: 'Are you sure you want to delete this application?',
+        showCancelButton: true,
+        confirmButtonColor: '#e74c3c',
+        cancelButtonColor: '#0A2C59',
+        confirmButtonText: 'Delete'
+      });
+      if (confirm.isConfirmed) {
+        try {
+          const token = sessionStorage.getItem("token");
+          await fetch(`http://localhost:5000/api/educational-assistance/${appId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          // Remove from applicants array and re-render
+          applicants = applicants.filter(a => a._id !== appId);
+          renderTables(applicants);
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted',
+            text: 'Application deleted successfully.',
+            confirmButtonColor: '#0A2C59'
+          });
+        } catch (err) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Delete Failed',
+            text: 'Could not delete application.',
+            confirmButtonColor: '#0A2C59'
+          });
+        }
+      }
+    });
+  });
+}
 
   // ---------------- Event Listeners ----------------
-  yearSelect.addEventListener("change", fetchApplicants);
-  cycleSelect.addEventListener("change", fetchApplicants);
   searchInput.addEventListener("input", () => renderTables(applicants));
+
 
   // ---------------- Initial Load ----------------
   fetchFormCycles().then(fetchApplicants);
@@ -505,7 +703,7 @@ if (rejectBtn) {
 
   // Fetch notifications from backend
   async function fetchNotifications() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     // Fetch new applications
     const newRes = await fetch('http://localhost:5000/api/notifications/unread', {
       headers: { Authorization: `Bearer ${token}` }
@@ -545,61 +743,7 @@ if (rejectBtn) {
   }
 
     // Helper to format date/time
-  function formatDateTime(dt) {
-    if (!dt) return "";
-    const date = new Date(dt);
-    return date.toLocaleString('en-US', {
-      year: 'numeric', month: 'long', day: 'numeric',
-      hour: '2-digit', minute: '2-digit', hour12: true
-    });
-  }
-
-  function updateDateTime() {
-    const options = { timeZone: "Asia/Manila" };
-    const now = new Date(new Date().toLocaleString("en-US", options));
-    const hours = now.getHours();
-
-    let greeting = "Good evening";
-    let iconClass = "fa-solid fa-moon";
-    let iconColor = "#183153";
-    if (hours < 12) {
-      iconClass = "fa-solid fa-sun";
-      iconColor = "#f7c948";
-      greeting = "Good morning";
-    } else if (hours < 18) {
-      iconClass = "fa-solid fa-cloud-sun";
-      iconColor = "#f7c948";
-      greeting = "Good afternoon";
-    }
-
-    // Format date as "January 25, 2025"
-    const dateStr = now.toLocaleDateString("en-US", {
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-      timeZone: "Asia/Manila"
-    });
-
-    // Format time as hh:mm (24-hour)
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-    const timeStr = `${hh}:${mm}`;
-
-    document.getElementById("greeting").textContent = greeting;
-    document.getElementById("header-date").textContent = dateStr + " -";
-    document.getElementById("datetime").textContent = timeStr;
-
-    // Update icon
-    const icon = document.getElementById("greeting-icon");
-    icon.className = iconClass;
-    icon.style.color = iconColor;
-  }
-
-  // Initial call
-  updateDateTime();
-  // Update every second
-  setInterval(updateDateTime, 1000);
-
+  
   // Optional: Hide dropdown when clicking outside
   document.addEventListener('click', function(e) {
     if (!notifDropdown.contains(e.target) && !notifBell.contains(e.target)) {

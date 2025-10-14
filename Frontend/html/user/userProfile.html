@@ -9,23 +9,35 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
     <!-- Navbar -->
     <div class="navbar">
-      <div class="navbar-left">
-        <img src="../../assets/logo.png" alt="Logo" />
-        <span class="title">SK-INSIGHT</span>
-      </div>
+    <div class="navbar-left">
+      <a href="./index.html">
+        <img src="../../assets/logo.png" alt="Logo" class="logo"/>
+      </a>
+      <a href="./index.html" class="title">SK-PBW</a>
+    </div>
+    <div class="navbar-center">
+      <!-- Desktop Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
+    </div>
       <div class="navbar-right">
-        <span><i class="fa-solid fa-bars" style="color: #ffffff"></i></span>
-        <span><i class="fa-solid fa-bell" style="color: #ffffff"></i></span>
-        <span><i class="fa-solid fa-user" style="color: #ffffff"></i></span>
+        <span class="navbar-hamburger" id="navbarHamburger">
+          <i class="fa-solid fa-bars"></i>
+        </span>
+      <a href="./announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+      <a href="../user/userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
       </div>
     </div>
+    
 
     <div class="profile-container">
-      <img src="../../assets/id.jpg" alt="User" />
+      <img id="profile-img" alt="User" />
       <h3>Test T. Tests</h3>
       <p>test@example.com</p>
       <p class="verified">
@@ -35,34 +47,33 @@
 
       <div class="field">
         <label>Full Name</label>
-        <input type="text" value="Test T. Test" readonly />
+        <input type="text" id="fullName" readonly />
       </div>
 
       <div class="field">
         <label>Age</label>
-        <input type="text" value="22" readonly />
+        <input type="text" id="age" readonly />
       </div>
 
       <div class="field">
         <label>Gender</label>
-        <input type="text" value="Male" readonly />
+        <input id="gender" readonly>
       </div>
 
       <div class="field">
         <label>Youth Classification</label>
-        <input type="text" value="In School Youth" readonly />
+        <input type="text" id="youthClassification" readonly />
       </div>
 
       <div class="field">
         <label>Civil Status</label>
-        <input type="text" value="Single" readonly />
+        <input id="civilStatus" readonly>
       </div>
 
       <div class="field">
         <label>Purok</label>
-        <input type="text" value="Purok 69" readonly />
+        <input type="text" id="purok" readonly />
       </div>
-
       <div class="buttons">
         <button class="verify-btn">Verify Account</button>
         <button class="logout-btn">Log out</button>
@@ -90,11 +101,9 @@
             <!-- Right Section -->
             <div class="footer-right">
               <h4>Follow Us</h4>
-              <ul>
-                <li><i class="fa-brands fa-facebook"></i> <a href="#">Facebook</a></li>
-                <li><i class="fa-brands fa-twitter"></i> <a href="#">Twitter</a></li>
-                <li><i class="fa-brands fa-instagram"></i> <a href="#">Instagram</a></li>
-              </ul>
+                <ul>
+                  <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
+                </ul>
             </div>
           </div>
         
@@ -104,5 +113,14 @@
             <p>© 2025 SK-INSIGHT. All rights reserved.</p>
           </div>
         </footer>
+
+        <div class="navbar-mobile-menu" id="navbarMobileMenu">
+          <!-- Mobile Navbar -->
+          <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+          <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+          <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
+        </div>
+
+  <script src="../../js/user-profile.js"></script>
   </body>
 </html>

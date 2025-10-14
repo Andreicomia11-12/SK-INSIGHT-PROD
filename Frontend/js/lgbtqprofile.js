@@ -1,9 +1,37 @@
 // lgbtqprofile.js
 
 // 🔹 Redirect to login if no token
-if (!localStorage.getItem("token")) {
-  window.location.href = "/html/admin-log.html";
-}
+(function() {
+  const token = sessionStorage.getItem("token") || localStorage.getItem("token");
+  function sessionExpired() {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Session Expired',
+      text: 'Please login again.',
+      confirmButtonColor: '#0A2C59',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => {
+      window.location.href = "./admin-log.html";
+    });
+  }
+  if (!token) {
+    sessionExpired();
+    return;
+  }
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.exp && Date.now() >= payload.exp * 1000) {
+      sessionStorage.removeItem("token");
+      localStorage.removeItem("token");
+      sessionExpired();
+    }
+  } catch (e) {
+    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
+    sessionExpired();
+  }
+})();
 
 let allProfiles = [];
 
@@ -11,71 +39,153 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("lgbtqprofile.js loaded ✅");
 
   const tableBody = document.querySelector(".tables tbody");
-  const yearSelect = document.getElementById("year"); // Cycle
-  const cycleSelect = document.getElementById("cycleNumber"); // Year
-  const filterBtn = document.getElementById("yearFilterBtn");
-  const searchInput = document.querySelector(".search-input");
 
+  // Custom dropdown elements
+  const yearDropdown = document.getElementById("yearDropdown");
+  const yearButton = yearDropdown.querySelector(".dropdown-button");
+  const yearContent = yearDropdown.querySelector(".dropdown-content");
+  const cycleDropdown = document.getElementById("cycleDropdown");
+  const cycleButton = cycleDropdown.querySelector(".dropdown-button");
+  const cycleContent = cycleDropdown.querySelector(".dropdown-content");
+  const classificationDropdown = document.getElementById("classificationDropdown");
+  const classificationButton = classificationDropdown.querySelector(".dropdown-button");
+  const classificationContent = classificationDropdown.querySelector(".dropdown-content");
+  const filterBtn = document.getElementById("filterBtn");
+  const clearFilterBtn = document.getElementById("clearFilterBtn");
+
+  let yearMap = {};
+  let sortedYears = [];
   let currentFilters = {
-  year: "",
-  cycle: "",
-  classification: "",
-  search: ""
-};
-
+    year: "",
+    cycle: "",
+    lgbtqClassification: "",
+    search: ""
+  };
 
   // 🔹 Fetch cycles for LGBTQ
   async function fetchCycles() {
     try {
       const res = await fetch("http://localhost:5000/api/formcycle/lgbtq", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
       });
       if (!res.ok) throw new Error("Failed to fetch cycles");
 
       const cycles = await res.json();
 
       // Group cycles by year
-      const yearMap = {};
+      yearMap = {};
       cycles.forEach((c) => {
         if (!yearMap[c.year]) yearMap[c.year] = [];
         yearMap[c.year].push(c.cycleNumber);
       });
 
-      // Populate year/cycle dropdowns
-      cycleSelect.innerHTML = `<option value="">Select Year</option>`;
-      yearSelect.innerHTML = `<option value="">Select Cycle</option>`;
-      Object.keys(yearMap)
-        .sort((a, b) => b - a)
-        .forEach((year) => {
-          const opt = document.createElement("option");
-          opt.value = year;
-          opt.textContent = year;
-          cycleSelect.appendChild(opt);
+      sortedYears = Object.keys(yearMap).sort((a, b) => b - a);
+
+      // Populate year dropdown
+      yearContent.innerHTML = "";
+      sortedYears.forEach(year => {
+        const yearOption = document.createElement("a");
+        yearOption.href = "#";
+        yearOption.className = "dropdown-option";
+        yearOption.textContent = year;
+        yearOption.addEventListener("click", (e) => {
+          e.preventDefault();
+          yearButton.textContent = year;
+          currentFilters.year = year;
+
+          // Reset cycle/classification
+          cycleButton.textContent = "Cycle";
+          currentFilters.cycle = "";
+          cycleButton.disabled = false;
+          classificationButton.textContent = "Classification";
+          classificationButton.disabled = true;
+
+          // Populate cycle dropdown for selected year
+          populateCycleDropdown(yearMap[year]);
+          yearContent.style.display = "none";
         });
-
-      // Disable cycle dropdown initially
-      yearSelect.disabled = true;
-
-      // When year changes, update cycle dropdown
-      cycleSelect.addEventListener("change", () => {
-        const selectedYear = cycleSelect.value;
-        yearSelect.innerHTML = `<option value="">Select Cycle</option>`;
-        if (selectedYear && yearMap[selectedYear]) {
-          yearMap[selectedYear].forEach((cy) => {
-            const opt = document.createElement("option");
-            opt.value = cy;
-            opt.textContent = `Cycle ${cy}`;
-            yearSelect.appendChild(opt);
-          });
-          yearSelect.disabled = false;
-        } else {
-          yearSelect.disabled = true;
-        }
+        yearContent.appendChild(yearOption);
       });
+
+      // Reset buttons on load
+      yearButton.textContent = "Year";
+      cycleButton.textContent = "Cycle";
+      cycleButton.disabled = true;
+      classificationButton.textContent = "Classification";
+      classificationButton.disabled = true;
     } catch (err) {
       console.error("Error fetching cycles:", err);
     }
   }
+
+  // Populate cycle dropdown for selected year
+  function populateCycleDropdown(cycles) {
+    cycleContent.innerHTML = "";
+    cycles.forEach(cycle => {
+      const cycleOption = document.createElement("a");
+      cycleOption.href = "#";
+      cycleOption.className = "dropdown-option";
+      cycleOption.textContent = `Cycle ${cycle}`;
+      cycleOption.addEventListener("click", (e) => {
+        e.preventDefault();
+        cycleButton.textContent = `Cycle ${cycle}`;
+        currentFilters.cycle = cycle;
+
+        // Enable classification dropdown
+        classificationButton.disabled = false;
+        cycleContent.style.display = "none";
+      });
+      cycleContent.appendChild(cycleOption);
+    });
+  }
+
+  // Dropdown open/close logic (same as KK)
+  yearButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    yearContent.style.display = yearContent.style.display === "block" ? "none" : "block";
+    cycleContent.style.display = "none";
+    classificationContent.style.display = "none";
+  });
+  cycleButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!cycleButton.disabled) {
+      cycleContent.style.display = cycleContent.style.display === "block" ? "none" : "block";
+      yearContent.style.display = "none";
+      classificationContent.style.display = "none";
+    }
+  });
+  classificationButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!classificationButton.disabled) {
+      classificationContent.style.display = classificationContent.style.display === "block" ? "none" : "block";
+      yearContent.style.display = "none";
+      cycleContent.style.display = "none";
+    }
+  });
+  window.addEventListener("click", () => {
+    yearContent.style.display = "none";
+    cycleContent.style.display = "none";
+    classificationContent.style.display = "none";
+  });
+
+  // Classification dropdown options
+  const classifications = [
+    "Lesbian", "Gay", "Bisexual", "Transgender", "Queer", "Intersex", "Asexual", "Other"
+  ];
+  classificationContent.innerHTML = "";
+  classifications.forEach(c => {
+    const option = document.createElement("a");
+    option.href = "#";
+    option.className = "dropdown-option";
+    option.textContent = c;
+    option.addEventListener("click", (e) => {
+      e.preventDefault();
+      classificationButton.textContent = c;
+      currentFilters.lgbtqClassification = c;
+      classificationContent.style.display = "none";
+    });
+    classificationContent.appendChild(option);
+  });
 
   // 🔹 Fetch profiles
   async function fetchProfiles(params = {}) {
@@ -85,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // If filtering by year, cycle, or classification
       if (params.year) queryObj.year = params.year;
-      if (params.cycle && params.year) queryObj.cycle = params.cycle; // Only allow cycle if year is selected
+      if (params.cycle && params.year) queryObj.cycle = params.cycle;
       if (params.lgbtqClassification) queryObj.lgbtqClassification = params.lgbtqClassification;
       if (params.search) queryObj.search = params.search;
 
@@ -96,40 +206,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const res = await fetch(url, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
 
       if (!res.ok) throw new Error(`Error ${res.status}`);
       const data = await res.json();
-      allProfiles = data;
-      console.log("✅ Profiles fetched:", data);
-      renderProfiles(data);
+      // Filter out deleted profiles (same as KK profiling)
+      const visibleProfiles = data.filter(p => !p.isDeleted);
+      allProfiles = visibleProfiles;
+      console.log("✅ Profiles fetched:", visibleProfiles);
+      renderProfiles(visibleProfiles);
     } catch (err) {
       console.error("❌ Error fetching profiles:", err);
     }
   }
 
+  const PROFILES_PER_PAGE = 30;
+  let currentPage = 1;
 
-  // 🔹 Render profiles
+  // Replace your renderProfiles function with this paginated version:
   function renderProfiles(profiles) {
+    const totalPages = Math.ceil(profiles.length / PROFILES_PER_PAGE);
+    const startIdx = (currentPage - 1) * PROFILES_PER_PAGE;
+    const endIdx = startIdx + PROFILES_PER_PAGE;
+    const pageProfiles = profiles.slice(startIdx, endIdx);
+
     tableBody.innerHTML = "";
-    if (!profiles.length) {
-      tableBody.innerHTML = `<tr><td colspan="5">No profiles found</td></tr>`;
+    if (!pageProfiles.length) {
+      tableBody.innerHTML = `<tr><td colspan="7">No profiles found</td></tr>`;
+      renderPagination(profiles.length, totalPages);
       return;
     }
 
-    profiles.forEach((p, i) => {
+    pageProfiles.forEach((p, i) => {
+      const birthday = p.displayData?.birthday
+        ? new Date(p.displayData.birthday).toLocaleDateString()
+        : "N/A";
+      const age = p.displayData?.age ?? "N/A";
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${i + 1}</td>
+        <td>${startIdx + i + 1}</td>
         <td>${p.displayData?.residentName || "N/A"}</td>
+        <td>${age}</td>
+        <td>${birthday}</td>
         <td>${p.displayData?.lgbtqClassification ?? "N/A"}</td>
         <td>${p.displayData?.sexAssignedAtBirth ?? "N/A"}</td>
-        <td><button class="view-btn" data-id="${p._id}" style="color: white;"><i class="fa-solid fa-eye" style = "color: #ffffffff"></i> Review</button></td>
+        <td>
+          <button class="view-btn" data-id="${p._id}" style="color: white;">
+            <i class="fa-solid fa-eye" style="color: #ffffffff"></i>
+          </button>
+          <button class="delete-btn" data-id="${p._id}">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
       `;
       tableBody.appendChild(row);
     });
+
+    renderPagination(profiles.length, totalPages);
 
     // Attach modal openers
     document.querySelectorAll(".view-btn").forEach((btn) =>
@@ -138,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
           `http://localhost:5000/api/lgbtqprofiling/${btn.dataset.id}`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -146,6 +281,166 @@ document.addEventListener("DOMContentLoaded", () => {
         showProfileModal(profile);
       })
     );
+
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        const result = await Swal.fire({
+          title: "Are you sure?",
+          text: "Do you really want to delete this form?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#0A2C59",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes",
+          cancelButtonText: "No"
+        });
+        if (result.isConfirmed) {
+          const res = await fetch(`http://localhost:5000/api/lgbtqprofiling/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+          });
+          if (res.ok) {
+            Swal.fire("Deleted!", "Profile moved to recycle bin.", "success");
+            fetchProfiles(); // Refresh table
+          }
+        }
+      });
+    });
+  }
+
+  // Add this function for pagination controls:
+  function renderPagination(totalProfiles, totalPages) {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    if (totalPages <= 1) return;
+
+    // Previous button
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "pagination-btn";
+    prevBtn.textContent = "Prev";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderProfiles(allProfiles);
+      }
+    };
+    pagination.appendChild(prevBtn);
+
+    // Page numbers (show max 5 pages at a time)
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + 4);
+    if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.className = "pagination-btn" + (i === currentPage ? " active" : "");
+      pageBtn.textContent = i;
+      pageBtn.onclick = () => {
+        currentPage = i;
+        renderProfiles(allProfiles);
+      };
+      pagination.appendChild(pageBtn);
+    }
+
+    // Next button
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "pagination-btn";
+    nextBtn.textContent = "Next";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderProfiles(allProfiles);
+      }
+    };
+    pagination.appendChild(nextBtn);
+  }
+
+  // 🔹 Render profiles
+  function renderProfiles(profiles) {
+    const totalPages = Math.ceil(profiles.length / PROFILES_PER_PAGE);
+    const startIdx = (currentPage - 1) * PROFILES_PER_PAGE;
+    const endIdx = startIdx + PROFILES_PER_PAGE;
+    const pageProfiles = profiles.slice(startIdx, endIdx);
+
+    tableBody.innerHTML = "";
+    if (!pageProfiles.length) {
+      tableBody.innerHTML = `<tr><td colspan="7">No profiles found</td></tr>`;
+      renderPagination(profiles.length, totalPages);
+      return;
+    }
+
+    pageProfiles.forEach((p, i) => {
+      const birthday = p.displayData?.birthday
+        ? new Date(p.displayData.birthday).toLocaleDateString()
+        : "N/A";
+      const age = p.displayData?.age ?? "N/A";
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${startIdx + i + 1}</td>
+        <td>${p.displayData?.residentName || "N/A"}</td>
+        <td>${age}</td>
+        <td>${birthday}</td>
+        <td>${p.displayData?.lgbtqClassification ?? "N/A"}</td>
+        <td>${p.displayData?.sexAssignedAtBirth ?? "N/A"}</td>
+        <td>
+          <button class="view-btn" data-id="${p._id}" style="color: white;">
+            <i class="fa-solid fa-eye" style="color: #ffffffff"></i>
+          </button>
+          <button class="delete-btn" data-id="${p._id}">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+
+    renderPagination(profiles.length, totalPages);
+
+    // Attach modal openers
+    document.querySelectorAll(".view-btn").forEach((btn) =>
+      btn.addEventListener("click", async () => {
+        const res = await fetch(
+          `http://localhost:5000/api/lgbtqprofiling/${btn.dataset.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          }
+        );
+        const profile = await res.json();
+        showProfileModal(profile);
+      })
+    );
+
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        const result = await Swal.fire({
+          title: "Are you sure?",
+          text: "Do you really want to delete this form?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#0A2C59",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes",
+          cancelButtonText: "No"
+        });
+        if (result.isConfirmed) {
+          const res = await fetch(`http://localhost:5000/api/lgbtqprofiling/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+          });
+          if (res.ok) {
+            Swal.fire("Deleted!", "Profile moved to recycle bin.", "success");
+            fetchProfiles(); // Refresh table
+          }
+        }
+      });
+    });
   }
 
   // 🔹 Show modal
@@ -154,209 +449,121 @@ document.addEventListener("DOMContentLoaded", () => {
     const header = document.getElementById("profileHeader");
     const details = document.getElementById("profileDetails");
 
-    // Use displayData for consistent info
-    const fullName = p.displayData?.residentName || "N/A";
-    const age = p.displayData?.age ?? "N/A";
-    const birthday = p.displayData?.birthday ?? "N/A";
-    const sexAssignedAtBirth = p.displayData?.sexAssignedAtBirth ?? "N/A";
-    const lgbtqClassification = p.displayData?.lgbtqClassification ?? "N/A";
-    const idImage = p.displayData?.idImage
-      ? `http://localhost:5000/uploads/lgbtq_id_images/${p.displayData.idImage}`
-      : "/Frontend/assets/default-profile.png";
+    // Build full name from root-level fields, fallback to displayData.residentName
+    let fullName = "N/A";
+    if (p.firstname || p.middlename || p.lastname) {
+      const firstname = p.firstname ? p.firstname.trim() : "";
+      const middlename = p.middlename && p.middlename.trim() !== ""
+        ? p.middlename.trim()[0].toUpperCase() + "."
+        : "";
+      const lastname = p.lastname ? p.lastname.trim() : "";
+      fullName = [firstname, middlename, lastname].filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+    } else if (p.displayData?.residentName) {
+      fullName = p.displayData.residentName;
+    }
 
-    // Header: just the name
-    // header.innerHTML = `
-    //   <p style="font-size:1.2em; font-weight:bold; margin:0;">${fullName}</p>
-    // `;
+    const age = p.displayData?.age ?? p.demographics?.age ?? "N/A";
+    const birthday = p.displayData?.birthday
+      ? new Date(p.displayData.birthday).toLocaleDateString()
+      : (p.demographics?.birthday ? new Date(p.demographics.birthday).toLocaleDateString() : "N/A");
+    const sexAssignedAtBirth = p.displayData?.sexAssignedAtBirth ?? p.sexAssignedAtBirth ?? "N/A";
+    const lgbtqClassification = p.displayData?.lgbtqClassification ?? p.lgbtqClassification ?? "N/A";
+    const idImage = p.displayData?.idImage || p.idImage
+      ? `http://localhost:5000/uploads/lgbtq_id_images/${p.displayData?.idImage || p.idImage}`
+      : null;
 
-    // Details: ID image in its own container, larger size
+    // Modern modal header: only full name, no download icon
+    header.innerHTML = `
+      <div class="profile-header">
+        <div class="profile-name">${fullName || "N/A"}</div>
+      </div>
+    `;
+
     details.innerHTML = `
-      <div class="profile-info" style = "margin-top: 5%">
-      <hr>
-        <p style="font-size:1.2em; font-weight:bold; margin:0;">${fullName}</p>
-        <hr>
-        <p><b class="label">Age:</b> ${age}</p>
-        <hr>
-        <p><b class="label">Sex Assigned at Birth:</b> ${sexAssignedAtBirth}</p>
-        <hr>
-        <p><b class="label">LGBTQ Classification:</b> ${lgbtqClassification}</p>
-        <hr>
-        <p><b class="label">Birthday:</b> ${birthday}</p>
-        <hr>
-        <p><b class="label">Email:</b> ${p.user?.email || "-"}</p>
-        <hr>
-        <div class="id-image-container" style="
-          background: #f3f3f3;
-          padding: 18px;
-          border-radius: 12px;
-          margin: 18px 0;
-          text-align: left;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-        ">
-          <p style="color:#222; font-weight:bold; margin-bottom:12px;">Identification Card:</p>
-          <div style="width:100%; display:flex; justify-content:center;">
-            <img src="${idImage}" alt="ID Image"
-              style="
-                width:96%;
-                max-width:480px;
-                height:220px;
-                object-fit:contain;
-                background:#fff;
-                border-radius:6px;
-                box-shadow:0 1px 6px rgba(0,0,0,0.08);
-                display:block;
-              " />
+      <div class="profile-details-modal">
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <span class="label">Age</span>
+            <span class="value">${age}</span>
+          </div>
+          <div class="profile-detail">
+            <span class="label">Birthday</span>
+            <span class="value">${birthday}</span>
           </div>
         </div>
-        <hr>
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <span class="label">Sex Assigned at Birth</span>
+            <span class="value">${sexAssignedAtBirth}</span>
+          </div>
+          <div class="profile-detail">
+            <span class="label">LGBTQIA+ Classification</span>
+            <span class="value">${lgbtqClassification}</span>
+          </div>
+        </div>
+        ${idImage ? `
+          <div class="profile-details-row">
+            <div class="profile-detail">
+              <span class="label">Valid ID</span>
+              <div class="id-image-container">
+                <img src="${idImage}" alt="Valid ID" class="id-image"/>
+              </div>
+            </div>
+          </div>
+        ` : ''}
       </div>
     `;
 
     modal.style.display = "flex";
-    document.querySelector(".close-btn").onclick = () =>
-      (modal.style.display = "none");
+    document.body.classList.add("modal-open");
+
+    // Fix: Attach close event to the correct button after rendering
+    const closeBtn = modal.querySelector(".modern-modal-close");
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        modal.style.display = "none";
+        document.body.classList.remove("modal-open");
+      };
+    }
   }
 
-  // 🔹 Cycle filter
-filterBtn.addEventListener("click", () => {
-  // Year & cycle
-  currentFilters.year = cycleSelect.value || "";
-  currentFilters.cycle = currentFilters.year ? yearSelect.value || "" : "";
+  // 🔹 Filter button logic
+  filterBtn.addEventListener("click", () => {
+    // Use the values from the custom dropdown buttons
+    const selectedYear = yearButton.textContent !== "Year" ? yearButton.textContent : "";
+    const selectedCycle = cycleButton.textContent !== "Cycle" ? cycleButton.textContent.replace("Cycle ", "") : "";
+    const selectedClassification = classificationButton.textContent !== "Classification" ? classificationButton.textContent : "";
 
-  // Classification already set from dropdown
-  // Search is handled separately in searchInput
-
-  fetchProfiles(currentFilters);
-});
-
-
-  // 🔹 Classification dropdown
-  const dropdownButton = document.querySelector(".dropdown-button");
-  const dropdownContent = document.querySelector(".dropdown-content");
-  const classifications = [
-    "Lesbian",
-    "Gay",
-    "Bisexual",
-    "Transgender",
-    "Queer",
-    "Intersex",
-    "Asexual",
-    "Other",
-  ];
-
-  // Populate dropdown
-classifications.forEach((c) => {
-  const option = document.createElement("a");
-  option.href = "#";
-  option.textContent = c;
-  option.addEventListener("click", (e) => {
-    e.preventDefault();
-    dropdownButton.textContent = c;
-    currentFilters.lgbtqClassification = c;
-  });
-  dropdownContent.appendChild(option);
-});
-
-// Add "All" option
-const allOption = document.createElement("a");
-allOption.href = "#";
-allOption.textContent = "All Classifications";
-allOption.addEventListener("click", (e) => {
-  e.preventDefault();
-  dropdownButton.textContent = "Select Classification";
-  currentFilters.lgbtqClassification = "";
-});
-dropdownContent.insertBefore(allOption, dropdownContent.firstChild);
-
-
-  // Show/hide dropdown on button click
-  dropdownButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    dropdownContent.style.display =
-      dropdownContent.style.display === "block" ? "none" : "block";
-  });
-
-  // Hide dropdown when clicking outside
-  document.addEventListener("click", () => {
-    dropdownContent.style.display = "none";
-  });
-
-
-  // 🔹 Search filter
-  searchInput.addEventListener("keyup", () => {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    const filteredProfiles = allProfiles.filter((p) => {
-      return (
-        (p.displayData?.residentName &&
-          p.displayData.residentName.toLowerCase().includes(searchTerm)) ||
-        (p.displayData?.purok &&
-          p.displayData.purok.toLowerCase().includes(searchTerm)) ||
-        (p.displayData?.lgbtqClassification &&
-          p.displayData.lgbtqClassification.toLowerCase().includes(searchTerm))
-      );
-    });
-    renderProfiles(filteredProfiles);
-  });
-
-  // Helper to format date/time
-  function formatDateTime(dt) {
-    if (!dt) return "";
-    const date = new Date(dt);
-    return date.toLocaleString('en-US', {
-      year: 'numeric', month: 'long', day: 'numeric',
-      hour: '2-digit', minute: '2-digit', hour12: true
-    });
-  }
-
-  function updateDateTime() {
-    const options = { timeZone: "Asia/Manila" };
-    const now = new Date(new Date().toLocaleString("en-US", options));
-    const hours = now.getHours();
-
-    let greeting = "Good evening";
-    let iconClass = "fa-solid fa-moon";
-    let iconColor = "#183153";
-    if (hours < 12) {
-      iconClass = "fa-solid fa-sun";
-      iconColor = "#f7c948";
-      greeting = "Good morning";
-    } else if (hours < 18) {
-      iconClass = "fa-solid fa-cloud-sun";
-      iconColor = "#f7c948";
-      greeting = "Good afternoon";
+    // Only allow filtering if year and cycle are selected
+    if (!selectedYear || !selectedCycle) {
+      alert("Please select both year and cycle before filtering.");
+      return;
     }
 
-    // Format date as "January 25, 2025"
-    const dateStr = now.toLocaleDateString("en-US", {
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-      timeZone: "Asia/Manila"
-    });
+    currentFilters.year = selectedYear;
+    currentFilters.cycle = selectedCycle;
+    currentFilters.lgbtqClassification = selectedClassification;
 
-    // Format time as hh:mm (24-hour)
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-    const timeStr = `${hh}:${mm}`;
+    fetchProfiles(currentFilters);
+  });
 
-    document.getElementById("greeting").textContent = greeting;
-    document.getElementById("header-date").textContent = dateStr + " -";
-    document.getElementById("datetime").textContent = timeStr;
-
-    // Update icon
-    const icon = document.getElementById("greeting-icon");
-    icon.className = iconClass;
-    icon.style.color = iconColor;
-  }
-
-  // Initial call
-  updateDateTime();
-  // Update every second
-  setInterval(updateDateTime, 1000);
+  // 🔹 Clear button logic
+  clearFilterBtn.addEventListener("click", () => {
+    yearButton.textContent = "Year";
+    cycleButton.textContent = "Cycle";
+    cycleButton.disabled = true;
+    classificationButton.disabled = true;
+    classificationButton.textContent = "Classification";
+    yearContent.style.display = "none";
+    cycleContent.style.display = "none";
+    classificationContent.style.display = "none";
+    currentFilters = {};
+    fetchProfiles({});
+  });
 
   // 🔹 Initial load
   fetchCycles();
-  fetchProfiles();
+  fetchProfiles({});
 });
 
 // Helper: Capitalize first letter

@@ -14,14 +14,39 @@
     <!-- Navbar -->
     <div class="navbar">
       <div class="navbar-left">
-        <img src="../../assets/logo.png" alt="Logo" />
-        <span class="title">SK-INSIGHT</span>
+        <a href="./index.html">
+          <img src="../../assets/logo.png" alt="Logo" class="logo"/>
+        </a>
+        <a href="./index.html" class="title">SK-PBW</a>
+      </div>
+      <div class="navbar-center">
+        <!-- Desktop Navbar -->
+        <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+        <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+        <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
       </div>
       <div class="navbar-right">
-        <span><i class="fa-solid fa-bars" style="color: #ffffff"></i></span>
-        <span><i class="fa-solid fa-bell" style="color: #ffffff"></i></span>
-        <a href="../user/userProfile.html"><i class="fa-solid fa-user" style="color: #ffffff"></i></a>
+        <span class="navbar-hamburger" id="navbarHamburger">
+          <i class="fa-solid fa-bars"></i>
+        </span>
+        <a class="notif" href="../user/announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+        <a href="../user/userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
       </div>
+    </div>
+
+    <div class="navbar-mobile-menu" id="navbarMobileMenu">
+      <!-- Mobile Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
+    </div>
+
+        <!-- Login Required Strip -->
+    <div id="login-strip" class="login-strip" style="display:none;">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>
+        You need to <a href="/Frontend/html/user/login.html">login</a> to access full features.
+      </span>
     </div>
 
     <!-- About Section -->
@@ -70,9 +95,7 @@
         <div class="footer-right">
           <h4>Follow Us</h4>
           <ul>
-            <li><i class="fa-brands fa-facebook"></i> <a href="#">Facebook</a></li>
-            <li><i class="fa-brands fa-twitter"></i> <a href="#">Twitter</a></li>
-            <li><i class="fa-brands fa-instagram"></i> <a href="#">Instagram</a></li>
+            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
           </ul>
         </div>
       </div>
@@ -84,4 +107,6 @@
       </div>
     </footer>
   </body>
+  <script src="../../js/about.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

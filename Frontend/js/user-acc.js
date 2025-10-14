@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tableBody = document.querySelector(".tables table tbody");
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token") || localStorage.getItem("token"); // <-- Updated line
   const searchInput = document.getElementById("userSearch"); // <-- Add this line
 
   let allUsers = []; // Store all users for filtering
@@ -62,62 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
       renderTable(filtered);
     });
   }
-
-    // Helper to format date/time
-  function formatDateTime(dt) {
-    if (!dt) return "";
-    const date = new Date(dt);
-    return date.toLocaleString('en-US', {
-      year: 'numeric', month: 'long', day: 'numeric',
-      hour: '2-digit', minute: '2-digit', hour12: true
-    });
-  }
-
-  function updateDateTime() {
-    const options = { timeZone: "Asia/Manila" };
-    const now = new Date(new Date().toLocaleString("en-US", options));
-    const hours = now.getHours();
-
-    let greeting = "Good evening";
-    let iconClass = "fa-solid fa-moon";
-    let iconColor = "#183153";
-    if (hours < 12) {
-      iconClass = "fa-solid fa-sun";
-      iconColor = "#f7c948";
-      greeting = "Good morning";
-    } else if (hours < 18) {
-      iconClass = "fa-solid fa-cloud-sun";
-      iconColor = "#f7c948";
-      greeting = "Good afternoon";
-    }
-
-    // Format date as "January 25, 2025"
-    const dateStr = now.toLocaleDateString("en-US", {
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-      timeZone: "Asia/Manila"
-    });
-
-    // Format time as hh:mm (24-hour)
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-    const timeStr = `${hh}:${mm}`;
-
-    document.getElementById("greeting").textContent = greeting;
-    document.getElementById("header-date").textContent = dateStr + " -";
-    document.getElementById("datetime").textContent = timeStr;
-
-    // Update icon
-    const icon = document.getElementById("greeting-icon");
-    icon.className = iconClass;
-    icon.style.color = iconColor;
-  }
-
-  // Initial call
-  updateDateTime();
-  // Update every second
-  setInterval(updateDateTime, 1000);
 
   // Initial load
   fetchUsers();

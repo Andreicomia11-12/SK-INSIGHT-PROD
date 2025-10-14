@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KK Profiling - Youth & Voting (View)</title>
+  <link rel="stylesheet" href="../css/view-youth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-left">
+      <a href="./index.html">
+        <img src="../../../../assets/logo.png" alt="Logo" class="logo"/>
+      </a>
+      <a href="../../index.html" class="title">SK-PBW</a>
+    </div>
+    <div class="navbar-center">
+        <!-- Desktop Navbar -->
+        <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+        <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+        <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
+    </div>
+    <div class="navbar-right">
+      <span class="navbar-hamburger" id="navbarHamburger">
+        <i class="fa-solid fa-bars"></i>
+      </span>
+      <a href="../../announcement.html"><i class="fa-solid fa-bell" style="color: #fff;"></i></a>
+      <a href="../../userProfile.html"><i class="fa-solid fa-user" style="color: #fff;"></i></a>
+    </div>
+  </div>
+  <div class="navbar-mobile-menu" id="navbarMobileMenu">
+      <!-- Mobile Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
+  </div>
+  <div class="kk-container">
+    <div class="kk-card kk-intro">
+      <h2>KK Profiling</h2>
+      <p><strong>Step 3 of 3: Youth & Voting Information</strong></p>
+    </div>
+    <form>
+      <div class="kk-card">
+        <label class="kk-label" for="youthAgeGroup">Youth Age Group:</label>
+        <select class="kk-input" id="youthAgeGroup" disabled>
+          <option value="">Select Age Group</option>
+          <option value="Child Youth">Child Youth</option>
+          <option value="Core Youth">Core Youth</option>
+          <option value="Young Youth">Young Youth</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="youthClassification">Youth Classification:</label>
+        <select class="kk-input" id="youthClassification" disabled>
+          <option value="">Select Classification</option>
+          <option value="In School Youth">In School Youth</option>
+          <option value="Out of School Youth">Out of School Youth</option>
+          <option value="Working Youth">Working Youth</option>
+          <option value="Youth with Specific Needs">Youth with Specific Needs</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="educationalBackground">Educational Background:</label>
+        <select class="kk-input" id="educationalBackground" disabled>
+          <option value="">Select Educational Background</option>
+          <option value="Elementary Undergraduate">Elementary Undergraduate</option>
+          <option value="Elementary Graduate">Elementary Graduate</option>
+          <option value="High School Undergraduate">High School Undergraduate</option>
+          <option value="High School Graduate">High School Graduate</option>
+          <option value="Vocational Graduate">Vocational Graduate</option>
+          <option value="College Undergraduate">College Undergraduate</option>
+          <option value="College Graduate">College Graduate</option>
+          <option value="Masters Graduate">Masters Graduate</option>
+          <option value="Doctorate Level">Doctorate Level</option>
+          <option value="Doctorate Graduate">Doctorate Graduate</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="workStatus">Work Status:</label>
+        <select class="kk-input" id="workStatus" disabled>
+          <option value="">Select Work Status</option>
+          <option value="Employed">Employed</option>
+          <option value="Unemployed">Unemployed</option>
+          <option value="Self-Employed">Self-Employed</option>
+          <option value="Currently looking for a Job">Currently looking for a Job</option>
+          <option value="Not interested in looking for a Job">Not interested in looking for a Job</option>
+        </select>
+      </div>
+      <div class="kk-card kk-checkbox-group">
+        <label><input type="checkbox" id="registeredSKVoter" disabled> Registered SK Voter</label>
+      </div>
+      <div class="kk-card kk-checkbox-group">
+        <label><input type="checkbox" id="registeredNationalVoter" disabled> Registered National Voter</label>
+      </div>
+      <div class="kk-card kk-checkbox-group">
+        <label><input type="checkbox" id="votedLastSKElection" disabled> Voted in Last SK Election</label>
+      </div>
+      <div class="kk-card kk-checkbox-group">
+        <label><input type="checkbox" id="attendedKKAssembly" disabled> Attended KK Assembly</label>
+      </div>
+      <div class="kk-card" id="attendanceCountGroup">
+        <label class="kk-label" for="attendanceCount">How many times?</label>
+        <select class="kk-input" id="attendanceCount" disabled>
+          <option value="">Select</option>
+          <option value="1-2 times">1-2 times</option>
+          <option value="3-4 times">3-4 times</option>
+          <option value="5 and above">5 and above</option>
+        </select>
+      </div>
+      <div class="kk-card" id="reasonGroup">
+        <label class="kk-label" for="reasonDidNotAttend">Why didn't you attend?</label>
+        <select class="kk-input" id="reasonDidNotAttend" disabled>
+          <option value="">Select</option>
+          <option value="There was no KK Assembly">There was no KK Assembly</option>
+          <option value="Not interested">Not interested</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label kk-file-upload" for="profileImage">
+          <i class="fas fa-upload"></i> Uploaded Profile Image
+          <div id="imagePreview" class="image-preview"></div>
+        </label>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label kk-file-upload" for="signatureImage">
+          <i class="fas fa-upload"></i> Uploaded Signature Image
+          <div id="signaturePreview" class="image-preview"></div>
+        </label>
+      </div>
+      <div class="butts">
+        <button type="button" class="kk-butn" onclick="window.location.href='view-kkaddress.html'">Previous</button>
+        <button type="button" class="kk-butns kk-next-btn" onclick="window.location.href='kkcofirmation.html'">Done</button>
+      </div>
+    </form>
+  </div>
+  <script src="../../../../js/view-kkyouth.js"></script>
+</body>
+</html>

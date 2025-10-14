@@ -27,8 +27,8 @@ body {
 }
 
 .logo {
-    width: 30vw;
-    max-width: 150px;
+    width: 50vw;
+    min-width: 90px;
     height: auto;
     margin: 0 auto 10px auto;
 }
@@ -54,13 +54,15 @@ body {
 }
 
 .container {
-    width: 50%;
-    max-width: 400px;
-    padding: 40px;
+    width: 80vw;
+    max-width: 320px;
+    min-width: 200px;
+    padding: 20px;
     background-color: white;
-    border-radius: 20px;
+    border-radius: 18px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    margin: 50px auto 0 auto;
+    margin: 60px auto 0 auto;
+    transition: width 0.2s, padding 0.2s;
 }
 
 .container h1 {
@@ -128,10 +130,129 @@ body {
     text-align: center;
 }
 
+/* Extra mobile-friendly adjustments */
+@media (min-width: 600px) {
+    body {
+        font-family: 'Poppins', sans-serif;
+        padding: 8px;
+        min-height: 100vh;
+        flex-direction: column;
+        align-items: center;
+        background: linear-gradient(to bottom, #0A2C59 30%, #ffffff 30%);
+    }
+    .container {
+        width: 95vw;
+        max-width: 340px;
+        padding: 18px;
+        margin: 100px auto 0 auto;
+        border-radius: 14px;
+    }
+    .sk, .sk1{
+        margin-top: 10px;
+        font-size: large;
+        color: white;
+    }
+    .container h1 {
+        font-size: 18px;
+        margin-bottom: 18px;
+    }
+    .container input[type="text"],
+    .container input[type="password"] {
+        font-size: 13px;
+        padding: 10px 10px 10px 36px;
+    }
+    .container button {
+        font-size: 14px;
+        padding: 10px 0;
+        border-radius: 7px;
+    }
+    .acc {
+        margin-top: 8%;
+        font-size: 13px;
+    }
+}
+
+/* For very small screens */
+@media (min-width: 380px) and (max-width: 490px) {
+    .container {
+        padding: 10px;
+        max-width: 98vw;
+        margin-top: 30%;
+    }
+    .logo {
+        width: 60px;
+        max-width: 60px;
+    }
+    .sk, .sk1 {
+        color: white;
+    }
+    .container h1 {
+        font-size: 15px;
+    }
+    .container button {
+        font-size: 12px;
+        padding: 8px 0;
+    }
+}
+
+@media (min-width: 490px) and (max-width: 680px) {
+    .right-side {
+        display: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .container {
+        padding: 10px;
+        max-width: 80vw;
+        margin-top: 20%;
+    }
+    .logo {
+        width: 60px;
+        max-width: 60px;
+    }
+    .sk, .sk1 {
+        color: white;
+    }
+    .container h1 {
+        font-size: 15px;
+    }
+    .container button {
+        font-size: 12px;
+        padding: 8px 0;
+    }
+}
+@media (min-width: 680px)  and (max-width: 1023px) {
+    .right-side {
+        display: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .container {
+        padding: 10px;
+        max-width: 80vw;
+        margin-top: 10%;
+    }
+    .logo {
+        width: 30px;
+        max-width: 50px;
+    }
+    .sk, .sk1 {
+        color: white;
+    }
+    .container h1 {
+        font-size: 15px;
+    }
+    .container button {
+        font-size: 12px;
+        padding: 8px 0;
+    }
+}
 /* Tablet adjustments */
 @media (min-width: 768px) {
     .logo {
-        width: 150px;
+        width: 100px;
     }
 
     .title1 {
@@ -187,12 +308,6 @@ body {
         background-color: white;
     }
 
-    .container {
-        margin: 10%;
-        max-width: 400px;
-        padding: 40px;
-    }
-
     .logo {
         width: 180px;
         margin: 0 auto 20px auto;
@@ -205,5 +320,14 @@ body {
 
     .title2 h1 {
         font-size: 30px;
+    }
+
+    .container {
+        max-width: 320px;
+        min-width: 200px;
+        width: auto;
+        margin: 0 auto;
+        padding: 32px;
+        border-radius: 18px;
     }
 }

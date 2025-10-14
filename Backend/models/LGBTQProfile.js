@@ -35,6 +35,8 @@ const lgbtqProfileSchema = new mongoose.Schema(
       required: true,
     },
     idImage: String, // <-- Add this line
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

@@ -9,19 +9,36 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
   <!-- ✅ Navbar -->
   <div class="navbar">
     <div class="navbar-left">
-      <img src="../../../../assets/logo.png" alt="Logo" class="logo"/>
-      <span class="title">SK-INSIGHT</span>
+      <a href="../../index.html">
+        <img src="../../../../assets/logo.png" alt="Logo" class="logo"/>
+      </a>
+      <a href="../../index.html" class="title">SK-PBW</a>
+    </div>
+    <div class="navbar-center">
+      <!-- Desktop Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
     </div>
     <div class="navbar-right">
-      <span><i class="fa-solid fa-bars"></i></span>
-      <span><i class="fa-solid fa-bell"></i></span>
-      <a href="../user/userProfile.html"><i class="fa-solid fa-user" style="color: #fff;"></i></a>
+      <span class="navbar-hamburger" id="navbarHamburger">
+        <i class="fa-solid fa-bars"></i>
+      </span>
+      <a class="notif" href="../../announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+      <a href="../../userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
     </div>
+  </div>
+    <div class="navbar-mobile-menu" id="navbarMobileMenu">
+    <!-- Mobile Navbar -->
+    <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+    <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+    <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
   </div>
 
   <!-- ✅ Thank You Card -->
@@ -38,9 +55,10 @@
     You can view your information by clicking the
     <strong>View Response</strong> button.
   </p>
-  <button class="btn">View Response</button>
+  <a href="../html/view-lgbt.html" class="btn">View Response</a>
 </div>
 
   </div>
+  <script src="../../../../js/lgbtqconfirm.js"></script>
 </body>
 </html>
