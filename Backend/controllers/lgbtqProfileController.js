@@ -41,19 +41,17 @@ exports.submitLGBTQProfile = async (req, res) => {
       return res.status(409).json({ success: false, error: "You already submitted during this form cycle" });
     }
 
-    // Check for required demographics and images
+    // Check for required demographics and image
     const { lastname, firstname, middlename, sexAssignedAtBirth, lgbtqClassification } = req.body;
     if (!lastname || !firstname || !middlename || !sexAssignedAtBirth || !lgbtqClassification) {
-      // Delete uploaded files if present
-      if (req.files?.idImageFront) fs.unlink(req.files.idImageFront[0].path, () => {});
-      if (req.files?.idImageBack) fs.unlink(req.files.idImageBack[0].path, () => {});
+      // Delete uploaded file if present
+      if (req.file) {
+        fs.unlink(req.file.path, () => {});
+      }
       return res.status(400).json({ success: false, error: "All demographic fields are required." });
     }
-    if (!req.files || !req.files.idImageFront || !req.files.idImageBack) {
-      // Delete uploaded files if only one was uploaded
-      if (req.files?.idImageFront) fs.unlink(req.files.idImageFront[0].path, () => {});
-      if (req.files?.idImageBack) fs.unlink(req.files.idImageBack[0].path, () => {});
-      return res.status(400).json({ success: false, error: "Both front and back ID images are required." });
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: "ID image is required." });
     }
 
     const newProfile = new LGBTQProfile({
@@ -64,8 +62,7 @@ exports.submitLGBTQProfile = async (req, res) => {
       middlename,
       sexAssignedAtBirth,
       lgbtqClassification,
-      idImageFront: req.files.idImageFront[0].path, // Cloudinary URL
-      idImageBack: req.files.idImageBack[0].path,   // Cloudinary URL
+      idImage: req.file.filename, // Save filename
     });
 
     await newProfile.save();
@@ -323,94 +320,82 @@ exports.permanentlyDeleteProfileById = async (req, res) => {
 // Export profiles (optionally filter by cycleId)
 exports.exportProfilesToExcel = async (req, res) => {
   try {
-    const templatePath = path.resolve(__dirname, '../templates/lgbtq_profiling_template.xlsx');
-    if (!fs.existsSync(templatePath)) {
-      return res.status(500).json({ error: 'Excel template file not found' });
-    }
-
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.readFile(templatePath);
-
-    const worksheet = workbook.worksheets[0]; // Use the first worksheet
-
-    // Check if year and cycle are provided in the query
     const { year, cycle } = req.query;
 
-    let formCycle;
-    if (year && cycle) {
-      // Fetch the specific cycle based on year, cycle number, and formName
-      formCycle = await FormCycle.findOne({
-        formName: "LGBTQIA+ Profiling",
-        year: Number(year),
-        cycleNumber: Number(cycle),
-      });
-
-      if (!formCycle) {
-        return res.status(404).json({ error: `No cycle found for year ${year} and cycle ${cycle}` });
-      }
-    } else {
-      // Fetch the present (open) cycle
-      formCycle = await FormCycle.findOne({ formName: "LGBTQIA+ Profiling", isOpen: true });
-      if (!formCycle) {
-        return res.status(404).json({ error: 'No open cycle found' });
-      }
-    }
-
-    // Fetch LGBTQ Profiles for the selected cycle and sort by createdAt (descending)
-    let profiles = await LGBTQProfile.find({ formCycle: formCycle._id, isDeleted: false })
-      .populate("user", "birthday")
-      .sort({ createdAt: -1 }); // Sort by createdAt in descending order
-
-    if (!profiles.length) {
-      return res.status(404).json({ error: 'No LGBTQ Profiles found for the selected cycle' });
-    }
-
-    // Start writing data at row 4 (since rows 1-3 are headers)
-    let rowNum = 4;
-
-    profiles.forEach(profile => {
-      const fullName = `${(profile.lastname || '').toUpperCase()}, ${(profile.firstname || '').toUpperCase()} ${(profile.middlename || '').toUpperCase()}${profile.suffix ? ` ${profile.suffix.toUpperCase()}` : ''}`.trim();
-
-      // Extract birthday details and compute age
-      const birthday = profile.user?.birthday ? new Date(profile.user.birthday) : null;
-      const birthMonth = birthday ? birthday.getMonth() + 1 : "N/A"; // Months are 0-indexed
-      const birthDay = birthday ? birthday.getDate() : "N/A";
-      const birthYear = birthday ? birthday.getFullYear() : "N/A";
-
-      // Compute age dynamically
-      const today = new Date();
-      const age = birthday
-        ? today.getFullYear() - birthYear - (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay) ? 1 : 0)
-        : "N/A";
-
-      // Sex Assigned at Birth
-      const sexAssignedAtBirth = profile.sexAssignedAtBirth || "N/A";
-
-      // LGBTQ Classification
-      const lgbtqClassification = profile.lgbtqClassification || "N/A";
-
-      // Write data to the existing row
-      worksheet.getCell(`A${rowNum}`).value = fullName;              // Full Name
-      worksheet.getCell(`B${rowNum}`).value = age;                  // Age
-      worksheet.getCell(`C${rowNum}`).value = birthMonth;           // Birth Month
-      worksheet.getCell(`D${rowNum}`).value = birthDay;             // Birth Day
-      worksheet.getCell(`E${rowNum}`).value = birthYear;            // Birth Year
-      worksheet.getCell(`F${rowNum}`).value = sexAssignedAtBirth;   // Sex Assigned at Birth
-      worksheet.getCell(`G${rowNum}`).value = lgbtqClassification;  // LGBTQ Classification
-
-      rowNum++; // Move to the next row
+    // Find the cycle
+    const cycleDoc = await FormCycle.findOne({
+      formName: "LGBTQIA+ Profiling",
+      year: Number(year),
+      cycleNumber: Number(cycle),
     });
 
-    // Set headers for the response
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename=lgbtq_profiling_export_${year || 'present'}_cycle_${cycle || 'open'}.xlsx`);
+    if (!cycleDoc) {
+      return res.status(404).json({ error: "Specified cycle not found" });
+    }
 
-    // Write the workbook to the response
+    const profiles = await LGBTQProfile.find({
+      formCycle: cycleDoc._id,
+    }).populate("user", "username email birthday age");
+
+    if (!profiles.length) {
+      return res.status(404).json({ error: "No profiling found for this cycle" });
+    }
+
+    // Define columns
+    const columns = [
+      { header: "Username", key: "username", width: 20 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Lastname", key: "lastname", width: 18 },
+      { header: "Firstname", key: "firstname", width: 18 },
+      { header: "Middlename", key: "middlename", width: 18 },
+      { header: "Birthday", key: "birthday", width: 15 },
+      { header: "Age", key: "age", width: 8 },
+      { header: "Sex Assigned at Birth", key: "sexAssignedAtBirth", width: 18 },
+      { header: "LGBTQ Classification", key: "lgbtqClassification", width: 20 },
+      { header: "ID Image", key: "idImage", width: 30 },
+      { header: "Submitted At", key: "createdAt", width: 22 },
+    ];
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("LGBTQIA+ Profiling");
+    worksheet.columns = columns;
+
+    // Add header row
+    worksheet.addRow(columns.map(col => col.header));
+    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+
+    // Add data rows
+    profiles.forEach(profile => {
+      worksheet.addRow([
+        profile.user?.username || "",
+        profile.user?.email || "",
+        profile.lastname || "",
+        profile.firstname || "",
+        profile.middlename || "",
+        profile.user?.birthday ? new Date(profile.user.birthday).toLocaleDateString() : "",
+        profile.user?.age || "",
+        profile.sexAssignedAtBirth || "",
+        profile.lgbtqClassification || "",
+        profile.idImage || "",
+        profile.createdAt ? profile.createdAt.toISOString() : "",
+      ]);
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=lgbtq_profiles_${year}_cycle${cycle}.xlsx`
+    );
+
     await workbook.xlsx.write(res);
     res.end();
-  } catch (err) {
-    console.error('Excel export error:', err);
-    res.status(500).json({ error: 'Failed to export LGBTQ Profiling data' });
+  } catch (error) {
+    console.error("Export error:", error);
+    res.status(500).json({ message: "Failed to export profiles" });
   }
 };
 

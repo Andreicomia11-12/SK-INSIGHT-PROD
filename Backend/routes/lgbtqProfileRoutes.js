@@ -5,41 +5,23 @@ const { protect, authorizeRoles } = require("../middleware/authMiddleware");
 const multer = require("multer");
 const upload = multer();
 const uploadLGBTQIdImage = require("../middleware/uploadLGBTQIdImage");
-const path = require("path");
-const fs = require("fs");
 
 // === USER ROUTES ===
 router.post(
   "/",
   protect,
-  uploadLGBTQIdImage.fields([
-    { name: "idImageFront", maxCount: 1 },
-    { name: "idImageBack", maxCount: 1 }
-  ]),
+  (req, res, next) => {
+    uploadLGBTQIdImage.single("idImage")(req, res, function (err) {
+      if (err) {
+        return res.status(400).json({ success: false, error: err.message });
+      }
+      next();
+    });
+  },
   ctrl.submitLGBTQProfile
 );
 
 router.get("/me/profile", protect, ctrl.getMyProfile);
-
-// Route to get front ID image by filename
-router.get("/id-image/front/:filename", protect, (req, res) => {
-  const filePath = path.join(__dirname, "../uploads/lgbtq_id_images", req.params.filename);
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).json({ error: "Front ID image not found" });
-  }
-});
-
-// Route to get back ID image by filenamex
-router.get("/id-image/back/:filename", protect, (req, res) => {
-  const filePath = path.join(__dirname, "../uploads/lgbtq_id_images", req.params.filename);
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).json({ error: "Back ID image not found" });
-  }
-});
 
 // === ADMIN ROUTES ===
 

@@ -1,16 +1,23 @@
-const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('../config/cloudinaryConfig');
+const multer = require("multer");
+const path = require("path");
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'lgbtq_id_images',
-    allowed_formats: ['jpg', 'jpeg', 'png'],
-    public_id: (req, file) => Date.now() + '-' + file.originalname.replace(/\s+/g, '_'),
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../uploads/lgbtq_id_images"));
+  },
+  filename: function (req, file, cb) {
+    const unique = Date.now() + "-" + file.originalname;
+    cb(null, unique);
   },
 });
 
-const uploadLGBTQIdImage = multer({ storage });
+const fileFilter = (req, file, cb) => {
+  if (!file.mimetype.startsWith("image/")) {
+    cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE", "Only image files are allowed!"));
+  } else {
+    cb(null, true);
+  }
+};
 
-module.exports = uploadLGBTQIdImage;
+const upload = multer({ storage, fileFilter });
+module.exports = upload;

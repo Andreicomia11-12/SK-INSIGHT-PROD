@@ -9,7 +9,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="/Frontend/css/Educational-Assistance-admin.css">
   <link rel="stylesheet" href="/Frontend/css/header.css">
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 <body>
   <!-- Sidebar (unchanged) -->
@@ -133,7 +132,7 @@
               <th>No.</th>
               <th>Name</th>
               <th>Age</th>
-
+              <th>School</th>
               <th>Civil Status</th>
               <th>Religion</th>
               <th>Year Level</th>
@@ -143,7 +142,6 @@
           </thead>
           <tbody id="pending"></tbody>
         </table>
-        <div class="pagination-container" id="pagination-pending"></div>
       </div>
 
       <div class="tab-content" data-tab="approved">
@@ -153,15 +151,16 @@
               <th>No.</th>
               <th>Name</th>
               <th>Age</th>
+              <th>School</th>
               <th>Civil Status</th>
               <th>Religion</th>
-              <th>Year Level</th>
+              <th>Grade/Year Level</th>
               <th>Gender</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="approved"></tbody>
         </table>
-        <div class="pagination-container" id="pagination-approved"></div>
       </div>
 
       <div class="tab-content" data-tab="rejected">
@@ -170,70 +169,46 @@
             <tr>
               <th>No.</th>
               <th>Name</th>
-              <th>Age</th>  
+              <th>Age</th>
+              <th>School</th>
               <th>Civil Status</th>
               <th>Religion</th>
-              <th>Year Level</th>
+              <th>Grade/Year Level</th>
               <th>Gender</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody id="rejected"></tbody>
         </table>
-        <div class="pagination-container" id="pagination-rejected"></div>
       </div>
-    </section> <!-- end of .tables -->
-    <div id="pagination" class="pagination-container"></div>
+    </section>
   </div>
 
   <!-- Profile Modal -->
-  <div id="profileModal" class="modal">
-  <div class="modal-content modern-modal">
-    <div class="modern-modal-header">
-      <div class="profile-header">
-        <img src="/Frontend/assets/default-profile.jpg" alt="Profile" />
-        <div class="profile-name" id="profileName"></div>
-      </div>
-      <button class="modern-modal-close" title="Close">&times;</button>
-    </div>
-    <div class="modern-modal-body" id="profileDetails">
-      <!-- Content will be injected here -->
+  <div id="profileModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div id="profileHeader"></div>
+      <span class="close-btn" style="cursor:pointer;position:absolute;top:10px;right:20px;">&times;</span>
+      <div id="profileDetails"></div>
     </div>
   </div>
-</div>
 
   <!-- Rejection Reason Modal -->
   <div id="rejectionModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <div class="modal-header" style="background:#0A2C59;color:#fff;border-radius:16px 16px 0 0;padding:18px 28px;position:relative;">
-      <span>Reject Application</span>
-      <span id="closeRejectionModal" class="close-btn" style="position:absolute;top:18px;right:24px;cursor:pointer;">&times;</span>
-    </div>
-    <div class="modal-body" style="padding:24px 28px;">
-      <label for="rejectionReasonSelect">Rejection Reason</label>
-      <select id="rejectionReasonSelect" style="width:100%;border-radius:8px;border:1.5px solid #e0e0e0;padding:10px;font-size:1em;background:#f7f7f7;color:#222;margin-bottom:12px;">
-        <option value="">Select a reason...</option>
-        <option value="requirements not correct">Requirements not correct</option>
-        <option value="incomplete documents">Incomplete documents</option>
-        <option value="not eligible">Not eligible</option>
-        <option value="duplicate application">Duplicate application</option>
-      </select>
-      <label for="rejectionReasonInput">Custom Message (optional)</label>
-      <textarea id="rejectionReasonInput" rows="3" placeholder="Type your message here..." style="width:100%;border-radius:8px;border:1.5px solid #e0e0e0;padding:10px;font-size:1em;background:#f7f7f7;color:#222;margin-bottom:18px;"></textarea>
-      <div style="margin-top:18px;text-align:right;">
-        <button id="submitRejectionBtn" style="background:#e74c3c;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-weight:500;font-size:1em;cursor:pointer;transition:background 0.2s;">Submit</button>
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>Reject Application</span>
+        <span id="closeRejectionModal" class="close-btn" style="position:absolute;top:18px;right:24px;cursor:pointer;">&times;</span>
+      </div>
+      <div class="modal-body">
+        <label for="rejectionReasonInput">Rejection Reason</label>
+        <textarea id="rejectionReasonInput" rows="4" placeholder="Enter reason for rejection..." style="width:100%;"></textarea>
+        <div style="margin-top:18px;text-align:right;">
+          <button id="submitRejectionBtn">Submit</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Loading Modal (highlighted for reuse) -->
-<div id="loadingModal" class="modal">
-  <div class="loading-content">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Processing rejection...</div>
-  </div>
-</div>
  </div>
 
   <script src="../../js/Educational-Assistance-admin.js"></script>

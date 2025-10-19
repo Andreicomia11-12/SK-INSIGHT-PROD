@@ -3,7 +3,6 @@
     "liveServer.settings.port": 5501,
     "liveServer.settings.ignoreFiles": [
         "**/Backend/**"
-    ],
-    "python.defaultInterpreterPath": "C:\\Program Files\\Python310\\python.exe"
+    ]
 }
 

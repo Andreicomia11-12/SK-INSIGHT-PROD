@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 const ctrl = require("../controllers/educationalAssistanceController");
 const { protect, authorizeRoles } = require("../middleware/authMiddleware");
-const uploadEducational = require("../middleware/educationalUploadMiddleware");
+const multer = require("multer");
+const upload = require("../middleware/signatureUploadMiddleware"); // or your custom middleware
 
 // ===== User Routes =====
 router.post(
   "/",
   protect,
-  uploadEducational.fields([
-    { name: "frontImage", maxCount: 1 },
-    { name: "backImage", maxCount: 1 },
+  upload.fields([
+    { name: "signature", maxCount: 1 },
+    { name: "sedulaImage", maxCount: 1 },
     { name: "coeImage", maxCount: 1 },
-    { name: "voter", maxCount: 1 },
   ]),
   ctrl.submitApplication
 );
@@ -44,8 +44,6 @@ router.get(
   authorizeRoles("admin"),
   ctrl.getCyclesAndPresent
 );
-
-// Explicitly define the export route before the dynamic `/:id` route
 router.get(
   "/export/excel",
   protect,
@@ -53,7 +51,7 @@ router.get(
   ctrl.exportApplicationsToExcel
 );
 
-// ===== ID-specific Admin Routes (Keep these LAST to avoid conflicts) =====
+// ID-specific admin routes — keep these LAST to avoid conflicts
 router.put(
   "/:id/status",
   protect,

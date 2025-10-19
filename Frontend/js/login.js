@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     title: 'Login Successful!',
                     text: 'Welcome SK Residents, you have successfully logged in.',
                     showConfirmButton: false,
-                    timer: 1200
+                    timer: 2000
                 }).then(() => {
                     window.location.href = 'index.html';
                 });

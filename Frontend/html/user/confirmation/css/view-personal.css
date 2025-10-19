@@ -86,20 +86,31 @@ body {
 }
 
 .kk-container {
-  max-width: 900px;
-  margin: 40px auto 0 auto;
-  padding: 0 12px;
+    max-width: 50vw;
+    min-width: 320px;
+    margin: 2rem auto;      /* Center horizontally */
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+    right: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;    /* Make children (cards) stretch to container width */
 }
 
 .kk-card {
-  background: #fff;
-  padding: 20px;
-  margin-bottom: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-  max-width: 900px;
-  width: 100%;
-  box-sizing: border-box;
+    width: 100%; /* All cards, including intro and form, take full container width */
+    background: #fff;
+    padding: 22px;
+    margin-bottom: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+
+    min-width: 320px; /* ✅ adjust until it matches intro */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .kk-label {
@@ -124,15 +135,17 @@ body {
 
 .kk-input:focus {
     border: 1.5px solid #143d77;
-    background: #eaf3fa
+    background: #eaf3fa;
 }
 
 .kk-btn-group {
-    position: relative;
-    width: 100%;
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    align-items: flex-end;
+    width: 100%;
+    margin-top: 18px;
+    margin-bottom: 0;
+    padding-right: 0;
 }
 
 .kk-btn, .kk-next-btn {
@@ -151,16 +164,16 @@ body {
     outline: none;
     display: inline-block;
     margin: 0;
-    margin-bottom: 5%;
 }
 
 /* Make Previous button same size as Next button */
 .kk-btn-group .kk-btn {
     margin-right: 0;
-    margin-bottom: 5%;
 }
 
-
+.kk-btn-group .kk-btn:not(:last-child) {
+    margin-right: 12px;
+}
 
 .kk-btn:hover, .kk-next-btn:hover {
     background: #1e4e9e;
@@ -306,17 +319,6 @@ body {
     }
 }
 
-@media (max-width: 700px) {
-  .kk-container {
-    max-width: 100vw;
-    padding: 0 4vw;
-  }
-  .kk-card {
-    max-width: 100vw;
-    padding: 12px;
-  }
-}
-
 @media (max-width: 600px) {
     .kk-container {
         max-width: 100vw;
@@ -324,11 +326,10 @@ body {
         padding: 8px;
     }
     .kk-card {
-        max-width: 100%; /* Changed from 340px to 100% */
-        width: 95%;      /* Added to take up most of the screen width */
+        max-width: 340px;
         margin-left: auto;
         margin-right: auto;
-        padding: 16px;   /* Increased padding */
+        padding: 8px;
         margin-bottom: 10px;
         border-radius: 8px;
     }
@@ -341,10 +342,7 @@ body {
         padding: 8px 4px;
     }
     .kk-next-btn{
-        margin-right: 2%;  /* Remove right margin */
-        width: auto;      /* Allow button to size naturally */
-        min-width: 100px; /* Minimum width */
-        padding: 12px 24px;
+        margin-right: 21%;
     }
     .kk-btn, .kk-butn, .kk-butns {
         width: 100%;
@@ -372,8 +370,7 @@ body {
         margin: 0 auto;
     }
     .kk-card {
-        width: 95%;      /* Take up most of the screen width */
-        padding: 12px;   /* Increased padding */
+        padding: 4px;
         margin-bottom: 8px;
         border-radius: 6px;
         min-width: 0;
@@ -386,12 +383,12 @@ body {
         font-size: 12px;
         padding: 6px 3px;
     }
-    
-    .kk-next-btn{
-        margin-right: 5%;  /* Remove right margin */
-        width: auto;      /* Allow button to size naturally */
-        min-width: 100px; /* Minimum width */
-        padding: 12px 24px;
+    .kk-btn, .kk-next-btn {
+        width: 20%;
+        min-width: 0;
+        font-size: 14px;
+        padding: 12px 0 0 0;
+        border-radius: 6px;
     }
     .kk-intro h2 {
         font-size: 13px;
@@ -411,15 +408,6 @@ body {
     .kk-intro h2 {
         font-size: 10px;
     }
-    
-    .kk-next-btn{
-        margin-right: 5%;  /* Remove right margin */
-        width: auto;      /* Allow button to size naturally */
-        min-width: 100px; /* Minimum width */
-        padding: 12px 24px;
-    }
-
-
 }
 
 @media (min-width: 601px) and (max-width: 900px) {
@@ -479,125 +467,4 @@ body {
     background: #1e4e9e;
     color: #fff;
     text-decoration: underline;
-}
-
-.footer {
-  background: #0A2C59;
-  color: #fff;
-  padding: 40px 60px 20px;
-  margin-top: auto; /* pushes footer down */
-}
-
-.footer-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 40px;
-  margin-bottom: 20px;
-}
-
-.footer-left h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.footer-left p {
-  font-size: 15px;
-  line-height: 1.5;
-  color: #cfd9e8;
-}
-
-.footer-middle h4,
-.footer-right h4 {
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.footer-middle ul,
-.footer-right ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-middle ul li,
-.footer-right ul li {
-  margin-bottom: 8px;
-}
-
-.footer-middle ul li a,
-.footer-right ul li a {
-  text-decoration: none;
-  color: #cfd9e8;
-  font-size: 15px;
-  transition: color 0.3s ease;
-}
-
-.footer-middle ul li a:hover,
-.footer-right ul li a:hover {
-  color: #ffffff;
-}
-
-.footer-right ul li i {
-  margin-right: 8px;
-  font-size: 15px;
-}
-
-.footer hr {
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  margin: 20px 0;
-}
-
-.footer-bottom {
-  text-align: center;
-}
-
-.footer-bottom p {
-  font-size: 14px;
-  color: #cfd9e8;
-}
-
-/* Responsive Footer */
-@media (max-width: 768px) {
-  .footer-container {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 20px;
-  }
-
-  .footer-left,
-  .footer-middle,
-  .footer-right {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer {
-    padding: 30px 20px 15px;
-  }
-
-  .footer-left h3 {
-    font-size: 18px;
-  }
-
-  .footer-left p {
-    font-size: 14px;
-  }
-
-  .footer-middle h4,
-  .footer-right h4 {
-    font-size: 15px;
-  }
-
-  .footer-middle ul li a,
-  .footer-right ul li a {
-    font-size: 14px;
-  }
-
-  .footer-bottom p {
-    font-size: 12px;
-  }
 }

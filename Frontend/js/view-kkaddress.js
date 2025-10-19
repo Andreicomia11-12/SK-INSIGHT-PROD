@@ -280,10 +280,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
       }
 
-      window.location.href = "../../Educational-assistance-user.html";
+      window.location.href = "/html/user/Educational-assistance-user.html";
     } catch (err) {
       console.error(err);
-      window.location.href = "../../Educational-assistance-user.html";
+      window.location.href = "/html/user/Educational-assistance-user.html";
     }
   }
 

@@ -15,10 +15,10 @@
   <!-- ✅ Navbar -->
   <div class="navbar">
     <div class="navbar-left">
-      <a href="../../index.html">
+      <a href="./index.html">
         <img src="../../../../assets/logo.png" alt="Logo" class="logo"/>
       </a>
-      <a href="../../index.html" class="title">SK-PBW</a>
+      <a href="./index.html" class="title">SK-PBW</a>
     </div>
     
     <div class="navbar-center">
@@ -77,7 +77,7 @@
       </div>
       <div class="card">
         <label for="sex">Sex Assigned at Birth:</label>
-        <select id="sex" name="sexAssignedAtBirth" disabled>
+        <select id="sex" name="sexAssignedAtBirth" readonly>
           <option value="">Select Sex Assigned at Birth</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
@@ -85,7 +85,7 @@
       </div>
       <div class="card">
         <label for="identity">LGBTQIA+ Classification:</label>
-        <select id="identity" name="lgbtqClassification" disabled>
+        <select id="identity" name="lgbtqClassification" readonly>
           <option value="">Select your Gender Identity</option>
           <option value="Lesbian">Lesbian</option>
           <option value="Gay">Gay</option>
@@ -96,23 +96,10 @@
           <option value="Asexual">Asexual</option>
         </select>
       </div>  
-      <!-- Front ID Image Upload -->
-      <div class="kk-upload-row">
-        <div class="card kk-upload-col">
-          <label for="idImageFront">Valid ID Image (Front):</label>
-          <div id="imagePreviewContainerFront" class="image-preview-container">
-            <img id="imagePreviewFront" alt="Front ID preview" />
-          </div>
-        </div>
-
-        <!-- Back ID Image Upload -->
-        <div class="card kk-upload-col">
-          <label for="idImageBack">Valid ID Image (Back):</label>
-          <div id="imagePreviewContainerBack" class="image-preview-container">
-            <img id="imagePreviewBack" alt="Back ID preview" />
-          </div>
-        </div>
-       </div>
+      <div class="card">
+        <label for="idImage">Uploaded ID Image:</label>
+        <div id="imagePreview"></div>
+      </div>
       <div style="max-width: 900px; margin: 0 auto 25px auto; text-align: left;">
         <a href="../html/lgbtqconfirmation.html" type="submit" id="submitBtn" class="submit-btn" style="width: auto; padding: 8px 20px; text-decoration: none;">
           Done
@@ -121,38 +108,6 @@
     </form>
   </div>
 
-
-        <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-container">
-        <div class="footer-left">
-          <h3>SK-INSIGHT</h3>
-          <p>Empowering the youth through data-driven governance.</p>
-        </div>
-
-        <div class="footer-middle">
-          <h4>About</h4>
-          <ul>
-            <li><a href="#">Things About US</a></li>
-            <li><a href="#">Things About SK</a></li>
-            <li><a href="#">Things About SK-INSIGHT</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-right">
-          <h4>Follow Us</h4>
-          <ul>
-            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="footer-bottom">
-        <p>© 2025 SK-INSIGHT. All rights reserved.</p>
-      </div>
-    </footer>
   <!-- ✅ Scripts -->
   <script src="../../../../js/view-lgbt.js"></script>
 </body>

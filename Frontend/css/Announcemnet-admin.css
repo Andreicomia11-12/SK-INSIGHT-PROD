@@ -1,0 +1,690 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #F5F7FA;
+    overflow: hidden;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #0A2C59; 
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+}
+
+.logos{
+    display: flex;
+    align-items: center;   
+    gap: 10px;               
+}
+
+.title-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; 
+    line-height: 1.2; 
+}
+
+.admin{
+    font-size: small;
+    color: #FED600;
+}
+
+.logo{
+    width: 20vw;
+    max-width: 100px;
+    height: auto;
+    margin-top: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 5px 0;
+    transition: background 0.3s;
+}
+
+.menu{
+    margin-top: 20px;
+}
+
+.dashh{
+    background-color: #07B0F2;
+    border-radius: 5px;
+}
+
+.dash{
+    margin-left: 10px;
+}
+
+.educ{
+    margin-left: 5px;
+    font-size: 15.2px;
+}
+
+.dashs{
+    margin-left: 3px;
+}
+
+.dashb{
+    margin-left: 10px;
+}
+
+.Kk{
+    margin-left: 5px;
+}
+
+.kk{
+    margin-left: 13px;
+}
+
+.log{
+    margin-top: 90%;
+}
+
+.content{
+    margin-left: 250px;
+    padding: 20px 20px;
+}
+
+.content-container{
+  margin: 20px;
+}
+
+.parent {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+}
+
+.title{
+    padding: 20px;
+    color: #0A2C59;
+}
+
+.subtitle{
+  font-size: 15px;
+  color: #666;
+  margin: 0 10px 0 1px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    margin-left: 80%;
+    margin-top: 50px;
+    width: 50%;
+  }
+
+.add{
+    background-color: #ffffffcc;
+    color: #000000;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: rgba(0, 0, 0, 0.605) 0.2px solid;
+}
+
+.add-announcement-btn {
+  background: #0A2C59;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  box-shadow: 0 2px 8px rgba(10,44,89,0.10);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 30px;
+}
+
+.add-announcement-btn:hover {
+  background: linear-gradient(90deg, #143d77 60%, #07B0F2 100%);
+  box-shadow: 0 4px 16px rgba(10,44,89,0.18);
+}
+
+.tabs {
+  display: flex;
+  gap: 30px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 20px;
+  margin: 28px 40px 24px 37px;
+  width: calc(100% - 77px);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #777;
+  padding: 12px 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-btn:hover {
+  color: #0A2C59;
+}
+
+.tab-btn.active {
+  color: #0A2C59;
+  font-weight: 600;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #0A2C59;
+  border-radius: 3px;
+}
+
+/* --- Table Design: Match KK Profiling --- */
+.tables {
+  margin: 24px 0 0 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(10,44,89,0.07);
+  padding: 18px 18px 8px 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tables table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  background: #fff;
+  table-layout: fixed;
+}
+
+.tables thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fff;
+}
+
+.tables tbody {
+  display: block;
+  height: 380px; /* Adjust as needed */
+  overflow-y: auto;
+  width: 100%;
+}
+
+.tables thead, .tables tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tables tbody td, .tables thead th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tables tbody::-webkit-scrollbar {
+  width: 8px;
+  background: #f4f6f8;
+  border-radius: 6px;
+}
+.tables tbody::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 6px;
+}
+
+thead th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f4f6f8;
+  font-weight: 600;
+  color: #222;
+  border-bottom: 2px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+tbody tr:nth-child(even) {
+  background: #fafbfd;
+}
+
+tbody tr {
+  background: #f7f8fa;
+  transition: background 0.18s;
+}
+
+tbody tr:hover {
+  background: #e1e8ff;
+}
+
+.btn-view, .btn-edit, .btn-delete, .btn-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #0A2C59;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.btn-view:hover, .btn-edit:hover, .btn-delete:hover, .btn-pin:hover {
+  background: #143d77;
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background: #c72c2c;
+}
+
+/* Modern circular action buttons */
+.btn-edit, .btn-pin, .btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f4f6f8;
+  color: #225aa3;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: 0 1px 4px rgba(10,44,89,0.07);
+  outline: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.btn-edit:hover {
+  background: #e1e8ff;
+  color: #143d77;
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: 0 4px 12px rgba(10,44,89,0.12);
+}
+
+.btn-pin {
+  color: #d4af37;
+  background: #fffbe6;
+}
+.btn-pin.pinned {
+  background: #fffbe6;
+  color: #d4af37;
+}
+.btn-pin:not(.pinned) {
+  color: #888;
+  background: #f4f6f8;
+}
+.btn-pin:hover {
+  background: #f7e7b3;
+  color: #bfa233;
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: 0 4px 12px rgba(212,175,55,0.12);
+}
+
+.btn-delete {
+  color: #ef4444;
+  background: #fff0f0;
+}
+.btn-delete:hover {
+  background: #ffe0e0;
+  color: #c72c2c;
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: 0 4px 12px rgba(239,68,68,0.12);
+}
+
+/* Icon inside button: center and fill */
+.btn-edit i, .btn-pin i, .btn-delete i {
+  font-size: 18px;
+  margin: 0;
+  display: block;
+}
+
+/* Modal Styles */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 999; 
+  left: 0; top: 0; width: 100%; height: 100%;
+  overflow: auto; background: rgba(0,0,0,0.18);
+}
+
+/* Modal Overlay */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.35);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Show modal when active (JS will set display:block) */
+.modal[style*="block"] {
+  display: flex !important;
+}
+
+/* Modern, user-friendly modal */
+.modal-content {
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px 56px 24px 56px; /* less vertical, more horizontal */
+  box-shadow: 0 8px 32px rgba(10,44,89,0.18);
+  width: 100%;
+  max-width: 600px; /* wider modal */
+  position: relative;
+  animation: modalPop 0.18s cubic-bezier(.4,1.4,.6,1) 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px; /* slightly less gap for compactness */
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.92) translateY(30px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.modal-content h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0A2C59;
+  text-align: center;
+}
+
+.modal-content .row.header-row {
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.modal-content .logo1 {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  margin-right: 8px;
+}
+
+#announcementForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#announcementForm label {
+  font-weight: 500;
+  color: #0A2C59;
+  margin-bottom: 4px;
+}
+
+#announcementForm input[type="text"],
+#announcementForm textarea,
+#announcementForm input[type="date"],
+#announcementForm input[type="time"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 0;
+  background: #f9f9f9;
+  color: #222;
+  transition: border 0.2s;
+  resize: none;
+}
+
+#announcementForm textarea {
+  min-height: 80px;
+  max-height: 180px;
+}
+
+#announcementForm input:focus,
+#announcementForm textarea:focus {
+  border-color: #07B0F2;
+  background: #fff;
+}
+
+#announcementForm .row.header-rows {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+
+#announcementForm button[type="submit"] {
+  background: linear-gradient(90deg, #0A2C59 60%, #07B0F2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(10,44,89,0.10);
+}
+
+#announcementForm button[type="submit"]:hover {
+  background: linear-gradient(90deg, #143d77 60%, #07B0F2 100%);
+  box-shadow: 0 4px 16px rgba(10,44,89,0.18);
+}
+
+.close {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 28px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+  z-index: 10;
+}
+.close:hover { color: #0A2C59; }
+
+/* Style for the date input in the modal form */
+#announcementForm input[type="date"] {
+  width: 60%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background: #f9f9f9;
+  color: #333;
+  box-sizing: border-box;
+  transition: border 0.2s;
+}
+
+#announcementForm input[type="date"]:focus {
+  border: 1.5px solid #1e90ff;
+  outline: none;
+  background: #fff;
+}
+
+#announcementForm input[type="time"] {
+  width: 60%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background: #f9f9f9;
+  color: #333;
+  box-sizing: border-box;
+  transition: border 0.2s;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;   /* vertically align image and text */
+  gap: 10px;             /* space between image and text */
+}
+
+.header-row img {
+  width: 8%;   /* adjust size as needed */
+  height: auto;
+}
+
+.ti{
+    margin-top: 3%;
+}
+
+.header-rows {
+  display: flex;
+  align-items: center;   /* vertically align image and text */
+  gap: 10px;             /* space between image and text */
+}
+
+/* Announcement Modal Specific Styles */
+.announcement-modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  max-width: 700px;
+  margin: auto;
+  font-family: "Segoe UI", sans-serif;
+}
+.announcement-modal-content .close {
+  position: absolute;
+  right: 22px;
+  top: 18px;
+  font-size: 1.3rem;
+  color: #4a5874;
+  cursor: pointer;
+}
+
+.modal-title {
+  margin-top: 0;
+  color: #183153;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.modal-meta {
+  color: #4a5874;
+  font-size: 1rem;
+  margin-bottom: 5%;
+  margin-bottom: 5%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  
+}
+.modal-meta i {
+  margin-right: 6px;
+}
+.modal-body {
+  background: #fdfdfd;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  min-height: 80px;
+  color: #333;
+  max-height: 260px;    
+  overflow-y: auto;  
+}
+
+/* Ensure equal gap and proper alignment for action icons in the Actions column */
+.tables table td:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px; /* Set your desired gap size */
+  /* Remove margin-left: 40%; */
+  margin-left: 0;
+  min-width: 180px; /* Ensures enough space for buttons */
+}
+
+/* Darker background for pinned announcements */
+.pinned-row {
+  background-color: #e2e8f0 !important; /* A darker shade than normal rows */
+}
+
+
+/* Align the Action header text to the center */
+.tables thead th:last-child {
+  text-align: center;
+  vertical-align: middle;
+  min-width: 180px;
+}
+
+/* Fade transition for .content */
+.page-fade {
+  opacity: 0;
+  transition: opacity 180ms cubic-bezier(.4,1.4,.6,1);
+}
+
+.page-fade-in {
+  opacity: 1;
+  transition: opacity 180ms cubic-bezier(.4,1.4,.6,1);
+}
+
+
+
+
+
+
+
+
+

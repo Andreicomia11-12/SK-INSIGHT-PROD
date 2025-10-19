@@ -29,11 +29,7 @@ const educationalAssistanceSchema = new mongoose.Schema({
   placeOfBirth: { type: String, required: true },
   age: { type: Number, required: true },
   sex: { type: String, required: true },
-  civilStatus: { 
-    type: String, 
-    required: true ,
-    enum: ["Single", "Live-in", "Married", "Unknown", "Separated", "Annulled", "Divorced", "Widowed"],
-  },
+  civilStatus: { type: String, required: true },
   religion: { type: String, required: true },
   email: { type: String, required: true },
   contactNumber: { type: Number, required: true },
@@ -54,10 +50,9 @@ const educationalAssistanceSchema = new mongoose.Schema({
   motherPhone: { type: String },
   siblings: [siblingSchema],
   expenses: [expenseSchema],
-  frontImage: { type: String },
-  backImage: { type: String }, // path or filename
-  coeImage: { type: String }, 
-  voter: { type: String },   // path or filename
+  signature: { type: String },
+  sedulaImage: { type: String }, // path or filename
+  coeImage: { type: String },    // path or filename
 
   status: {
     type: String,
@@ -66,7 +61,6 @@ const educationalAssistanceSchema = new mongoose.Schema({
   },
   rejectionReason: { type: String },
   resubmissionCount: { type: Number, default: 0 },
-  isRead: { type: Boolean, default: false }, // <-- Add this line
 
   createdAt: { type: Date, default: Date.now },
 });

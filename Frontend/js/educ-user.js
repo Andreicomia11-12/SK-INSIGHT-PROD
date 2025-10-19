@@ -42,116 +42,99 @@ document.addEventListener('DOMContentLoaded', async function() {
       console.error('Failed to fetch birthday:', err);
     }
   }
-    document.getElementById('benefittype').value = 'Educational Assistance';
 
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    // Client-side validation (add/remove fields as required by your backend)
-    const requiredIds = ['surname','firstName','birthday','contact','year'];
-    for (const id of requiredIds) {
-      const el = document.getElementById(id);
-      if (!el || !el.value.trim()) {
-        return Swal.fire('Missing field', `Please fill the ${id} field.`, 'warning');
-      }
-    }
-
-    // Ensure typeOfBenefiting is present and default to Applicant
-    const typeEl = document.getElementById('typeOfBenefiting') || document.getElementById('benefittype');
-    const typeValue = typeEl && typeEl.value ? typeEl.value : 'Applicant';
-
     const formData = new FormData();
-formData.append('surname', document.getElementById('surname').value.trim());
-formData.append('firstname', document.getElementById('firstName').value.trim());
-formData.append('middlename', document.getElementById('middleName')?.value?.trim() || '');
-formData.append('placeOfBirth', document.getElementById('placeOfBirth')?.value || '');
-formData.append('age', Number(document.getElementById('age')?.value || 0));
-formData.append('sex', document.getElementById('gender')?.value || '');
-formData.append('civilStatus', document.getElementById('civilstatus')?.value || '');
-formData.append('religion', document.getElementById('religion')?.value || '');
-formData.append('email', document.getElementById('email')?.value || '');
-formData.append('contactNumber', Number(document.getElementById('contact')?.value || 0));
-formData.append('school', document.getElementById('schoolname')?.value || '');
-formData.append('schoolAddress', document.getElementById('schooladdress')?.value || '');
-formData.append('year', document.getElementById('year')?.value || '');
-formData.append('typeOfBenefit', typeValue); // <-- use this name
-formData.append('fatherName', document.getElementById('fathername')?.value || '');
-formData.append('fatherPhone', document.getElementById('fathercontact')?.value || '');
-formData.append('motherName', document.getElementById('mothername')?.value || '');
-formData.append('motherPhone', document.getElementById('mothercontact')?.value || '');
 
-    // siblings & expenses as before
+    // Map form fields to backend model fields
+    formData.append('surname', document.getElementById('surname').value);
+    formData.append('firstname', document.getElementById('firstName').value);
+    formData.append('middlename', document.getElementById('middleName').value);
+    formData.append('birthday', document.getElementById('birthday').value); // This is now auto-filled
+    formData.append('sex', document.getElementById('gender').value);
+    formData.append('civilStatus', document.getElementById('civilstatus').value);
+    formData.append('religion', document.getElementById('religion').value);
+    formData.append('school', document.getElementById('schoolname').value);
+    formData.append('schoolAddress', document.getElementById('schooladdress').value);
+    formData.append('year', document.getElementById('year').value);
+    formData.append('fatherName', document.getElementById('fathername').value);
+    formData.append('fatherPhone', document.getElementById('fathercontact').value);
+    formData.append('motherName', document.getElementById('mothername').value);
+    formData.append('motherPhone', document.getElementById('mothercontact').value);
+    formData.append('placeOfBirth', document.getElementById('placeOfBirth').value);
+    formData.append('age', document.getElementById('age').value);
+    formData.append('contactNumber', document.getElementById('contact').value);
+    formData.append('email', document.getElementById('email').value);
+    // ...add other fields as needed...
+
+    // Siblings (collect from input fields)
     const siblings = [];
     document.querySelectorAll('#siblingsTableBody tr').forEach(row => {
-      const nameEl = row.querySelector('.sibling-name');
-      const genderEl = row.querySelector('.sibling-gender');
-      const ageEl = row.querySelector('.sibling-age');
-      if (nameEl) siblings.push({ name: nameEl.value, gender: genderEl?.value || '', age: ageEl?.value ? Number(ageEl.value) : '' });
+      siblings.push({
+        name: row.querySelector('.sibling-name').value,
+        gender: row.querySelector('.sibling-gender').value,
+        age: Number(row.querySelector('.sibling-age').value)
+      });
     });
     formData.append('siblings', JSON.stringify(siblings));
 
+    // Expenses (collect from input fields)
     const expenses = [];
     document.querySelectorAll('#expensesTableBody tr').forEach(row => {
-      const itemEl = row.querySelector('.expense-item');
-      const costEl = row.querySelector('.expense-cost');
-      if (itemEl) expenses.push({ item: itemEl.value, expectedCost: costEl?.value ? Number(costEl.value) : '' });
+      expenses.push({
+        item: row.querySelector('.expense-item').value,
+        expectedCost: Number(row.querySelector('.expense-cost').value)
+      });
     });
     formData.append('expenses', JSON.stringify(expenses));
 
-    // Files (only append if present)
-    const maybeAppendFile = (id, key) => {
-      const inp = document.getElementById(id);
-      if (inp && inp.files && inp.files.length > 0) formData.append(key, inp.files[0]);
-    };
-    maybeAppendFile('voter', 'voter');
-    maybeAppendFile('coeImage', 'coeImage');
-    maybeAppendFile('frontImage', 'frontImage');
-    maybeAppendFile('backImage', 'backImage');
+    // Signature file (if you have a file input for signature)
+    const signatureInput = document.querySelector('input[type="file"][name="signature"]');
+    if (signatureInput && signatureInput.files.length > 0) {
+      formData.append('signature', signatureInput.files[0]);
+    }
 
+    // Sedula image
+    const sedulaInput = document.getElementById('sedulaImage');
+    if (sedulaInput && sedulaInput.files.length > 0) {
+      formData.append('sedulaImage', sedulaInput.files[0]);
+    }
+    const coeInput = document.getElementById('coeImage');
+    if (coeInput && coeInput.files.length > 0) {
+      formData.append('coeImage', coeInput.files[0]);
+    }
+    const schoolIdInput = document.getElementById('schoolIdImage');
+    if (schoolIdInput && schoolIdInput.files.length > 0) {
+      formData.append('schoolIdImage', schoolIdInput.files[0]);
+    }
+
+    // Send to backend
     try {
-      // Show loading SweetAlert
-      Swal.fire({
-        title: 'Submitting...',
-        text: 'Please wait while your application is being submitted.',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
-
       const res = await fetch('http://localhost:5000/api/educational-assistance', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token') || localStorage.getItem('token')}`
+          Authorization: `Bearer ${token}`,
         },
         body: formData
       });
-
-      Swal.close(); // Close loading modal
-
-      const text = await res.text();
-      let data = null;
-      try { data = JSON.parse(text); } catch (err) { /* not JSON */ }
-
-      if (!res.ok) {
-        console.error('Submit failed', res.status, text);
-        const message = data?.message || data?.error || text || `Server returned ${res.status}`;
-        return Swal.fire('Submission failed', message, 'error');
+      const data = await res.json();
+      if (res.ok) {
+        Swal.fire("✅ Success", "Form submitted successfully!", "success").then(() => {
+          window.location.href = "confirmation/html/educConfirmation.html";
+        });
+        form.reset();
+      } else {
+        if (res.status === 409) {
+          Swal.fire("❌ Error", data.error || "You already submitted for this cycle.", "error");
+          return;
+        }
+        Swal.fire("❌ Error", data.message || "Submission failed.", "error");
       }
-
-      // success
-      Swal.fire('✅ Success', data?.message || 'Form submitted successfully!', 'success').then(() => {
-        sessionStorage.removeItem('educ_siblings');
-        sessionStorage.removeItem('educ_expenses');
-        sessionStorage.removeItem('educationalAssistanceFormData');
-        window.location.href = "confirmation/html/educConfirmation.html";
-      });
-      form.reset();
     } catch (err) {
-      Swal.close();
-      console.error('Fetch error', err);
-      Swal.fire('Error', 'Network or server error. Check console for details.', 'error');
+      console.error("🚨 Fetch error:", err);
+      Swal.fire("Error", "Something went wrong. Try again later.", "error");
     }
   });
 
@@ -172,20 +155,13 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
       <td><button type="button" class="removeSiblingBtn">Remove</button></td>
     `;
     tbody.appendChild(tr);
-    saveSiblings(); // save after adding
   });
 
   // Siblings: Remove Row
   document.getElementById('siblingsTableBody').addEventListener('click', function(e) {
     if (e.target.classList.contains('removeSiblingBtn')) {
       e.target.closest('tr').remove();
-      saveSiblings(); // save after removing
     }
-  });
-
-  // Save siblings on any change in siblings table (delegated)
-  document.getElementById('siblingsTableBody').addEventListener('input', function() {
-    saveSiblings();
   });
 
   // Expenses: Add Row
@@ -198,116 +174,45 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
       <td><button type="button" class="removeExpenseBtn">Remove</button></td>
     `;
     tbody.appendChild(tr);
-    saveExpenses(); // save after adding
   });
 
   // Expenses: Remove Row
   document.getElementById('expensesTableBody').addEventListener('click', function(e) {
     if (e.target.classList.contains('removeExpenseBtn')) {
       e.target.closest('tr').remove();
-      saveExpenses(); // save after removing
     }
   });
 
-  // Save expenses on any change in expenses table (delegated)
-  document.getElementById('expensesTableBody').addEventListener('input', function() {
-    saveExpenses();
-  });
-
-  // Restore siblings/expenses from sessionStorage on load
-  (function restoreDynamicTables() {
-    const savedSiblings = JSON.parse(sessionStorage.getItem('educ_siblings') || '[]');
-    if (Array.isArray(savedSiblings) && savedSiblings.length) {
-      const tbody = document.getElementById('siblingsTableBody');
-      tbody.innerHTML = '';
-      savedSiblings.forEach(s => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><input type="text" class="sibling-name" required value="${escapeHtml(s.name || '')}"></td>
-          <td>
-            <select class="sibling-gender" required>
-              <option value="">Select</option>
-              <option value="Male" ${s.gender === 'Male' ? 'selected' : ''}>Male</option>
-              <option value="Female" ${s.gender === 'Female' ? 'selected' : ''}>Female</option>
-            </select>
-          </td>
-          <td><input type="number" class="sibling-age" min="0" required value="${s.age ?? ''}"></td>
-          <td><button type="button" class="removeSiblingBtn">Remove</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+  // Image preview modal logic
+  function showImagePreview(fileInputId) {
+    const input = document.getElementById(fileInputId);
+    if (input && input.files.length > 0) {
+      const file = input.files[0];
+      const url = URL.createObjectURL(file);
+      const modal = document.getElementById('imagePreviewModal');
+      const img = document.getElementById('previewImg');
+      img.src = url;
+      modal.style.display = 'flex';
+      // Remove object URL after modal closes to avoid memory leak
+      modal.onclick = function() {
+        modal.style.display = 'none';
+        img.src = '';
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      Swal.fire("No file selected", "Please upload an image first.", "info");
     }
-
-    const savedExpenses = JSON.parse(sessionStorage.getItem('educ_expenses') || '[]');
-    if (Array.isArray(savedExpenses) && savedExpenses.length) {
-      const tbody = document.getElementById('expensesTableBody');
-      tbody.innerHTML = '';
-      savedExpenses.forEach(ex => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><input type="text" class="expense-item" required value="${escapeHtml(ex.item || '')}"></td>
-          <td><input type="number" class="expense-cost" min="0" required value="${ex.expectedCost ?? ''}"></td>
-          <td><button type="button" class="removeExpenseBtn">Remove</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-  })();
-
-  // helper: save siblings to sessionStorage
-  function saveSiblings() {
-    const arr = [];
-    document.querySelectorAll('#siblingsTableBody tr').forEach(row => {
-      const nameEl = row.querySelector('.sibling-name');
-      const genderEl = row.querySelector('.sibling-gender');
-      const ageEl = row.querySelector('.sibling-age');
-      if (!nameEl || !genderEl || !ageEl) return;
-      arr.push({
-        name: nameEl.value,
-        gender: genderEl.value,
-        age: ageEl.value ? Number(ageEl.value) : ''
-      });
-    });
-    sessionStorage.setItem('educ_siblings', JSON.stringify(arr));
-  }
-
-  // helper: save expenses to sessionStorage
-  function saveExpenses() {
-    const arr = [];
-    document.querySelectorAll('#expensesTableBody tr').forEach(row => {
-      const itemEl = row.querySelector('.expense-item');
-      const costEl = row.querySelector('.expense-cost');
-      if (!itemEl || !costEl) return;
-      arr.push({
-        item: itemEl.value,
-        expectedCost: costEl.value ? Number(costEl.value) : ''
-      });
-    });
-    sessionStorage.setItem('educ_expenses', JSON.stringify(arr));
-  }
-
-  // small utility to escape values when inserting into HTML
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
   }
 
   // Eye icon click listeners
-  document.getElementById('viewVoter').addEventListener('click', function() {
-    showImagePreview('voter');
+  document.getElementById('viewSedula').addEventListener('click', function() {
+    showImagePreview('sedulaImage');
   });
   document.getElementById('viewCOE').addEventListener('click', function() {
     showImagePreview('coeImage');
   });
-  document.getElementById('viewFront').addEventListener('click', function() {
-    showImagePreview('frontImage');
-  });
-  document.getElementById('viewBack').addEventListener('click', function() {
-    showImagePreview('backImage');
+  document.getElementById('viewSchoolId').addEventListener('click', function() {
+    showImagePreview('schoolIdImage');
   });
 
   // Navbar: Mobile menu toggle
@@ -359,124 +264,39 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
     }
   }
 
-  // --- ADD: showImagePreview helper (creates modal if missing) ---
-  function showImagePreview(inputId) {
+  function handleFileDelete(inputId, labelId, fileNameId) {
     const input = document.getElementById(inputId);
-    let src = '';
+    const label = document.getElementById(labelId);
+    const fileNameSpan = document.getElementById(fileNameId);
 
-    // Prefer selected file (local preview)
-    if (input && input.files && input.files.length > 0) {
-      src = URL.createObjectURL(input.files[0]);
-    } else {
-      // fallback: try data-url attributes or hidden URL inputs (server-provided URLs)
-      if (input && input.dataset && input.dataset.url) src = input.dataset.url;
-      const hidden = document.getElementById(`${inputId}Url`);
-      if (!src && hidden && hidden.value) src = hidden.value;
+    if (input && label && fileNameSpan) {
+      // Clear the file input, show the label, hide the filename
+      input.value = '';
+      label.style.display = 'inline-flex';
+      fileNameSpan.textContent = '';
+      fileNameSpan.style.display = 'none';
     }
-
-    if (!src) {
-      Swal.fire("No file selected", "Please upload an image first.", "info");
-      return;
-    }
-
-    // create modal if not present
-    let modal = document.getElementById('imagePreviewModal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'imagePreviewModal';
-      Object.assign(modal.style, {
-        position: 'fixed',
-        inset: '0',
-        display: 'none',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        zIndex: 2000
-      });
-
-      const img = document.createElement('img');
-      img.id = 'previewImg';
-      Object.assign(img.style, {
-        maxWidth: '90%',
-        maxHeight: '80%',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.5)',
-        borderRadius: '6px'
-      });
-
-      const closeBtn = document.createElement('button');
-      closeBtn.id = 'closePreviewBtn';
-      closeBtn.textContent = 'Close';
-      Object.assign(closeBtn.style, {
-        position: 'absolute',
-        top: '20px',
-        right: '20px',
-        padding: '8px 12px',
-        background: '#fff',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer'
-      });
-
-      closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        const imgEl = document.getElementById('previewImg');
-        if (imgEl) {
-          // revoke only if it was a blob URL
-          if (imgEl.dataset.objectUrl === 'true') {
-            URL.revokeObjectURL(imgEl.src);
-          }
-          imgEl.src = '';
-          delete imgEl.dataset.objectUrl;
-        }
-      });
-
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeBtn.click();
-      });
-
-      modal.appendChild(img);
-      modal.appendChild(closeBtn);
-      document.body.appendChild(modal);
-    }
-
-    const imgEl = document.getElementById('previewImg');
-    // set image src and mark if it's an object URL so we can revoke later
-    if (imgEl) {
-      // revoke previous object URL if any
-      if (imgEl.dataset.objectUrl === 'true' && imgEl.src) {
-        try { URL.revokeObjectURL(imgEl.src); } catch (e) {}
-      }
-      imgEl.src = src;
-      // determine if src is a blob/object URL
-      imgEl.dataset.objectUrl = src.startsWith('blob:') ? 'true' : 'false';
-    }
-
-    modal.style.display = 'flex';
   }
-  // --- END added helper ---
 
   // Sedula delete
-  document.getElementById('deleteVoter').addEventListener('click', function() {
-    handleFileDelete('voter', 'voterLabel', 'voterFileName');
+  document.getElementById('deleteSedula').addEventListener('click', function() {
+    handleFileDelete('sedulaImage', 'sedulaLabel', 'sedulaFileName');
   });
+
   // COE delete
   document.getElementById('deleteCOE').addEventListener('click', function() {
     handleFileDelete('coeImage', 'coeLabel', 'coeFileName');
   });
-  // Front Image delete
-  document.getElementById('deleteFront').addEventListener('click', function() {
-    handleFileDelete('frontImage', 'frontLabel', 'frontFileName');
-  });
-  // Back Image delete
-  document.getElementById('deleteBack').addEventListener('click', function() {
-    handleFileDelete('backImage', 'backLabel', 'backFileName');
+
+  // Signature delete
+  document.getElementById('deleteSchoolId').addEventListener('click', function() {
+    handleFileDelete('signature', 'signatureLabel', 'signatureFileName');
   });
 
   // Call for each file input
-  handleFileInput('voter', 'voterLabel', 'voterFileName', 'viewVoter', 'deleteVoter');
+  handleFileInput('sedulaImage', 'sedulaLabel', 'sedulaFileName', 'viewSedula', 'deleteSedula');
   handleFileInput('coeImage', 'coeLabel', 'coeFileName', 'viewCOE', 'deleteCOE');
-  handleFileInput('frontImage', 'frontLabel', 'frontFileName', 'viewFront', 'deleteFront');
-  handleFileInput('backImage', 'backLabel', 'backFileName', 'viewBack', 'deleteBack');
+  handleFileInput('signature', 'signatureLabel', 'signatureFileName', 'viewSchoolId', 'deleteSchoolId');
 
   // Set age when birthday is loaded from backend
   const birthdayInput = document.getElementById('birthday');
@@ -493,9 +313,9 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
   }
 
   // Close preview button
-  // document.getElementById('closePreviewBtn').addEventListener('click', function() {
-  //   document.getElementById('imagePreviewModal').style.display = 'none';
-  // });
+  document.getElementById('closePreviewBtn').addEventListener('click', function() {
+    document.getElementById('imagePreviewModal').style.display = 'none';
+  });
 
   // Get user data from localStorage or sessionStorage
   let userData = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user')) || {};
@@ -503,58 +323,6 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
   if (emailInput && userData.email) {
     emailInput.value = userData.email;
     emailInput.readOnly = true; // Optional: make it not editable
-  }
-
-  // Restore form data from localStorage if available
-const savedFormData = JSON.parse(sessionStorage.getItem('educationalAssistanceFormData') || '{}');
-if (form && savedFormData) {
-  Array.from(form.elements).forEach(el => {
-    if (el.name && savedFormData[el.name] !== undefined) {
-      if (el.type === "checkbox" || el.type === "radio") {
-        el.checked = savedFormData[el.name] === true;
-      } 
-      // ✅ Skip file inputs
-      else if (el.type === "file") {
-        // do nothing for file input
-      } 
-      else {
-        el.value = savedFormData[el.name];
-      }
-    }
-  });
-}
-
-
-  // Save form data to localStorage on input change
-  form.addEventListener('input', function() {
-    const dataToSave = {};
-    Array.from(form.elements).forEach(el => {
-      if (el.name) {
-        if (el.type === "checkbox" || el.type === "radio") {
-          dataToSave[el.name] = el.checked;
-        } else {
-          dataToSave[el.name] = el.value;
-        }
-      }
-    });
-    sessionStorage.setItem('educationalAssistanceFormData', JSON.stringify(dataToSave));
-  });
-
-  // Clear saved data on successful submit
-  form.addEventListener('submit', function() {
-    sessionStorage.removeItem('educationalAssistanceFormData');
-  });
-
-  // ensure "Type of Benefiting" defaults to "Applicant" so user doesn't have to input it
-  const typeEl = document.getElementById('typeOfBenefiting')
-    || document.getElementById('typeOfBenefitting')
-    || document.getElementById('benefitType')
-    || document.getElementById('benefittype'); // fallback to existing id
-
-  if (typeEl) {
-    if (!typeEl.value) typeEl.value = 'Educational Assistance';
-    // keep it submitted but prevent accidental change (do not disable if it's a select)
-    if (typeEl.tagName === 'INPUT') typeEl.readOnly = true;
   }
 });
 
@@ -793,62 +561,3 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('educAssistanceNavBtnDesktop')?.addEventListener('click', handleEducAssistanceNavClick);
   document.getElementById('educAssistanceNavBtnMobile')?.addEventListener('click', handleEducAssistanceNavClick);
 });
-
-// remove the stray removal at file bottom (do not clear saved data on load)
-// localStorage.removeItem('educationalAssistanceFormData');
-
-function handleFileDelete(inputId, labelId, fileNameId) {
-  const input = document.getElementById(inputId);
-  const label = document.getElementById(labelId);
-  const fileNameSpan = document.getElementById(fileNameId);
-
-  // Clear file input (allowed only to set to empty string)
-  if (input) {
-    try { input.value = ''; } catch (e) { /* ignore */ }
-  }
-
-  // Restore add/plus label and hide filename
-  if (label) label.style.display = 'inline-flex';
-  if (fileNameSpan) {
-    fileNameSpan.textContent = '';
-    fileNameSpan.style.display = 'none';
-  }
-
-  // Reset view icon and delete icon states for known IDs
-  const viewMap = {
-    voter: 'viewVoter',
-    coeImage: 'viewCOE',
-    frontImage: 'viewFront',
-    backImage: 'viewBack'
-  };
-  const deleteMap = {
-    voter: 'deleteVoter',
-    coeImage: 'deleteCOE',
-    frontImage: 'deleteFront',
-    backImage: 'deleteBack'
-  };
-
-  const viewIcon = document.getElementById(viewMap[inputId] || `view${capitalize(inputId)}`);
-  const deleteIcon = document.getElementById(deleteMap[inputId] || `delete${capitalize(inputId)}`);
-
-  if (viewIcon) {
-    viewIcon.classList.remove('fa-eye');
-    viewIcon.classList.add('fa-eye-slash', 'disabled');
-    viewIcon.style.pointerEvents = 'none';
-    viewIcon.style.opacity = '0.5';
-  }
-  if (deleteIcon) {
-    deleteIcon.classList.add('disabled');
-    deleteIcon.style.pointerEvents = 'none';
-    deleteIcon.style.opacity = '0.5';
-  }
-
-  // clear any server URL holder if present
-  const hiddenUrl = document.getElementById(`${inputId}Url`);
-  if (hiddenUrl) hiddenUrl.value = '';
-}
-
-function capitalize(str) {
-  if (!str) return '';
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}

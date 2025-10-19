@@ -33,41 +33,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const tableBody = document.querySelector(".tables table tbody");
   const token = sessionStorage.getItem("token"); // <-- Use only sessionStorage
   const modal = document.getElementById("myModal");
-  const addBtn = document.getElementById("myBtn");
-  const closeBtn = document.querySelector(".close");
+  const btn = document.getElementById("myBtn");
+  const span = document.querySelector(".close");
   const form = document.getElementById("announcementForm");
 
   let editingId = null; // Track whether we're editing
   let announcementsData = []; // Store all announcements globally
 
-  // Show modal
-  function showModal() {
-    modal.style.display = "flex";
-    setTimeout(() => modal.classList.add("show"), 10);
-    document.body.style.overflow = "hidden"; // Prevent background scrolling
-  }
-
-  // Hide modal
-  function hideModal() {
-    modal.classList.remove("show");
-    setTimeout(() => {
-      modal.style.display = "none";
-      document.body.style.overflow = ""; // Re-enable scrolling
-    }, 300);
-    form.reset(); // Reset form when closing
-    editingId = null; // Reset editing state
-  }
-
-  // Modal triggers
-  addBtn.onclick = showModal;
-  closeBtn.onclick = hideModal;
-
-  // Close on outside click
-  window.onclick = (event) => {
-    if (event.target === modal) {
-      hideModal();
-    }
+  // Modal open/close
+  btn.onclick = () => {
+    editingId = null;
+    form.reset();
+    modal.style.display = "block";
   };
+  span.onclick = () => modal.style.display = "none";
+  window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; };
 
   // Fetch announcements
   async function fetchAnnouncements() {
@@ -261,11 +241,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (res.ok) {
-        hideModal(); // Use the new hide function
+        modal.style.display = "none";
         form.reset();
         editingId = null;
-        await fetchAnnouncements();
-        renderCurrentTab();
+        fetchAnnouncements();
       } else {
         alert("Failed to save announcement");
       }
@@ -307,19 +286,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   fetchAnnouncements();
-});
-
-const socket = io("http://localhost:5000", { transports: ["websocket"] });
-
-socket.on("educational-assistance:newSubmission", (data) => {
-  Swal.fire({
-    icon: 'info',
-    title: 'New Educational Assistance Application',
-    text: 'A new application has arrived!',
-    timer: 8000,
-    showConfirmButton: false,
-    toast: true,
-    position: 'top-end'
-  });
-  // Optionally refresh or update something if needed
 });

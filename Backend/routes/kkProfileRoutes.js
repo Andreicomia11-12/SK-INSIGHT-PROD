@@ -264,7 +264,7 @@ router.get("/me", protect, ctrl.getMyProfile);
 router.get("/me/image", protect, ctrl.getProfileImage);
 
 // Admin-only routes
-// router.get("/export", protect, authorizeRoles("admin"), ctrl.exportProfilesToExcel);
+router.get("/export", protect, authorizeRoles("admin"), ctrl.exportProfilesToExcel);
 router.get("/deleted", protect, authorizeRoles("admin"), ctrl.getDeletedProfiles);
 
 // Profile submission with image
@@ -288,8 +288,6 @@ router.get("/me", protect, async (req, res) => {
   res.json(kkProfile);
 });
 
-router.get('/export-template', protect, authorizeRoles('admin'), ctrl.exportKKProfilesExcelTemplate);
-
 // Admin or Owner can manage a specific profile
 router.get("/:id", protect, authorizeRoles("admin"), ctrl.getProfileById);
 router.put("/:id", protect, ctrl.updateProfileById);
@@ -311,6 +309,5 @@ router.post('/upload-signature', signatureUpload.single('signatureImage'), (req,
   // Save req.file.filename or req.file.path to your database as needed
   res.json({ filename: req.file.filename });
 });
-
 
 module.exports = router;

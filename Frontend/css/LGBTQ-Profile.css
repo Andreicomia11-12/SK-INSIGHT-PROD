@@ -822,12 +822,10 @@ tbody tr:hover {
 }
 
 .pagination-btn.active {
-  background: white;
-  color: #0A2C59;
+  background: #07B0F2;
+  color: #fff;
   font-weight: bold;
-  border: 2px solid #0A2C59;
 }
-
 
 .pagination-btn:disabled {
   background: #e0e0e0;

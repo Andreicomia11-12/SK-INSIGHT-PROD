@@ -156,7 +156,7 @@ function handleLGBTQProfileNavClick(event) {
     // CASE 4: Form open, no profile → Go to form
     window.location.href = "lgbtqform.html";
   })
-  .catch(() => window.location.href = "../../lgbtqform.html");
+  .catch(() => window.location.href = "lgbtqform.html");
 }
 
 // Educational Assistance Navigation
@@ -228,7 +228,7 @@ function handleEducAssistanceNavClick(event) {
       return;
     }
     // CASE 4: Form open, no profile → Go to form
-    window.location.href = "../../Educational-assistance-user.html";
+    window.location.href = "Educational-assistance-user.html";
   })
   .catch(() => window.location.href = "Educational-assistance-user.html");
 }
