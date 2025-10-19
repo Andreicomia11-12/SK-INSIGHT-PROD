@@ -37,6 +37,12 @@ app.use(express.static(path.join(__dirname, "../Frontend")));
 // Serve everything inside uploads/
 app.use('/', express.static(path.join(__dirname, 'uploads')));
 
+// Make io available to routes
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);

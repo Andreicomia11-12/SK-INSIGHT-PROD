@@ -164,14 +164,14 @@
     .container {
         width: 90%;
         max-width: 1000px;
-        margin: 2rem auto;
+        margin: 5rem auto;
         padding: 0 25px;
         box-sizing: border-box;
     }
 
     /* Cards */
     .card {
-        width: 100%;
+        width: 90.5%;
         max-width: 900px;
         margin: 0 auto 25px auto;
         background-color: #fff;
@@ -181,14 +181,25 @@
         box-sizing: border-box;
     }
 
+    .cardintro{
+      width: 90.5%;
+      max-width: 900px;
+      margin: 0 auto 25px auto;
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      box-sizing: border-box;
+    }
+
     /* Intro Card */
-    .card.intro h2 {
+    .cardintro h2 {
         margin-bottom: 10px;
         color: #0a2c59;
         font-size: 24px;
     }
 
-    .card.intro p {
+    .cardintro p {
         margin-bottom: 10px;
         line-height: 1.5;
     }
@@ -223,13 +234,16 @@ textarea:focus {
 
     /* Submit Button */
     .submit-btn {
-        width: 100%;
-        padding: 10px;
-        background-color: #0a2c59;
+        
+    min-width: 120px;
+    min-height: 40px;
+        padding: 12px 30px !important;
+        background-color: #143d77;
         color: white;
-        font-size: 1rem;
+        font-size: 15px;
+        font-weight: bold;
         border: none;
-        border-radius: 5px;
+        border-radius: 7px;
         cursor: pointer;
         text-decoration: none;
     }
@@ -262,11 +276,19 @@ textarea:focus {
 
     /* Responsive Adjustments */
     @media (max-width: 768px) {
-        .card { padding: 20px; }
+      .cardintro{
+        margin-top: -3%;
+        padding: 20px; 
+        width: 80vw;
+      }
+        .card { 
+          padding: 20px; 
+          width: 80vw;
+        }
     }
 
     @media (max-width: 480px) {
-        .card {
+        .card, .cardintro {
             padding: 15px;
             margin-bottom: 20px;
         }
@@ -297,7 +319,7 @@ textarea:focus {
             width: 100vw;
             padding: 0 4px;
         }
-        .card {
+        .card, .cardintro {
             margin-left: auto;
             margin-right: auto;
             width: 90%;

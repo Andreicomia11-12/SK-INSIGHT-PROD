@@ -161,7 +161,9 @@ const viewCOE = document.getElementById('viewCOE');
 if (viewCOE) {
   viewCOE.onclick = function() {
     if (data.coeImage) {
-      document.getElementById('previewImg').src = `/uploads/${data.coeImage}`;
+      // Use Cloudinary URL directly if it's already a full URL
+      const imageUrl = data.coeImage.startsWith('http') ? data.coeImage : `/uploads/${data.coeImage}`;
+      document.getElementById('previewImg').src = imageUrl;
       document.getElementById('imagePreviewModal').style.display = 'block';
     }
   };

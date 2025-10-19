@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalTitle = modal.querySelector(".modal-header h3");
   const modalEventDate = modal.querySelector(".event-date");
   const modalCreatedDate = modal.querySelector(".created-date");
-  const modalDescription = modal.querySelector(".description");
+  const modalDescription = modal.querySelector(".description-box");
   const closeModalBtn = modal.querySelector(".close-modal");
 
   // Fetch announcements
@@ -50,15 +50,31 @@ document.addEventListener("DOMContentLoaded", () => {
       return ev >= now;
     });
 
-    upcomingAnnouncements.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
-    const limitedAnnouncements = upcomingAnnouncements.slice(0, 5);
+    // Sort: pinned announcements first, then by event date
+    upcomingAnnouncements.sort((a, b) => {
+      // If one is pinned and the other isn't, pinned comes first
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      
+      // If both are pinned or both are not pinned, sort by event date
+      return new Date(a.eventDate) - new Date(b.eventDate);
+    });
+    
+    const limitedAnnouncements = upcomingAnnouncements.slice(0, 8);
 
     limitedAnnouncements.forEach(a => {
       const status = getAnnouncementStatus(a.eventDate);
       const tr = document.createElement("tr");
+      
+      // Add pinned class for styling
+      if (a.isPinned) {
+        tr.classList.add("pinned-row");
+      }
+      
       tr.innerHTML = `
         <td>
           <div class="announcement-title">
+            ${a.isPinned ? '<i class="fa-solid fa-location-pin" style="color: #d4af37; margin-right: 8px;"></i>' : ''}
             <i class="fa-solid fa-bullhorn"></i>
             ${a.title}
           </div>
@@ -74,10 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
       tableBody.appendChild(tr);
     });
 
-    for (let i = limitedAnnouncements.length; i < 5; i++) {
+    for (let i = limitedAnnouncements.length; i < 8; i++) {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td colspan="4" style="text-align:center; color: #888;">No announcements yet</td>
       `;
       tableBody.appendChild(tr);
     }
@@ -140,6 +155,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Load announcements on page load
   fetchAnnouncements();
+
+  // =========================
+  // REALTIME UPDATES WITH WEBSOCKET
+  // =========================
+  // Connect to WebSocket server
+  const socket = io("http://localhost:5000", { transports: ["websocket"] });
+
+  // Listen for announcement updates
+  socket.on("announcement:created", (data) => {
+    console.log("New announcement created:", data);
+    // Refresh announcements to show the new one
+    fetchAnnouncements();
+  });
+
+  socket.on("announcement:updated", (data) => {
+    console.log("Announcement updated:", data);
+    // Refresh announcements to show the updated one
+    fetchAnnouncements();
+  });
+
+  socket.on("announcement:deleted", (data) => {
+    console.log("Announcement deleted:", data);
+    // Refresh announcements to remove the deleted one
+    fetchAnnouncements();
+  });
+
+  socket.on("announcement:pinned", (data) => {
+    console.log("Announcement pinned:", data);
+    // Refresh announcements to show pin status
+    fetchAnnouncements();
+  });
+
+  socket.on("announcement:unpinned", (data) => {
+    console.log("Announcement unpinned:", data);
+    // Refresh announcements to show pin status
+    fetchAnnouncements();
+  });
+
+  // Handle connection errors
+  socket.on("connect_error", (error) => {
+    console.log("WebSocket connection error:", error);
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.log("WebSocket disconnected:", reason);
+  });
 });
 
 

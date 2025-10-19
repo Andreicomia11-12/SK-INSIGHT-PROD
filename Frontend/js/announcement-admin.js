@@ -56,6 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 300);
     form.reset(); // Reset form when closing
     editingId = null; // Reset editing state
+    
+    // Reset modal header
+    const modalHeader = document.querySelector('.modal-header h2');
+    if (modalHeader) {
+      modalHeader.textContent = 'Add Announcement';
+    }
   }
 
   // Modal triggers
@@ -168,7 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "DELETE",
             headers: { "Authorization": `Bearer ${token}` }
           });
-          if (res.ok) fetchAnnouncements();
+          if (res.ok) {
+            fetchAnnouncements();
+          }
         } catch (err) {
           console.error("Delete error:", err);
         }
@@ -195,8 +203,14 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("time").value = dt.toTimeString().slice(0,5);
         }
 
+        // Update modal header for editing
+        const modalHeader = document.querySelector('.modal-header h2');
+        if (modalHeader) {
+          modalHeader.textContent = 'Edit Announcement';
+        }
+
         editingId = id;
-        modal.style.display = "block";
+        showModal();
       } catch (err) {
         console.error("Edit error:", err);
       }
@@ -323,3 +337,5 @@ socket.on("educational-assistance:newSubmission", (data) => {
   });
   // Optionally refresh or update something if needed
 });
+
+// WebSocket events are now handled by the backend

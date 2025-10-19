@@ -238,12 +238,15 @@ body {
 .card {
   width: 100%;
   max-width: 900px;
-  margin: 0 auto 25px auto;
+  margin: 12px auto 25px auto;
   background-color: #fff;
   border-radius: 15px;
   padding: 30px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
+}
+.card.intro{
+  margin-top: 3.7%;
 }
     /* Intro Card */
     .card.intro h2 {
@@ -321,6 +324,15 @@ body {
 
 .submit-btn:hover {
   background: #1a4c9c;         /* match kkform hover */
+}
+
+/* Invisible Card for Button Alignment */
+.invisible-card {
+  background: transparent;
+  box-shadow: none;
+  padding: 8px 20px 0 20px;
+  margin-top: -8px;
+  margin-bottom: 0;
 }
 .image-preview-container {
   position: relative;
