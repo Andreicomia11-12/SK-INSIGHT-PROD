@@ -114,11 +114,9 @@ body {
 /* ✅ Thank You Card */
 .container {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
+  max-width: 900px;      /* match kk form container width */
+  margin: 2rem auto;     /* consistent vertical spacing */
+  padding: 20px;         /* consistent inner padding */
 }
 
 .card {
@@ -175,6 +173,84 @@ body {
 .card-logo {
   width: 70px;   /* adjust as needed */
   height: 70px;
+}
+
+/* Footer */
+.footer {
+  background: #0A2C59;
+  color: #fff;
+  padding: 40px 60px 20px;
+  margin-top: auto; /* pushes footer down */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.footer-left h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.footer-left p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #cfd9e8;
+}
+
+.footer-middle h4,
+.footer-right h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer-middle ul,
+.footer-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-middle ul li,
+.footer-right ul li {
+  margin-bottom: 8px;
+}
+
+.footer-middle ul li a,
+.footer-right ul li a {
+  text-decoration: none;
+  color: #cfd9e8;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.footer-middle ul li a:hover,
+.footer-right ul li a:hover {
+  color: #ffffff;
+}
+
+.footer-right ul li i {
+  margin-right: 8px;
+  font-size: 15px;
+}
+
+.footer hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px 0;
+}
+
+.footer-bottom {
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 14px;
+  color: #cfd9e8;
 }
 
 /* Responsive behavior */
@@ -234,4 +310,48 @@ body {
 .navbar-mobile-menu .nav-btn:hover {
   background: #eaf3fa;
   color: #1e4e9e;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .footer-left,
+  .footer-middle,
+  .footer-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 20px 15px;
+  }
+
+  .footer-left h3 {
+    font-size: 18px;
+  }
+
+  .footer-left p {
+    font-size: 14px;
+  }
+
+  .footer-middle h4,
+  .footer-right h4 {
+    font-size: 15px;
+  }
+
+  .footer-middle ul li a,
+  .footer-right ul li a {
+    font-size: 14px;
+  }
+
+  .footer-bottom p {
+    font-size: 12px;
+  }
 }

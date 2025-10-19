@@ -180,4 +180,7 @@ setInterval(autoDeleteKKProfiles, 24 * 60 * 60 * 1000); // Run every 24 hours
 const autoDeleteLGBTQProfiles = require("./utils/autoDeleteLGBTQProfiles");
 setInterval(autoDeleteLGBTQProfiles, 24 * 60 * 60 * 1000); // Run every 24 hours
 
+app.use('/uploads/id', express.static(path.join(__dirname, 'uploads/id')));
+app.use('/uploads/signatures', express.static(path.join(__dirname, 'uploads/signatures')));
+
 console.log('Server started');

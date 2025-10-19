@@ -129,15 +129,9 @@ exports.submitKKProfile = async (req, res) => {
           : undefined,
 
       // ✅ Save uploaded images if present
-      profileImage: req.files?.profileImage
-        ? req.files.profileImage[0].filename
-        : null,
-      idImagePath: req.files?.idImage
-        ? req.files.idImage[0].path
-        : null,
-      signatureImagePath: req.files?.signatureImage
-        ? req.files.signatureImage[0].filename
-        : null,
+      profileImage: req.files?.profileImage ? req.files.profileImage[0].path : null, // Cloudinary URL
+      idImagePath: req.files?.idImage ? req.files.idImage[0].path : null,           // Cloudinary URL
+      signatureImagePath: req.files?.signatureImage ? req.files.signatureImage[0].path : null, // Cloudinary URL
 
       birthday,
     });
@@ -219,122 +213,122 @@ exports.deleteProfileById = async (req, res) => {
 };
 
 // GET /api/kkprofiling/export?cycleId=<formCycleId>
-exports.exportProfilesToExcel = async (req, res) => {
-  try {
-    const { year, cycle } = req.query;
+// exports.exportProfilesToExcel = async (req, res) => {
+//   try {
+//     const { year, cycle } = req.query;
 
-    // Find the cycle
-    const cycleDoc = await FormCycle.findOne({
-      formName: "KK Profiling",
-      year: Number(year),
-      cycleNumber: Number(cycle),
-    });
+//     // Find the cycle
+//     const cycleDoc = await FormCycle.findOne({
+//       formName: "KK Profiling",
+//       year: Number(year),
+//       cycleNumber: Number(cycle),
+//     });
 
-    if (!cycleDoc) {
-      return res.status(404).json({ error: "Specified cycle not found" });
-    }
+//     if (!cycleDoc) {
+//       return res.status(404).json({ error: "Specified cycle not found" });
+//     }
 
-    const profiles = await KKProfile.find({
-      formCycle: cycleDoc._id,
-    }).populate("user", "username email birthday age");
+//     const profiles = await KKProfile.find({
+//       formCycle: cycleDoc._id,
+//     }).populate("user", "username email birthday age");
 
-    if (!profiles.length) {
-      return res.status(404).json({ error: "No profiling found for this cycle" });
-    }
+//     if (!profiles.length) {
+//       return res.status(404).json({ error: "No profiling found for this cycle" });
+//     }
 
-    // Define columns
-    const columns = [
-      { header: "Username", key: "username", width: 20 },
-      { header: "Email", key: "email", width: 30 },
-      { header: "Lastname", key: "lastname", width: 18 },
-      { header: "Firstname", key: "firstname", width: 18 },
-      { header: "Middlename", key: "middlename", width: 18 },
-      { header: "Suffix", key: "suffix", width: 10 },
-      { header: "Birthday", key: "birthday", width: 15 },
-      { header: "Age", key: "age", width: 8 },
-      { header: "Gender", key: "gender", width: 10 },
-      { header: "Region", key: "region", width: 15 },
-      { header: "Province", key: "province", width: 15 },
-      { header: "Municipality", key: "municipality", width: 15 },
-      { header: "Barangay", key: "barangay", width: 15 },
-      { header: "Purok", key: "purok", width: 10 },
-      { header: "Email", key: "email", width: 25 },
-      { header: "Contact Number", key: "contactNumber", width: 15 },
-      { header: "Civil Status", key: "civilStatus", width: 15 },
-      { header: "Youth Age Group", key: "youthAgeGroup", width: 15 },
-      { header: "Youth Classification", key: "youthClassification", width: 18 },
-      { header: "Educational Background", key: "educationalBackground", width: 20 },
-      { header: "Work Status", key: "workStatus", width: 15 },
-      { header: "Registered SK Voter", key: "registeredSKVoter", width: 15 },
-      { header: "Registered National Voter", key: "registeredNationalVoter", width: 20 },
-      { header: "Voted Last SK Election", key: "votedLastSKElection", width: 20 },
-      { header: "Attended KK Assembly", key: "attendedKKAssembly", width: 20 },
-      { header: "Attendance Count", key: "attendanceCount", width: 18 },
-      { header: "Reason Did Not Attend", key: "reasonDidNotAttend", width: 25 },
-      { header: "Profile Image", key: "profileImage", width: 30 },
-      { header: "Submitted At", key: "createdAt", width: 22 },
-    ];
+//     // Define columns
+//     const columns = [
+//       { header: "Username", key: "username", width: 20 },
+//       { header: "Email", key: "email", width: 30 },
+//       { header: "Lastname", key: "lastname", width: 18 },
+//       { header: "Firstname", key: "firstname", width: 18 },
+//       { header: "Middlename", key: "middlename", width: 18 },
+//       { header: "Suffix", key: "suffix", width: 10 },
+//       { header: "Birthday", key: "birthday", width: 15 },
+//       { header: "Age", key: "age", width: 8 },
+//       { header: "Gender", key: "gender", width: 10 },
+//       { header: "Region", key: "region", width: 15 },
+//       { header: "Province", key: "province", width: 15 },
+//       { header: "Municipality", key: "municipality", width: 15 },
+//       { header: "Barangay", key: "barangay", width: 15 },
+//       { header: "Purok", key: "purok", width: 10 },
+//       { header: "Email", key: "email", width: 25 },
+//       { header: "Contact Number", key: "contactNumber", width: 15 },
+//       { header: "Civil Status", key: "civilStatus", width: 15 },
+//       { header: "Youth Age Group", key: "youthAgeGroup", width: 15 },
+//       { header: "Youth Classification", key: "youthClassification", width: 18 },
+//       { header: "Educational Background", key: "educationalBackground", width: 20 },
+//       { header: "Work Status", key: "workStatus", width: 15 },
+//       { header: "Registered SK Voter", key: "registeredSKVoter", width: 15 },
+//       { header: "Registered National Voter", key: "registeredNationalVoter", width: 20 },
+//       { header: "Voted Last SK Election", key: "votedLastSKElection", width: 20 },
+//       { header: "Attended KK Assembly", key: "attendedKKAssembly", width: 20 },
+//       { header: "Attendance Count", key: "attendanceCount", width: 18 },
+//       { header: "Reason Did Not Attend", key: "reasonDidNotAttend", width: 25 },
+//       { header: "Profile Image", key: "profileImage", width: 30 },
+//       { header: "Submitted At", key: "createdAt", width: 22 },
+//     ];
 
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("KK Profiling");
-    worksheet.columns = columns;
+//     const workbook = new ExcelJS.Workbook();
+//     const worksheet = workbook.addWorksheet("KK Profiling");
+//     worksheet.columns = columns;
 
-    // Add header row
-    worksheet.addRow(columns.map(col => col.header));
-    worksheet.getRow(1).font = { bold: true };
-    worksheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+//     // Add header row
+//     worksheet.addRow(columns.map(col => col.header));
+//     worksheet.getRow(1).font = { bold: true };
+//     worksheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
 
-    // Add data rows
-    profiles.forEach(profile => {
-      worksheet.addRow([
-        profile.user?.username || "",
-        profile.user?.email || "",
-        profile.lastname || "",
-        profile.firstname || "",
-        profile.middlename || "",
-        profile.suffix || "",
-        profile.user?.birthday ? new Date(profile.user.birthday).toLocaleDateString() : "",
-        profile.user?.age || "",
-        profile.gender || "",
-        profile.region || "",
-        profile.province || "",
-        profile.municipality || "",
-        profile.barangay || "",
-        profile.purok || "",
-        profile.email || "",
-        profile.contactNumber || "",
-        profile.civilStatus || "",
-        profile.youthAgeGroup || "",
-        profile.youthClassification || "",
-        profile.educationalBackground || "",
-        profile.workStatus || "",
-        profile.registeredSKVoter || "",
-        profile.registeredNationalVoter || "",
-        profile.votedLastSKElection || "",
-        profile.attendedKKAssembly || "",
-        profile.attendanceCount || "",
-        profile.reasonDidNotAttend || "",
-        profile.profileImage || "",
-        profile.createdAt ? profile.createdAt.toISOString() : "",
-      ]);
-    });
+//     // Add data rows
+//     profiles.forEach(profile => {
+//       worksheet.addRow([
+//         profile.user?.username || "",
+//         profile.user?.email || "",
+//         profile.lastname || "",
+//         profile.firstname || "",
+//         profile.middlename || "",
+//         profile.suffix || "",
+//         profile.user?.birthday ? new Date(profile.user.birthday).toLocaleDateString() : "",
+//         profile.user?.age || "",
+//         profile.gender || "",
+//         profile.region || "",
+//         profile.province || "",
+//         profile.municipality || "",
+//         profile.barangay || "",
+//         profile.purok || "",
+//         profile.email || "",
+//         profile.contactNumber || "",
+//         profile.civilStatus || "",
+//         profile.youthAgeGroup || "",
+//         profile.youthClassification || "",
+//         profile.educationalBackground || "",
+//         profile.workStatus || "",
+//         profile.registeredSKVoter || "",
+//         profile.registeredNationalVoter || "",
+//         profile.votedLastSKElection || "",
+//         profile.attendedKKAssembly || "",
+//         profile.attendanceCount || "",
+//         profile.reasonDidNotAttend || "",
+//         profile.profileImage || "",
+//         profile.createdAt ? profile.createdAt.toISOString() : "",
+//       ]);
+//     });
 
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=kk_profiles_${year}_cycle${cycle}.xlsx`
-    );
+//     res.setHeader(
+//       "Content-Type",
+//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//     );
+//     res.setHeader(
+//       "Content-Disposition",
+//       `attachment; filename=kk_profiles_${year}_cycle${cycle}.xlsx`
+//     );
 
-    await workbook.xlsx.write(res);
-    res.end();
-  } catch (error) {
-    console.error("Export error:", error);
-    res.status(500).json({ message: "Failed to export profiles" });
-  }
-};
+//     await workbook.xlsx.write(res);
+//     res.end();
+//   } catch (error) {
+//     console.error("Export error:", error);
+//     res.status(500).json({ message: "Failed to export profiles" });
+//   }
+// };
 
 // GET /api/kkprofiling/me
 exports.getMyProfile = async (req, res) => {
@@ -654,6 +648,158 @@ exports.permanentlyDeleteProfileById = async (req, res) => {
   }
 };
 
+
+
+exports.exportKKProfilesExcelTemplate = async (req, res) => {
+  try {
+    const templatePath = path.resolve(__dirname, '../templates/kk_profiling_template.xlsx');
+    if (!fs.existsSync(templatePath)) {
+      return res.status(500).json({ error: 'Excel template file not found' });
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(templatePath);
+
+    const worksheet = workbook.worksheets[0]; // Use the first worksheet
+
+    // Check if year and cycle are provided in the query
+    const { year, cycle } = req.query;
+
+    let formCycle;
+    if (year && cycle) {
+      // Fetch the specific cycle based on year, cycle number, and formName
+      formCycle = await FormCycle.findOne({
+        formName: "KK Profiling",
+        year: Number(year),
+        cycleNumber: Number(cycle),
+      });
+
+      if (!formCycle) {
+        return res.status(404).json({ error: `No cycle found for year ${year} and cycle ${cycle}` });
+      }
+    } else {
+      // Fetch the present (open) cycle
+      formCycle = await FormCycle.findOne({ formName: "KK Profiling", isOpen: true });
+      if (!formCycle) {
+        return res.status(404).json({ error: 'No open cycle found' });
+      }
+    }
+
+    // Fetch KK Profiles for the selected cycle
+    let profiles = await KKProfile.find({ formCycle: formCycle._id, isDeleted: false }).populate("user", "birthday");
+
+    if (!profiles.length) {
+      return res.status(404).json({ error: 'No KK Profiles found for the selected cycle' });
+    }
+
+    // Sort profiles by the purok number (ascending)
+    profiles = profiles.sort((a, b) => {
+      const purokA = parseInt(a.purok) || 0; // Default to 0 if purok is not a number
+      const purokB = parseInt(b.purok) || 0;
+      return purokA - purokB;
+    });
+
+    // Start writing data at row 4 (since rows 1-3 are headers)
+    let rowNum = 4;
+
+    profiles.forEach(profile => {
+      const fullName = `${(profile.lastname || '').toUpperCase()}, ${(profile.firstname || '').toUpperCase()} ${(profile.middlename || '').toUpperCase()}`.trim();
+
+      // Extract birthday details and compute age
+      const birthday = profile.user?.birthday ? new Date(profile.user.birthday) : null;
+      const birthMonth = birthday ? birthday.getMonth() + 1 : "N/A"; // Months are 0-indexed
+      const birthDay = birthday ? birthday.getDate() : "N/A";
+      const birthYear = birthday ? birthday.getFullYear() : "N/A";
+
+      // Compute age dynamically
+      const today = new Date();
+      const age = birthday
+        ? today.getFullYear() - birthYear - (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay) ? 1 : 0)
+        : "N/A";
+
+      // Gender logic: M for Male, F for Female
+      const gender = profile.gender === "Male" ? "M" : profile.gender === "Female" ? "F" : "N/A";
+
+      // Civil status in all caps
+      const civilStatus = (profile.civilStatus || "N/A").toUpperCase();
+
+      // Youth classification logic
+      let youthClassification = "N/A";
+      if (profile.youthClassification === "In School Youth") {
+        youthClassification = "ISY";
+      } else if (profile.youthClassification === "Out of School Youth") {
+        youthClassification = "OSY";
+      } else if (profile.youthClassification === "Working Youth") {
+        youthClassification = "WY";
+      } else if (profile.youthClassification === "Youth with Specific Needs") {
+        const specificNeeds = [];
+        if (profile.specificNeedType?.includes("Person w/Disability")) specificNeeds.push("PWD");
+        if (profile.specificNeedType?.includes("Children in Conflict w/Law")) specificNeeds.push("CC");
+        if (profile.specificNeedType?.includes("Indigenous People")) specificNeeds.push("IP");
+        youthClassification = `YSP${specificNeeds.length ? " - " + specificNeeds.join("/") : ""}`;
+      }
+
+      // Youth age group
+      const youthAgeGroup = profile.youthAgeGroup || "N/A";
+
+      // Email address, contact number, and purok
+      const email = profile.email || "N/A";
+      const contactNumber = profile.contactNumber || "N/A";
+      const purok = profile.purok ? `PUROK ${profile.purok}` : "PUROK N/A"; // Add "PUROK" prefix
+
+      // Educational background and work status
+      const educationalBackground = profile.educationalBackground || "N/A";
+      const workStatus = profile.workStatus || "N/A";
+
+      // Registered National Voter and Voted Last SK Election
+      const registeredNationalVoter = profile.registeredNationalVoter ? "Y" : "N";
+      const votedLastSKElection = profile.votedLastSKElection ? "Y" : "N";
+
+      // Attended KK Assembly logic
+      let attendedKKAssembly = profile.attendedKKAssembly ? "Y" : "N";
+      let attendanceOrReason = profile.attendedKKAssembly
+        ? profile.attendanceCount || "N/A" // If attended, show attendance count
+        : profile.reasonDidNotAttend || "N/A"; // If not attended, show reason
+
+      // Write data to the existing row
+      worksheet.getCell(`A${rowNum}`).value = "IV-A";                // Region
+      worksheet.getCell(`B${rowNum}`).value = "BATANGAS";            // Province
+      worksheet.getCell(`C${rowNum}`).value = "CALACA CITY";         // Municipality
+      worksheet.getCell(`D${rowNum}`).value = "PUTING BATO WEST";    // Barangay
+      worksheet.getCell(`E${rowNum}`).value = fullName;              // Full Name
+      worksheet.getCell(`F${rowNum}`).value = age;                   // Age
+      worksheet.getCell(`G${rowNum}`).value = birthMonth;            // Birth Month
+      worksheet.getCell(`H${rowNum}`).value = birthDay;              // Birth Day
+      worksheet.getCell(`I${rowNum}`).value = birthYear;             // Birth Year
+      worksheet.getCell(`J${rowNum}`).value = gender;                // Gender
+      worksheet.getCell(`K${rowNum}`).value = civilStatus;           // Civil Status
+      worksheet.getCell(`L${rowNum}`).value = youthClassification;   // Youth Classification
+      worksheet.getCell(`M${rowNum}`).value = youthAgeGroup;         // Youth Age Group
+      worksheet.getCell(`N${rowNum}`).value = email;                 // Email Address
+      worksheet.getCell(`O${rowNum}`).value = contactNumber;         // Contact Number
+      worksheet.getCell(`P${rowNum}`).value = purok;                 // Purok
+      worksheet.getCell(`Q${rowNum}`).value = educationalBackground; // Educational Background
+      worksheet.getCell(`R${rowNum}`).value = workStatus;            // Work Status
+      worksheet.getCell(`S${rowNum}`).value = registeredNationalVoter; // Registered National Voter
+      worksheet.getCell(`T${rowNum}`).value = votedLastSKElection;   // Voted Last SK Election
+      worksheet.getCell(`U${rowNum}`).value = attendedKKAssembly;    // Attended KK Assembly
+      worksheet.getCell(`V${rowNum}`).value = attendanceOrReason;    // Attendance Count or Reason
+
+      rowNum++; // Move to the next row
+    });
+
+    // Set headers for the response
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=kk_profiling_export_${year || 'present'}_cycle_${cycle || 'open'}.xlsx`);
+
+    // Write the workbook to the response
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error('Excel export error:', err);
+    res.status(500).json({ error: 'Failed to export KK Profiling data' });
+  }
+};
 
 
 // Use isPWD, isCICL, isIP as needed here

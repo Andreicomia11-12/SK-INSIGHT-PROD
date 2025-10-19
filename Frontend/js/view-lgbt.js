@@ -10,26 +10,38 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (!res.ok) return;
     const data = await res.json();
 
-    // Fill form fields with fetched data
-    document.getElementById('lastName').value = data.lastname || '';
-    document.getElementById('firstName').value = data.firstname || '';
-    document.getElementById('middleName').value = data.middlename || '';
-    document.getElementById('birthday').value =
-      data.kkInfo && data.kkInfo.birthday
-        ? new Date(data.kkInfo.birthday).toISOString().split('T')[0]
-        : '';
-    document.getElementById('sex').value = data.sexAssignedAtBirth || '';
-    document.getElementById('identity').value = data.lgbtqClassification || '';
-
-    // Profile image preview (if exists)
-    if (data.idImage) {
-      const imageUrl = data.idImage.startsWith('http')
-        ? data.idImage
-        : `http://localhost:5000/lgbtq_id_images/${data.idImage}`;
-      document.getElementById('imagePreview').innerHTML =
-        `<img src="${imageUrl}" alt="ID Image" style="width:320px;border-radius:10px;">`;
+    // Front ID image preview (if exists)
+    if (data.idImageFront) {
+      document.getElementById('imagePreviewContainerFront').style.display = 'block';
+      document.getElementById('imagePreviewFront').src = data.idImageFront;
     }
-    console.log("Fetched profile data:", data);
+
+    // Back ID image preview (if exists)
+    if (data.idImageBack) {
+      document.getElementById('imagePreviewContainerBack').style.display = 'block';
+      document.getElementById('imagePreviewBack').src = data.idImageBack;
+    }
+
+    // Set personal info fields if they exist in the response
+    if (data.lastname) document.getElementById('lastName').value = data.lastname;
+    if (data.firstname) document.getElementById('firstName').value = data.firstname;
+    if (data.middlename) document.getElementById('middleName').value = data.middlename;
+
+    // Get birthday from user info (from sign-in)
+    let birthday = "";
+    if (data.user && data.user.birthday) {
+      birthday = data.user.birthday;
+    } else if (data.kkInfo && data.kkInfo.birthday) {
+      birthday = data.kkInfo.birthday;
+    } else if (data.birthday) {
+      birthday = data.birthday;
+    }
+    if (birthday) {
+      document.getElementById('birthday').value = birthday.split('T')[0];
+    }
+
+    if (data.sexAssignedAtBirth) document.getElementById('sex').value = data.sexAssignedAtBirth;
+    if (data.lgbtqClassification) document.getElementById('identity').value = data.lgbtqClassification;
   } catch (err) {
     console.error('Failed to fetch LGBTQ Profile data:', err);
   }
@@ -135,7 +147,7 @@ function handleLGBTQProfileNavClick(event) {
       text: 'Please log in to access LGBTQ+ Profiling.',
       confirmButtonText: 'OK'
     }).then(() => {
-      window.location.href = '/Frontend/html/user/login.html';
+      window.location.href = '../../login.html';
     });
     return;
   }
@@ -193,9 +205,9 @@ function handleLGBTQProfileNavClick(event) {
       return;
     }
     // CASE 4: Form open, no profile → Go to form
-    window.location.href = "lgbtqform.html";
+    window.location.href = "../../lgbtqform.html";
   })
-  .catch(() => window.location.href = "lgbtqform.html");
+  .catch(() => window.location.href = "../../lgbtqform.html");
 }
 
 // Educational Assistance Navigation
@@ -267,9 +279,9 @@ function handleEducAssistanceNavClick(event) {
       return;
     }
     // CASE 4: Form open, no profile → Go to form
-    window.location.href = "Educational-assistance-user.html";
+    window.location.href = "../../Educational-assistance-user.html";
   })
-  .catch(() => window.location.href = "Educational-assistance-user.html");
+  .catch(() => window.location.href = "../../Educational-assistance-user.html");
 }
 
 document.addEventListener('DOMContentLoaded', function() {

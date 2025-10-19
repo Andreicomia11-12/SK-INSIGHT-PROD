@@ -51,6 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
 const approvedTable = document.getElementById("approved");
 const rejectedTable = document.getElementById("rejected");
 
+  let currentPagePending = 1;
+let currentPageApproved = 1;
+let currentPageRejected = 1;
+const ITEMS_PER_PAGE = 30;
+let applicants = [];
+
   // ---------------- Tabs ----------------
   tabButtons.forEach(button => {
     button.addEventListener("click", () => {
@@ -198,164 +204,293 @@ const rejectedTable = document.getElementById("rejected");
 
   // ---------------- Render Tables ----------------
   function renderTables(data) {
-    pendingTable.innerHTML = "";
-    approvedTable.innerHTML = "";
-    rejectedTable.innerHTML = "";
+    // Sort by newest first (descending by createdAt)
+    const sortByNewest = arr =>
+      arr.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+    // Filter by tab status and sort
+    const pendingApps = sortByNewest(data.filter(app => app.status === "pending"));
+    const approvedApps = sortByNewest(data.filter(app => app.status === "approved"));
+    const rejectedApps = sortByNewest(data.filter(app => app.status === "rejected"));
+
+    // Search filter
     const searchTerm = searchInput.value.toLowerCase();
+    const filterBySearch = arr => arr.filter(app => {
+      const mi = app.middlename ? app.middlename[0].toUpperCase() + "." : "";
+      const fullName = `${app.firstname} ${mi} ${app.surname}`.trim().toLowerCase();
+      return fullName.includes(searchTerm);
+    });
 
-    data.forEach((app, index) => {
+    const filteredPending = filterBySearch(pendingApps);
+    const filteredApproved = filterBySearch(approvedApps);
+    const filteredRejected = filterBySearch(rejectedApps);
+
+    // Pagination for each tab
+    const totalPagesPending = Math.ceil(filteredPending.length / ITEMS_PER_PAGE);
+    const totalPagesApproved = Math.ceil(filteredApproved.length / ITEMS_PER_PAGE);
+    const totalPagesRejected = Math.ceil(filteredRejected.length / ITEMS_PER_PAGE);
+
+    if (currentPagePending > totalPagesPending) currentPagePending = totalPagesPending || 1;
+    if (currentPageApproved > totalPagesApproved) currentPageApproved = totalPagesApproved || 1;
+    if (currentPageRejected > totalPagesRejected) currentPageRejected = totalPagesRejected || 1;
+
+    const startPending = (currentPagePending - 1) * ITEMS_PER_PAGE;
+    const endPending = startPending + ITEMS_PER_PAGE;
+    const pagePending = filteredPending.slice(startPending, endPending);
+
+    const startApproved = (currentPageApproved - 1) * ITEMS_PER_PAGE;
+    const endApproved = startApproved + ITEMS_PER_PAGE;
+    const pageApproved = filteredApproved.slice(startApproved, endApproved);
+
+    const startRejected = (currentPageRejected - 1) * ITEMS_PER_PAGE;
+    const endRejected = startRejected + ITEMS_PER_PAGE;
+    const pageRejected = filteredRejected.slice(startRejected, endRejected);
+
+    // Render Pending
+    pendingTable.innerHTML = "";
+    pagePending.forEach((app, idx) => {
       const mi = app.middlename ? app.middlename[0].toUpperCase() + "." : "";
       const fullName = `${app.firstname} ${mi} ${app.surname}`.trim();
-      if (!fullName.toLowerCase().includes(searchTerm)) return;
-
-      let actionBtn = "";
-      if (app.status === "pending") {
-        actionBtn = `<button class="action-btn"><i class="fas fa-eye"></i></button>`;
-      } else {
-        actionBtn = `<button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>`;
-      }
-
-      // Removed School column
-      const row = `
-        <tr data-id="${app._id}">
-          <td>${index + 1}</td>
+      pendingTable.innerHTML += `
+        <tr data-id="${app._id}" class="${app.isRead ? 'row-read' : 'row-unread'}">
+          <td>${startPending + idx + 1}</td>
           <td>${fullName}</td>
           <td>${app.age ?? ""}</td>
           <td>${app.civilStatus || "N/A"}</td>
           <td>${app.religion || "N/A"}</td>
           <td>${app.year || app.grade || "N/A"}</td>
           <td>${app.sex || "N/A"}</td>
-          <td>${actionBtn}</td>
+          <td><button class="action-btn"><i class="fas fa-eye"></i></button></td>
         </tr>
       `;
-
-      if (app.status === "pending") {
-        pendingTable.innerHTML += row;
-      } else if (app.status === "approved") {
-        approvedTable.innerHTML += row;
-      } else if (app.status === "rejected") {
-        rejectedTable.innerHTML += row;
-      }
     });
 
-    // Attach modal openers and delete handlers after table rows are rendered
+    // Render Approved
+    approvedTable.innerHTML = "";
+    pageApproved.forEach((app, idx) => {
+      const mi = app.middlename ? app.middlename[0].toUpperCase() + "." : "";
+      const fullName = `${app.firstname} ${mi} ${app.surname}`.trim();
+      approvedTable.innerHTML += `
+        <tr data-id="${app._id}">
+          <td>${startApproved + idx + 1}</td>
+          <td>${fullName}</td>
+          <td>${app.age ?? ""}</td>
+          <td>${app.civilStatus || "N/A"}</td>
+          <td>${app.religion || "N/A"}</td>
+          <td>${app.year || app.grade || "N/A"}</td>
+          <td>${app.sex || "N/A"}</td>
+        </tr>
+      `;
+    });
+
+    // Render Rejected
+    rejectedTable.innerHTML = "";
+    pageRejected.forEach((app, idx) => {
+      const mi = app.middlename ? app.middlename[0].toUpperCase() + "." : "";
+      const fullName = `${app.firstname} ${mi} ${app.surname}`.trim();
+      rejectedTable.innerHTML += `
+        <tr data-id="${app._id}">
+          <td>${startRejected + idx + 1}</td>
+          <td>${fullName}</td>
+          <td>${app.age ?? ""}</td>
+          <td>${app.civilStatus || "N/A"}</td>
+          <td>${app.religion || "N/A"}</td>
+          <td>${app.year || app.grade || "N/A"}</td>
+          <td>${app.sex || "N/A"}</td>
+          <td><button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button></td>
+        </tr>
+      `;
+    });
+
+    // Individual pagination for each tab
+    renderPaginationTab('pagination-pending', currentPagePending, totalPagesPending, filteredPending.length, (page) => {
+      currentPagePending = page;
+      renderTables(applicants);
+    });
+    renderPaginationTab('pagination-approved', currentPageApproved, totalPagesApproved, filteredApproved.length, (page) => {
+      currentPageApproved = page;
+      renderTables(applicants);
+    });
+    renderPaginationTab('pagination-rejected', currentPageRejected, totalPagesRejected, filteredRejected.length, (page) => {
+      currentPageRejected = page;
+      renderTables(applicants);
+    });
+
     attachModalOpeners();
     attachDeleteHandlers();
+  }
+
+  function renderPaginationTab(containerId, currentPage, totalPages, totalItems, onPageChange) {
+    const pagination = document.getElementById(containerId);
+    if (!pagination) return;
+    pagination.innerHTML = "";
+
+    if (totalItems <= ITEMS_PER_PAGE) return;
+
+    // Prev
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "pagination-btn";
+    prevBtn.textContent = "Prev";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+      if (currentPage > 1) {
+        onPageChange(currentPage - 1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+    pagination.appendChild(prevBtn);
+
+    // Page numbers (max 5)
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + 4);
+    if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.className = "pagination-btn" + (i === currentPage ? " active" : "");
+      pageBtn.textContent = i;
+      pageBtn.onclick = () => {
+        onPageChange(i);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+      pagination.appendChild(pageBtn);
+    }
+
+    // Next
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "pagination-btn";
+    nextBtn.textContent = "Next";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+      if (currentPage < totalPages) {
+        onPageChange(currentPage + 1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+    pagination.appendChild(nextBtn);
   }
 
   // Add this after renderTables function
 
   async function showApplicantModal(app) {
-    const modal = document.getElementById("profileModal");
-    let birthday = app.birthday;
-
-    // If birthday is missing, fetch from user profile
-    if (!birthday && app.user && app.user._id) {
-      try {
-        const token = sessionStorage.getItem("token");
-        const res = await fetch(`http://localhost:5000/api/users/${app.user._id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.ok) {
-          const userData = await res.json();
-          birthday = userData.birthday;
-        }
-      } catch (err) {
-        console.error("Failed to fetch user birthday:", err);
+    // Fetch latest data from backend to ensure isRead is updated
+    const token = sessionStorage.getItem("token");
+    const response = await fetch(
+      `http://localhost:5000/api/educational-assistance/${app._id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` }
       }
-    }
+    );
+    const freshApp = await response.json();
+
+    const modal = document.getElementById("profileModal");
+    const nameDiv = document.getElementById("profileName");
+    const details = document.getElementById("profileDetails");
 
     const mi = app.middlename ? app.middlename[0].toUpperCase() + "." : "";
+    nameDiv.textContent = `${app.firstname} ${mi} ${app.surname}`;
 
-    modal.innerHTML = `
-      <div class="modal-content">
-        <div class="modal-header" style="display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #eee; margin-top:30px;">
-          <div>
-            ${app.status === "approved" ? `
-              <button class="print-btn" id="printProfileBtn"><i class="fa-solid fa-print"></i> Print</button>
-            ` : ""}
-            <span class="close-btn" style="cursor:pointer;font-size:1.5em;margin-left:18px;">&times;</span>
+    details.innerHTML = `
+      <div class="profile-details-modal">
+        <!-- Personal Info -->
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">Age</div>
+            <div class="value">${app.age ?? "-"}</div>
+          </div>
+          <div class="profile-detail">
+            <div class="label">Gender</div>
+            <div class="value">${app.sex || "-"}</div>
+          </div>
+          <div class="profile-detail">
+            <div class="label">Birthday</div>
+            <div class="value">${app.birthday ? new Date(app.birthday).toLocaleDateString() : "-"}</div>
           </div>
         </div>
-        <div id="profileDetails">
-          
-          <div class="namee form-field">
-            <label>Name:</label>
-            <div class="form-box">${app.firstname} ${mi} ${app.surname}</div>
-          </div>
 
-          <div class="form-field row">
-            <label>Birthday:</label>
-            <div class="form-box">${birthday ? new Date(birthday).toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" }) : ""}</div>
-            <label>Place of Birth:</label>
-            <div class="form-box">${app.placeOfBirth || ""}</div>
+        <!-- Birth & Contact Info -->
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">Place of Birth</div>
+            <div class="value">${app.placeOfBirth || "-"}</div>
           </div>
-
-          <div class="form-field row">
-            <label>Age:</label>
-            <div class="form-box">${app.age ?? ""}</div>
-            <label>Gender:</label>
-            <div class="form-box">${app.sex || ""}</div>
+          <div class="profile-detail">
+            <div class="label">Email</div>
+            <div class="value">${app.user?.email || "-"}</div>
           </div>
-          
-          <div class="form-field row">
-            <label>Civil Status:</label>
-            <div class="form-box">${app.civilStatus || ""}</div>
-            <label>Religion:</label>
-            <div class="form-box">${app.religion || ""}</div>
+          <div class="profile-detail">
+            <div class="label">Contact Number</div>
+            <div class="value">${app.contactNumber || "-"}</div>
           </div>
+        </div>
 
-          <div class="form-field">
-            <label>Name of School:</label>
-            <div class="form-box">${app.school || "-"}</div>
+        <!-- Personal Details -->
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">Civil Status</div>
+            <div class="value">${app.civilStatus || "-"}</div>
           </div>
-
-          <div class="form-field">
-            <label>School Address:</label>
-            <div class="form-box">${app.schoolAddress || "-"}</div>
+          <div class="profile-detail">
+            <div class="label">Religion</div>
+            <div class="value">${app.religion || "-"}</div>
           </div>
-
-          <div class="form-field row">
-            <label>Year Level:</label>
-            <div class="form-box">${app.year || "-"}</div>
+          <div class="profile-detail">
+            <div class="label">Type of Benefit</div>
+            <div class="value">${app.typeOfBenefit || "-"}</div>
           </div>
+        </div>
 
-
-          <div class="form-field">
-            <label>E-mail:</label>
-            <div class="form-box">${app.user?.email || "-"}</div>
+        <!-- School Info -->
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">School</div>
+            <div class="value">${app.school || "-"}</div>
           </div>
-
-          <div class="form-field">
-            <label>Type of Benefit being Applied:</label>
-            <div class="form-box">${app.typeOfBenefit || "Educational Assistance"}</div>
+          <div class="profile-detail">
+            <div class="label">School Address</div>
+            <div class="value">${app.schoolAddress || "-"}</div>
           </div>
+        </div>
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">Year Level</div>
+            <div class="value">${app.year || "-"}</div>
+          </div>
+        </div>
 
-          <hr>
-          <table style="width:100%;border-collapse:collapse;margin-top:10px;">
-            <tr>
-              <td><b>Father's Name:</b></td>
-              <td>${app.fatherName || ""}</td>
-              <td><b>Contact Number:</b></td>
-              <td>${app.fatherPhone || ""}</td>
-            </tr>
-            <tr>
-              <td><b>Mother's Name:</b></td>
-              <td>${app.motherName || ""}</td>
-              <td><b>Contact Number:</b></td>
-              <td>${app.motherPhone || ""}</td>
-            </tr>
-          </table>
-          <hr>
-          <div style="margin-top:10px;">
-            <b>Names of Brother/s and Sister/s</b>
-            <table style="width:100%;border-collapse:collapse;margin-top:5px;">
+        <!-- Parents Info -->
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">Father's Name</div>
+            <div class="value">${app.fatherName || "-"}</div>
+          </div>
+          <div class="profile-detail">
+            <div class="label">Father's Contact</div>
+            <div class="value">${app.fatherPhone || "-"}</div>
+          </div>
+        </div>
+        
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">Mother's Name</div>
+            <div class="value">${app.motherName || "-"}</div>
+          </div>
+          <div class="profile-detail">
+            <div class="label">Mother's Contact</div>
+            <div class="value">${app.motherPhone || "-"}</div>
+          </div>
+        </div>
+
+        <!-- Siblings Table -->
+        <div class="profile-details-row">
+          <div class="profile-detail" style="flex:2;">
+            <div class="label">Siblings</div>
+            <table class="detail-table">
               <thead>
-                <tr style="background:#f7f7f7;">
-                  <th style="text-align:left;">Name</th>
-                  <th style="text-align:left;">Gender</th>
-                  <th style="text-align:left;">Age</th>
+                <tr>
+                  <th>Name</th>
+                  <th>Gender</th>
+                  <th>Age</th>
                 </tr>
               </thead>
               <tbody>
@@ -365,260 +500,213 @@ const rejectedTable = document.getElementById("rejected");
                     <td>${sib.gender}</td>
                     <td>${sib.age}</td>
                   </tr>
-                `).join("")}
+                `).join("") || '<tr><td colspan="3">No siblings listed</td></tr>'}
               </tbody>
             </table>
           </div>
-          <hr>
-          <div style="margin-top:10px;">
-            <b>Fees and other Expenses to be Incurred</b>
-            <table style="width:100%;border-collapse:collapse;margin-top:5px;">
+        </div>
+
+        <!-- Educational Expenses Table -->
+        <div class="profile-details-row">
+          <div class="profile-detail" style="flex:2;">
+            <div class="label">Educational Expenses</div>
+            <table class="detail-table">
               <thead>
-                <tr style="background:#f7f7f7;">
-                  <th style="text-align:left;">Expense</th>
-                  <th style="text-align:left;">Expected Cost</th>
+                <tr>
+                  <th>Item</th>
+                  <th>Expected Cost</th>
                 </tr>
               </thead>
               <tbody>
                 ${(app.expenses || []).map(exp => `
                   <tr>
                     <td>${exp.item}</td>
-                    <td>${exp.expectedCost}</td>
+                    <td>₱${exp.expectedCost.toLocaleString()}</td>
                   </tr>
-                `).join("")}
+                `).join("") || '<tr><td colspan="2">No expenses listed</td></tr>'}
               </tbody>
             </table>
           </div>
-          <div style="margin-top:18px; text-align:right;">
-            ${app.status === "pending" ? `
-              <button class="reject-btn" style="background:#e74c3c; color:#fff; border:none; border-radius:6px; padding:7px 16px; margin-right:8px; cursor:pointer;">Reject</button>
-              <button class="approve-btn" style="background:#0A2C59; color:#fff; border:none; border-radius:6px; padding:7px 16px; cursor:pointer;">Accept</button>
-            ` : ""}
-          </div>
-
-
         </div>
+
+        <!-- Action Buttons -->
+        ${app.status === "pending" ? `
+          <div class="modal-actions">
+            <button class="modal-btn modal-btn-danger reject-btn">Reject</button>
+            <button class="modal-btn modal-btn-primary approve-btn">Accept</button>
+          </div>
+        ` : ''}
       </div>
     `;
 
-    modal.style.display = "flex";
+    // Add event listeners for approve/reject buttons if status is pending
+    if (app.status === "pending") {
+      const approveBtn = modal.querySelector(".modal-btn-primary");
+      const rejectBtn = modal.querySelector(".modal-btn-danger");
 
-    // Close modal
-    modal.querySelector(".close-btn").onclick = () => (modal.style.display = "none");
+      // Approve button handler
+      approveBtn.addEventListener("click", async () => {
+        modal.style.display = "none";
+        const confirmed = await Swal.fire({
+          title: 'Approve Application?',
+          text: "Are you sure you want to approve this application?",
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#0A2C59',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes',
+        });
 
-    // Print
-    if (app.status === "approved") {
-      const printBtn = modal.querySelector("#printProfileBtn");
-      if (printBtn) {
-        printBtn.onclick = function () {
-          const printContents = modal.querySelector(".modal-content").innerHTML;
-          const originalContents = document.body.innerHTML;
-          document.body.innerHTML = printContents;
-          window.print();
-          document.body.innerHTML = originalContents;
-          window.location.reload();
-        };
-      }
-    }
-      //   modal.querySelector("#printProfileBtn").onclick = function () {
-      //   const printWindow = window.open("", "_blank", "width=900,height=650");
+        if (confirmed.isConfirmed) {
+          // Show loading modal
+          const loadingModal = document.getElementById("loadingModal");
+          loadingModal.style.display = "flex";
+          try {
+            const res = await fetch(`http://localhost:5000/api/educational-assistance/${app._id}/status`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+              },
+              body: JSON.stringify({ status: 'approved' })
+            });
 
-      //   printWindow.document.write(`
-      //     <html>
-      //       <head>
-      //         <title>Applicant Profile</title>
-      //         <style>
-      //           body { font-family: 'Poppins', sans-serif; margin: 40px; color: #222; }
-      //           h1 { text-align: center; color: #0A2C59; }
-      //           .section { margin-top: 20px; }
-      //           .section b { display: inline-block; width: 180px; color: #0A2C59; }
-      //           table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-      //           th, td { border: 1px solid #ccc; padding: 8px; font-size: 14px; }
-      //           th { background: #f7f7f7; }
-      //         </style>
-      //       </head>
-      //       <body>
-      //         <h1>Applicant Profile</h1>
+            loadingModal.style.display = "none";
 
-      //         <div class="section">
-      //           <b>Name:</b> ${app.firstname} ${app.middlename || ""} ${app.surname}<br>
-      //           <b>Birthday:</b> ${app.birthday ? new Date(app.birthday).toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" }) : ""}<br>
-      //           <b>Place of Birth:</b> ${app.placeOfBirth || ""}<br>
-      //           <b>Age:</b> ${app.age ?? ""}<br>
-      //           <b>Gender:</b> ${app.sex || ""}<br>
-      //           <b>Civil Status:</b> ${app.civilStatus || ""}<br>
-      //           <b>Religion:</b> ${app.religion || ""}<br>
-      //           <b>Email:</b> ${app.user?.email || "-"}
-      //         </div>
+            if (!res.ok) throw new Error('Failed to approve');
 
-      //         <div class="section">
-      //           <b>School:</b> ${app.school || "-"}<br>
-      //           <b>School Address:</b> ${app.schoolAddress || "-"}<br>
-      //           <b>Course:</b> ${app.course || "-"}<br>
-      //           <b>Year Level:</b> ${app.yearLevel || "-"}<br>
-      //           <b>Type of Benefit:</b> ${app.typeOfBenefit || "Educational Assistance"}
-      //         </div>
+            await Swal.fire(
+              'Approved!',
+              'The application has been approved.',
+              'success'
+            );
 
-      //         <div class="section">
-      //           <b>Father’s Name:</b> ${app.fatherName || ""} (${app.fatherPhone || ""})<br>
-      //           <b>Mother’s Name:</b> ${app.motherName || ""} (${app.motherPhone || ""})
-      //         </div>
-
-      //         <div class="section">
-      //           <h3>Names of Brother/s and Sister/s</h3>
-      //           <table>
-      //             <thead>
-      //               <tr><th>Name</th><th>Gender</th><th>Age</th></tr>
-      //             </thead>
-      //             <tbody>
-      //               ${(app.siblings || []).map(sib => `
-      //                 <tr>
-      //                   <td>${sib.name}</td>
-      //                   <td>${sib.gender}</td>
-      //                   <td>${sib.age}</td>
-      //                 </tr>
-      //               `).join("")}
-      //             </tbody>
-      //           </table>
-      //         </div>
-
-      //         <div class="section">
-      //           <h3>Fees and Other Expenses</h3>
-      //           <table>
-      //             <thead>
-      //               <tr><th>Expense</th><th>Expected Cost</th></tr>
-      //             </thead>
-      //             <tbody>
-      //               ${(app.expenses || []).map(exp => `
-      //                 <tr>
-      //                   <td>${exp.item}</td>
-      //                   <td>${exp.expectedCost}</td>
-      //                 </tr>
-      //               `).join("")}
-      //             </tbody>
-      //           </table>
-      //         </div>
-      //       </body>
-      //     </html>
-      //   `);
-
-      //   printWindow.document.close();
-      //   printWindow.focus();
-      //   printWindow.print();
-      // };
-  
-
-  // Handle approve/reject clicks
-  // Approve button
-const approveBtn = modal.querySelector(".approve-btn");
-if (approveBtn) {
-  approveBtn.textContent = "Accept";
-  approveBtn.onclick = async () => {
-    modal.style.display = "none"; // Close modal first
-    try {
-      const token = sessionStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/educational-assistance/${app._id}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ status: "approved" })
+            fetchApplicants(); // Refresh the table
+          } catch (err) {
+            loadingModal.style.display = "none";
+            await Swal.fire(
+              'Error!',
+              'Failed to approve application.',
+              'error'
+            );
+            modal.style.display = "flex";
+          }
+        } else {
+          modal.style.display = "flex";
+        }
       });
 
-      app.status = "approved";
-      renderTables(applicants);
-    } catch (err) {
-      console.error("Error approving:", err);
-      alert("Failed to approve application.");
+      // Reject button handler
+      rejectBtn.addEventListener("click", async () => {
+        const rejectionModal = document.getElementById("rejectionModal");
+        const rejectionReasonSelect = document.getElementById("rejectionReasonSelect");
+        const rejectionReasonInput = document.getElementById("rejectionReasonInput");
+        const submitRejectionBtn = document.getElementById("submitRejectionBtn");
+        const closeRejectionBtn = document.getElementById("closeRejectionModal");
+
+        // Show rejection modal
+        rejectionModal.style.display = "flex";
+
+        // Close rejection modal handler
+        closeRejectionBtn.onclick = () => {
+          rejectionModal.style.display = "none";
+          rejectionReasonSelect.value = "";
+          rejectionReasonInput.value = "";
+        };
+
+        // Submit rejection handler
+        submitRejectionBtn.onclick = async () => {
+          const selectedReason = rejectionReasonSelect.value;
+          const customMessage = rejectionReasonInput.value;
+
+          if (!selectedReason) {
+            rejectionModal.style.display = "none";
+            modal.style.display = "none";
+            await Swal.fire('Error', 'Please select a rejection reason', 'error');
+            rejectionModal.style.display = "flex";
+            return;
+          }
+
+          rejectionModal.style.display = "none";
+          modal.style.display = "none";
+
+          // --- SHOW LOADING MODAL (highlighted for reuse) ---
+          const loadingModal = document.getElementById("loadingModal");
+          loadingModal.style.display = "flex";
+          // --- END LOADING MODAL ---
+
+          const rejectionReason = customMessage 
+            ? `${selectedReason} - ${customMessage}`
+            : selectedReason;
+
+          try {
+            const res = await fetch(`http://localhost:5000/api/educational-assistance/${app._id}/status`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+              },
+              body: JSON.stringify({
+                status: 'rejected',
+                rejectionReason
+              })
+            });
+
+            // --- HIDE LOADING MODAL (highlighted for reuse) ---
+            loadingModal.style.display = "none";
+            // --- END LOADING MODAL ---
+
+            if (!res.ok) throw new Error('Failed to reject');
+
+            await Swal.fire({
+              icon: 'success',
+              title: 'Application Rejected',
+              text: 'The application has been successfully rejected',
+              confirmButtonColor: '#0A2C59'
+            });
+
+            fetchApplicants(); // Refresh table
+
+          } catch (err) {
+            loadingModal.style.display = "none";
+            await Swal.fire({
+              icon: 'error',
+              title: 'Rejection Failed',
+              text: 'Failed to reject the application. Please try again.',
+              confirmButtonColor: '#0A2C59'
+            });
+            rejectionModal.style.display = "flex";
+          }
+
+          rejectionReasonSelect.value = "";
+          rejectionReasonInput.value = "";
+        };
+      });
     }
-  };
+
+    modal.style.display = "flex";
+
+    // Close button handler
+    modal.querySelector(".modern-modal-close").onclick = () => {
+      modal.style.display = "none";
+    };
+
+    // Mark as read
+    const row = document.querySelector(`tr[data-id="${app._id}"]`);
+if (row) {
+  row.classList.remove('row-unread');
+  row.classList.add('row-read');
 }
-
-const rejectBtn = modal.querySelector(".reject-btn");
-if (rejectBtn) {
-  rejectBtn.onclick = () => {
-    modal.style.display = "none"; // Close modal first
-    document.getElementById("rejectionModal").style.display = "flex";
-    document.getElementById("rejectionReasonInput").value = "";
-    document.getElementById("rejectionModal").dataset.appId = app._id;
-  };
-}
-
-// Handle rejection modal close
-document.getElementById("closeRejectionModal").onclick = function() {
-  document.getElementById("rejectionModal").style.display = "none";
-};
-
-// Handle rejection modal submit
-document.getElementById("submitRejectionBtn").onclick = async function() {
-  const submitBtn = document.getElementById("submitRejectionBtn");
-  const reason = document.getElementById("rejectionReasonInput").value.trim();
-  if (!reason) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Rejection Reason Required',
-      text: 'Please enter a reason for rejection.',
-      confirmButtonColor: '#0A2C59'
-    });
-    return;
   }
-  submitBtn.disabled = true; // Prevent multiple clicks
-
-  // Hide the rejection modal BEFORE showing the loading alert
-  document.getElementById("rejectionModal").style.display = "none";
-
-  Swal.fire({
-    title: 'Processing...',
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-    didOpen: () => {
-      Swal.showLoading();
-    }
-  });
-
-  const appId = document.getElementById("rejectionModal").dataset.appId;
-  try {
-    const token = sessionStorage.getItem("token");
-    await fetch(`http://localhost:5000/api/educational-assistance/${appId}/status`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        status: "rejected",
-        rejectionReason: reason
-      })
-    });
-    modal.style.display = "none";
-    app.status = "rejected";
-    renderTables(applicants);
-    Swal.fire({
-      icon: 'success',
-      title: 'Application Rejected',
-      text: 'The applicant has been notified.',
-      confirmButtonColor: '#0A2C59'
-    });
-  } catch (err) {
-    console.error("Error rejecting:", err);
-    Swal.fire({
-      icon: 'error',
-      title: 'Failed to Reject',
-      text: 'There was an error rejecting the application.',
-      confirmButtonColor: '#0A2C59'
-    });
-  } finally {
-    submitBtn.disabled = false; // Re-enable after process
-  }
-};
-  }
-
 
   // After renderTables, attach modal openers for all .action-btn
   function attachModalOpeners() {
   document.querySelectorAll(".action-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      // Prevent modal if delete button was clicked
+      if (btn.classList.contains("delete-btn")) return;
+      // Prevent modal if event originated from inside a delete button
+      if (e.target.closest(".delete-btn")) return;
       const row = btn.closest("tr");
       const appId = row.dataset.id;
       const app = applicants.find(a => a._id === appId);
@@ -673,8 +761,24 @@ function attachDeleteHandlers() {
 }
 
   // ---------------- Event Listeners ----------------
-  searchInput.addEventListener("input", () => renderTables(applicants));
-
+  searchInput.addEventListener("input", () => {
+  currentPagePending = 1;
+  currentPageApproved = 1;
+  currentPageRejected = 1;
+  renderTables(applicants);
+});
+filterBtn.addEventListener("click", () => {
+  currentPagePending = 1;
+  currentPageApproved = 1;
+  currentPageRejected = 1;
+  fetchApplicants();
+});
+clearFilterBtn.addEventListener("click", () => {
+  currentPagePending = 1;
+  currentPageApproved = 1;
+  currentPageRejected = 1;
+  fetchApplicants();
+});
 
   // ---------------- Initial Load ----------------
   fetchFormCycles().then(fetchApplicants);
@@ -708,7 +812,15 @@ function attachDeleteHandlers() {
     const newRes = await fetch('http://localhost:5000/api/notifications/unread', {
       headers: { Authorization: `Bearer ${token}` }
     });
-    const newNotifs = await newRes.json();
+    let newNotifs = await newRes.json();
+
+    // Filter: only pending and within last 24 hours
+    const now = Date.now();
+    newNotifs = newNotifs.filter(n => {
+      if (n.status !== "pending") return false;
+      const created = new Date(n.createdAt).getTime();
+      return (now - created) <= 24 * 60 * 60 * 1000;
+    });
 
     // Fetch overdue applications
     const overdueRes = await fetch('http://localhost:5000/api/notifications/overdue', {
@@ -731,10 +843,21 @@ function attachDeleteHandlers() {
       const name = n.fullname || 'unknown';
       const status = n.status || 'unknown';
       const date = new Date(n.createdAt).toLocaleString();
+      const type = n.typeOfBenefit || 'Educational Assistance';
+      const cycle = n.cycle ? `Cycle: ${n.cycle}` : '';
+      const year = n.year ? `Year: ${n.year}` : '';
+      const school = n.school || '';
+      const email = n.email || '';
       container.innerHTML += `
         <div class="notif-item">
-          <span><strong>${name}</strong>
+          <span>
+            <strong>${name}</strong>
             <span class="notif-status ${isOverdue ? 'notif-overdue' : ''}">${status}${isOverdue ? ' (Overdue)' : ''}</span>
+          </span>
+          <span class="notif-details">
+            ${type}${cycle ? ' | ' + cycle : ''}${year ? ' | ' + year : ''}
+            ${school ? ' | School: ' + school : ''}
+            ${email ? ' | Email: ' + email : ''}
           </span>
           <span class="notif-date">${date}</span>
         </div>
@@ -750,4 +873,38 @@ function attachDeleteHandlers() {
       notifDropdown.style.display = 'none';
     }
   });
+
+  // --- SOCKET.IO REALTIME ARRIVAL ---
+  const socket = io("http://localhost:5000", { transports: ["websocket"] });
+
+  socket.on("educational-assistance:newSubmission", (data) => {
+    // Optionally show a toast/notification
+    Swal.fire({
+      icon: 'info',
+      title: 'New Educational Assistance Application',
+      text: 'A new application has arrived!',
+      timer: 8000,
+      showConfirmButton: false,
+      toast: true,
+      position: 'top-end'
+    });
+    // Refresh applicants table
+    fetchApplicants();
+  });
+});
+
+
+const socket = io("http://localhost:5000", { transports: ["websocket"] });
+
+socket.on("educational-assistance:newSubmission", (data) => {
+  Swal.fire({
+    icon: 'info',
+    title: 'New Educational Assistance Application',
+    text: 'A new application has arrived!',
+    timer: 8000,
+    showConfirmButton: false,
+    toast: true,
+    position: 'top-end'
+  });
+  // Optionally refresh or update something if needed
 });

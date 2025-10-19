@@ -1,25 +1,16 @@
 const multer = require('multer');
-const path = require('path');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../config/cloudinaryConfig');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../uploads/signatures'));
+const signatureStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'kk_signature_images',
+    allowed_formats: ['jpg', 'jpeg', 'png'],
+    public_id: (req, file) => Date.now() + '-' + file.originalname.replace(/\s+/g, '_'),
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname.replace(/\s+/g, '_'));
-  }
 });
 
-const signatureUpload = multer({
-  storage: storage,
-  fileFilter: function (req, file, cb) {
-    // Accept only image files
-    if (!file.mimetype.startsWith('image/')) {
-      return cb(new Error('Only image files are allowed!'), false);
-    }
-    cb(null, true);
-  }
-});
+const uploadSignatureImage = multer({ storage: signatureStorage });
 
-module.exports = signatureUpload;
+module.exports = uploadSignatureImage;

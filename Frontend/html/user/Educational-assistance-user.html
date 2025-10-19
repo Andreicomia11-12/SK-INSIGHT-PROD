@@ -97,8 +97,8 @@
   </div>
 
   <div class="card">
-    <label for="civilStatus">Civil Status:</label>
-    <select id="civilStatus" name="civilStatus" required>
+    <label for="civilstatus">Civil Status:</label>
+    <select id="civilstatus" name="civilstatus" required>
       <option value="">Select Civil Status</option>
       <option value="Single">Single</option>
       <option value="Live-in">Live-in</option>
@@ -140,10 +140,6 @@
     <label for="year">Year:</label>
     <select class="year" id="year" name="year" required>
       <option value="">Select Classification</option>
-      <option value="Grade 7">Grade 7</option>
-      <option value="Grade 8">Grade 8</option>
-      <option value="Grade 9">Grade 9</option>
-      <option value="Grade 10">Grade 10</option>
       <option value="Grade 11">Grade 11</option>
       <option value="Grade 12">Grade 12</option>
     </select>
@@ -225,15 +221,27 @@
       </thead>
       <tbody>
         <tr>
-          <td>Sedula</td>
-          <td><i class="fa-solid fa-eye view-icon" id="viewSedula"></i></td>
-          <td><i class="fa-solid fa-trash delete-icon" id="deleteSedula"></i></td>
+          <td>School ID(Front)</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewFront"></i></td>
+          <td><i class="fa-solid fa-trash delete-icon" id="deleteFront"></i></td>
           <td>
-            <label for="sedulaImage" class="upload-plus" id="sedulaLabel">
+            <label for="frontImage" class="upload-plus" id="frontLabel">
               <i class="fa-solid fa-plus"></i>
             </label>
-            <input type="file" id="sedulaImage" name="sedulaImage" accept="image/*" required>
-            <span class="file-name" id="sedulaFileName"></span>
+            <input type="file" id="frontImage" name="frontImage" accept="image/*" required>
+            <span class="file-name" id="frontFileName"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>School ID(Back)</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewBack"></i></td>
+          <td><i class="fa-solid fa-trash delete-icon" id="deleteBack"></i></td>
+          <td>
+            <label for="backImage" class="upload-plus" id="backLabel">
+              <i class="fa-solid fa-plus"></i>
+            </label>
+            <input type="file" id="backImage" name="backImage" accept="image/*" required>
+            <span class="file-name" id="backFileName"></span>
           </td>
         </tr>
         <tr>
@@ -249,15 +257,15 @@
           </td>
         </tr>
         <tr>
-          <td>Signature</td>
-          <td><i class="fa-solid fa-eye view-icon" id="viewSchoolId"></i></td>
-          <td><i class="fa-solid fa-trash delete-icon" id="deleteSchoolId"></i></td>
+          <td>Parent's voter's certificate</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewVoter"></i></td>
+          <td><i class="fa-solid fa-trash delete-icon" id="deleteVoter"></i></td>
           <td>
-            <label for="signature" class="upload-plus" id="signatureLabel">
+            <label for="voter" class="upload-plus" id="voterLabel">
               <i class="fa-solid fa-plus"></i>
             </label>
-            <input type="file" id="signature" name="signature" accept="image/*" required>
-            <span class="file-name" id="signatureFileName"></span>
+            <input type="file" id="voter" name="voter" accept="image/*" required>
+            <span class="file-name" id="voterFileName"></span>
           </td>
         </tr>
       </tbody>
@@ -274,7 +282,37 @@
   <button id="closePreviewBtn" class="close-preview-btn">&times;</button>
   <img id="previewImg" src="" alt="Preview">
 </div>
+      <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <h3>SK-INSIGHT</h3>
+          <p>Empowering the youth through data-driven governance.</p>
+        </div>
 
+        <div class="footer-middle">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Things About US</a></li>
+            <li><a href="#">Things About SK</a></li>
+            <li><a href="#">Things About SK-INSIGHT</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-right">
+          <h4>Follow Us</h4>
+          <ul>
+            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="footer-bottom">
+        <p>© 2025 SK-INSIGHT. All rights reserved.</p>
+      </div>
+    </footer>
   <script src="../../js/educ-user.js"></script>
 </body>
 </html>

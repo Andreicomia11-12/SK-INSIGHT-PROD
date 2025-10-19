@@ -14,6 +14,166 @@ body {
     overflow-y: auto; /* Make the page scrollable */
 }
 
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    background: #0A2C59;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+  
+  .navbar img {
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .navbar .title {
+      color: white;
+      text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+  
+  .nav-btn{
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  
+  .navbar-center {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+  }
+  
+  .navbar-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .bell {
+      color: white;
+      cursor: pointer;
+      margin-top: 5px;
+      margin-right: 5px;
+      font-size: 22px;
+  }
+  
+  .prof {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 8px 12px;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+  }
+  
+  .navbar-right {
+    display: flex;
+    gap: 15px;
+    font-size: 20px;
+  }
+  
+   .navbar-right a {
+     text-decoration: none;
+     color: #fff;
+   }
+  
+  .nav-btn {
+      color: #ffffff;
+      padding: 7px 18px;
+      border-radius: 6px;
+      font-weight: 500;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.2s, color 0.2s;
+      border: none;
+      outline: none;
+  }
+  .nav-btn:hover, .nav-btn.active {
+      background: #1e4e9e;
+      color: #fff;
+  }
+  .notif{
+      color: white;
+  
+  }
+  .kk-container {
+      max-width: 900px;      /* Match LGBTQ form */
+      margin: 2rem auto;
+      padding: 20px;
+  }
+  
+  .kk-card {
+      background: #fff;
+      padding: 20px;         /* Match LGBTQ form */
+      margin-bottom: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+      max-width: 900px;      /* Match LGBTQ form */
+      margin-left: auto;
+      margin-right: auto;
+  }
+
+ /* Invisible card wrapper to align actions with cards without visible chrome */
+ .kk-card-invisible {
+     background: transparent;
+     box-shadow: none;
+     padding: 20px; /* keep same padding as .kk-card so content aligns */
+     margin-top: 0;
+ }
+.navbar-hamburger { display: none; font-size: 1.8rem; cursor: pointer; margin-right: 10px; }
+
+/* Mobile dropdown menu */
+.navbar-mobile-menu { display: none; position: fixed; top: 60px; right: 16px; width: 220px; background: #fff; flex-direction: column; align-items: stretch; z-index: 2000; padding: 18px 12px; border-radius: 14px; box-shadow: 0 8px 32px rgba(20,61,119,0.18); border: 1px solid #e3eaf3; }
+.navbar-mobile-menu.active { display: flex !important; }
+.navbar-mobile-menu .nav-btn { display: block; width: 100%; padding: 12px 0; font-size: 1rem; border-radius: 8px; color: #143d77; background: none; text-align: left; border: none; margin-bottom: 8px; text-decoration: none; font-weight: 500; transition: background 0.18s, color 0.18s; }
+.navbar-mobile-menu .nav-btn:last-child { margin-bottom: 0; }
+.navbar-mobile-menu .nav-btn:hover { background: #eaf3fa; color: #1e4e9e; }
+
+/* Navbar responsiveness like kkform.css */
+@media (max-width: 1048px) {
+    .navbar-center { display: none !important; }
+    .navbar-hamburger { display: inline-block !important; }
+}
+@media (min-width: 1049px) {
+    .navbar-center { display: flex !important; }
+    .navbar-hamburger { display: none !important; }
+}
+
+/* === Adopt card and button design from kkform.css === */
+.kk-container { max-width: 900px; margin: 2rem auto; padding: 20px; }
+.kk-card { background: #fff; padding: 20px; margin-bottom: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.10); max-width: 900px; margin-left: auto; margin-right: auto; }
+.kk-label { display: block; font-weight: 600; margin-bottom: 10px; font-size: 17px; color: #143d77; }
+.kk-input { width: 100%; padding: 14px 10px; border: 1px solid #bcd4ec; border-radius: 8px; background: #f5faff; font-size: 17px; margin-bottom: 0; outline: none; transition: border 0.3s; }
+.kk-input:focus { border: 1.5px solid #143d77; background: #eaf3fa; }
+.kk-btn-group { display: flex; justify-content: flex-end; gap: 10px; }
+.kk-btn, .kk-next-btn { min-width: 100px; min-height: 40px; background: #143d77; color: #fff; font-size: 14px; padding: 12px 0 7px 0; border-radius: 10px; text-decoration: none; font-weight: bold; text-align: center; box-shadow: 0 2px 8px rgba(20,61,119,0.08); cursor: pointer; transition: background 0.3s; display: inline-block; }
+.kk-btn:hover, .kk-next-btn:hover { background: #1a4c9c; }
+
+/* Right-align Next on small screens like kkform.css */
+@media (max-width: 600px) {
+    .kk-container { padding: 8px; max-width: 100vw; }
+    .kk-card { padding: 10px; margin-bottom: 16px; border-radius: 10px; max-width: 80vw; }
+    .kk-label { font-size: 15px; }
+    .kk-input { font-size: 15px; padding: 10px 6px; }
+    .kk-btn-group { justify-content: flex-end; }
+    .kk-next-btn { margin-left: auto; display: inline-block; }
+}
+
 .navbar {
     position: fixed;
     top: 0;
@@ -86,31 +246,20 @@ body {
 }
 
 .kk-container {
-    max-width: 50vw;
-    min-width: 320px;
-    margin: 2rem auto;      /* Center horizontally */
-    padding: 20px;
-    overflow-y: auto;
-    position: relative;
-    right: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;    /* Make children (cards) stretch to container width */
+  max-width: 900px;
+  margin: 40px auto 0 auto;
+  padding: 0 12px;
 }
 
 .kk-card {
-    width: 100%; /* All cards, including intro and form, take full container width */
-    background: #fff;
-    padding: 22px;
-    margin-bottom: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-
-    min-width: 320px; /* ✅ adjust until it matches intro */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+  max-width: 900px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .kk-label {
@@ -135,17 +284,15 @@ body {
 
 .kk-input:focus {
     border: 1.5px solid #143d77;
-    background: #eaf3fa;
+    background: #eaf3fa
 }
 
 .kk-btn-group {
+    position: relative;
+    width: 100%;
     display: flex;
     justify-content: flex-end;
-    align-items: flex-end;
-    width: 100%;
-    margin-top: 18px;
-    margin-bottom: 0;
-    padding-right: 0;
+    margin-top: 20px;
 }
 
 .kk-btn, .kk-next-btn {
@@ -164,16 +311,16 @@ body {
     outline: none;
     display: inline-block;
     margin: 0;
+    margin-bottom: 5%;
 }
 
 /* Make Previous button same size as Next button */
 .kk-btn-group .kk-btn {
     margin-right: 0;
+    margin-bottom: 5%;
 }
 
-.kk-btn-group .kk-btn:not(:last-child) {
-    margin-right: 12px;
-}
+
 
 .kk-btn:hover, .kk-next-btn:hover {
     background: #1e4e9e;
@@ -319,6 +466,17 @@ body {
     }
 }
 
+@media (max-width: 700px) {
+  .kk-container {
+    max-width: 100vw;
+    padding: 0 4vw;
+  }
+  .kk-card {
+    max-width: 100vw;
+    padding: 12px;
+  }
+}
+
 @media (max-width: 600px) {
     .kk-container {
         max-width: 100vw;
@@ -326,10 +484,11 @@ body {
         padding: 8px;
     }
     .kk-card {
-        max-width: 340px;
+        max-width: 100%; /* Changed from 340px to 100% */
+        width: 95%;      /* Added to take up most of the screen width */
         margin-left: auto;
         margin-right: auto;
-        padding: 8px;
+        padding: 16px;   /* Increased padding */
         margin-bottom: 10px;
         border-radius: 8px;
     }
@@ -342,7 +501,10 @@ body {
         padding: 8px 4px;
     }
     .kk-next-btn{
-        margin-right: 21%;
+        margin-right: 2%;  /* Remove right margin */
+        width: auto;      /* Allow button to size naturally */
+        min-width: 100px; /* Minimum width */
+        padding: 12px 24px;
     }
     .kk-btn, .kk-butn, .kk-butns {
         width: 100%;
@@ -370,7 +532,8 @@ body {
         margin: 0 auto;
     }
     .kk-card {
-        padding: 4px;
+        width: 95%;      /* Take up most of the screen width */
+        padding: 12px;   /* Increased padding */
         margin-bottom: 8px;
         border-radius: 6px;
         min-width: 0;
@@ -383,12 +546,12 @@ body {
         font-size: 12px;
         padding: 6px 3px;
     }
-    .kk-btn, .kk-next-btn {
-        width: 20%;
-        min-width: 0;
-        font-size: 14px;
-        padding: 12px 0 0 0;
-        border-radius: 6px;
+    
+    .kk-next-btn{
+        margin-right: 5%;  /* Remove right margin */
+        width: auto;      /* Allow button to size naturally */
+        min-width: 100px; /* Minimum width */
+        padding: 12px 24px;
     }
     .kk-intro h2 {
         font-size: 13px;
@@ -408,6 +571,15 @@ body {
     .kk-intro h2 {
         font-size: 10px;
     }
+    
+    .kk-next-btn{
+        margin-right: 5%;  /* Remove right margin */
+        width: auto;      /* Allow button to size naturally */
+        min-width: 100px; /* Minimum width */
+        padding: 12px 24px;
+    }
+
+
 }
 
 @media (min-width: 601px) and (max-width: 900px) {
@@ -467,4 +639,125 @@ body {
     background: #1e4e9e;
     color: #fff;
     text-decoration: underline;
+}
+
+.footer {
+  background: #0A2C59;
+  color: #fff;
+  padding: 40px 60px 20px;
+  margin-top: auto; /* pushes footer down */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.footer-left h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.footer-left p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #cfd9e8;
+}
+
+.footer-middle h4,
+.footer-right h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer-middle ul,
+.footer-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-middle ul li,
+.footer-right ul li {
+  margin-bottom: 8px;
+}
+
+.footer-middle ul li a,
+.footer-right ul li a {
+  text-decoration: none;
+  color: #cfd9e8;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.footer-middle ul li a:hover,
+.footer-right ul li a:hover {
+  color: #ffffff;
+}
+
+.footer-right ul li i {
+  margin-right: 8px;
+  font-size: 15px;
+}
+
+.footer hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px 0;
+}
+
+.footer-bottom {
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 14px;
+  color: #cfd9e8;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .footer-left,
+  .footer-middle,
+  .footer-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 20px 15px;
+  }
+
+  .footer-left h3 {
+    font-size: 18px;
+  }
+
+  .footer-left p {
+    font-size: 14px;
+  }
+
+  .footer-middle h4,
+  .footer-right h4 {
+    font-size: 15px;
+  }
+
+  .footer-middle ul li a,
+  .footer-right ul li a {
+    font-size: 14px;
+  }
+
+  .footer-bottom p {
+    font-size: 12px;
+  }
 }

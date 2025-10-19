@@ -715,3 +715,18 @@ function showProfileModal(p) {
     }
   });
 });
+
+const socket = io("http://localhost:5000", { transports: ["websocket"] });
+
+socket.on("educational-assistance:newSubmission", (data) => {
+  Swal.fire({
+    icon: 'info',
+    title: 'New Educational Assistance Application',
+    text: 'A new application has arrived!',
+    timer: 8000,
+    showConfirmButton: false,
+    toast: true,
+    position: 'top-end'
+  });
+  // Optionally refresh or update something if needed
+});

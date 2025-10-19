@@ -68,14 +68,17 @@ exports.submitApplication = async (req, res) => {
     }
 
     // Save file paths if files are uploaded
-    if (req.files?.signature?.[0]) {
-      data.signature = req.files.signature[0].path;
+    if (req.files?.frontImage?.[0]) {
+      data.frontImage = req.files.frontImage[0].path;
     }
-    if (req.files?.sedulaImage?.[0]) {
-      data.sedulaImage = req.files.sedulaImage[0].path;
+    if (req.files?.backImage?.[0]) {
+      data.backImage = req.files.backImage[0].path;
     }
     if (req.files?.coeImage?.[0]) {
       data.coeImage = req.files.coeImage[0].path;
+    }
+    if (req.files?.voter?.[0]) {
+      data.voter = req.files.voter[0].path;
     }
 
     const presentCycle = await getPresentCycle("Educational Assistance");
@@ -240,6 +243,12 @@ exports.getApplicationById = async (req, res) => {
     "username email"
   );
   if (!app) return res.status(404).json({ error: "Application not found" });
+
+  // Mark as read ONLY for admin users
+  if (req.user && req.user.role === "admin" && !app.isRead) {
+    app.isRead = true;
+    await app.save();
+  }
 
   // Mark related notifications as read
   await Notification.updateMany(

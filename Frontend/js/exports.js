@@ -63,16 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Fetch available cycles for selected type
       try {
-        Swal.fire({
-          title: 'Loading cycles...',
-          allowOutsideClick: false,
-          didOpen: () => Swal.showLoading()
-        });
         const res = await fetch(cycleEndpoints[exportType], {
           headers: { Authorization: `Bearer ${token}` }
         });
         cyclesData = await res.json();
-        Swal.close();
         if (!Array.isArray(cyclesData) || !cyclesData.length) {
           Swal.fire({
             icon: "warning",
@@ -85,11 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         // Extract unique years
         const years = [...new Set(cyclesData.map(c => c.year))].sort((a, b) => b - a);
-        yearSelect.innerHTML = `<option value="">Select year</option>` +
+        yearSelect.innerHTML = `<option value="">Select Year</option>` +
           years.map(y => `<option value="${y}">${y}</option>`).join("");
-        cycleSelect.innerHTML = `<option value="">Select cycle</option>`;
+        cycleSelect.innerHTML = `<option value="">Select Cycle</option>`;
       } catch (err) {
-        Swal.close();
         Swal.fire({
           icon: "error",
           title: "Failed to load cycles",
@@ -140,7 +133,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let endpoint = "";
     if (exportType === "kk") {
-      endpoint = `http://localhost:5000/api/kkprofiling/export?year=${year}&cycle=${cycle}`;
+      // Updated KK Profiling Export API
+      endpoint = `http://localhost:5000/api/kkprofiling/export-template?year=${year}&cycle=${cycle}`;
     } else if (exportType === "educational") {
       endpoint = `http://localhost:5000/api/educational-assistance/export?year=${year}&cycle=${cycle}`;
     } else if (exportType === "lgbtq") {
@@ -312,7 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `,
         showCancelButton: true,
-        confirmButtonText: "Yes, close it",
+        confirmButtonText: "Yes",
         cancelButtonText: "Cancel",
         confirmButtonColor: "#ef4444",
         cancelButtonColor: "#0A2C59",
@@ -342,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </ul>
         `,
         showCancelButton: true,
-        confirmButtonText: "Yes, open it",
+        confirmButtonText: "Yes",
         cancelButtonText: "Cancel",
         confirmButtonColor: "#07B0F2",
         cancelButtonColor: "#0A2C59"
@@ -504,7 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
           showCancelButton: true,
           confirmButtonColor: "#07B0F2",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, restore",
+          confirmButtonText: "Yes",
           cancelButtonText: "Cancel"
         });
         if (result.isConfirmed) {
@@ -553,4 +547,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Filter dropdown change handler
   document.getElementById("deletedFilter").addEventListener("change", fetchDeletedProfiles);
+});
+
+// --- SOCKET.IO ALERT FOR NEW EDUCATIONAL ASSISTANCE ---
+const socket = io("http://localhost:5000", { transports: ["websocket"] });
+
+socket.on("educational-assistance:newSubmission", (data) => {
+  Swal.fire({
+    icon: 'info',
+    title: 'New Educational Assistance Application',
+    text: 'A new application has arrived!',
+    timer: 8000,
+    showConfirmButton: false,
+    toast: true,
+    position: 'top-end'
+  });
 });

@@ -6,8 +6,8 @@
 
 body {
     font-family: 'Poppins', Arial, sans-serif;
-    background-color: #eaf3fa;
-    color: #000000;
+    background-color: #D1E1F5;
+    color: #0A1A3A;
     min-height: 100vh;
     margin: 0;
     padding-top: 80px;
@@ -20,6 +20,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
+  height: 74px;
   background: #0A2C59;
   color: #fff;
   display: flex;
@@ -65,9 +66,10 @@ body {
 .bell {
     color: white;
     cursor: pointer;
-    margin-top: 5px;
+    margin-top: 0;
     margin-right: 5px;
     font-size: 22px;
+    line-height: 1;
 }
 
 .prof {
@@ -84,15 +86,14 @@ body {
   display: flex;
   gap: 15px;
   font-size: 20px;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .navbar-right a {
   text-decoration: none;
 }
 
-.navbar-right a {
-    text-decoration: none;
-}
 
 .nav-btn {
     color: #ffffff;
@@ -111,22 +112,63 @@ body {
 }
 .notif{
     color: white;
+    margin-top: 4%;
+}
+
+.navbar-right a {
+    margin-top: 1%;
 }
 .kk-container {
     max-width: 900px;      /* Match LGBTQ form */
     margin: 2rem auto;
     padding: 20px;
 }
+.kk-container::before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 60px; /* adjust to match navbar height */
+  pointer-events: none;
+  background: linear-gradient(to bottom, #d1e1f5 80%, transparent 100%);
+  z-index: 900;
+}
+
+
+    /* Intro Card */
+    .card.intro h2 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #0a2c59;
+  }
+
+  .card.intro p {
+    font-size: 16px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+  }
 
 .kk-card {
-    background: #fff;
-    padding: 20px;         /* Match LGBTQ form */
-    margin-bottom: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-    max-width: 900px;      /* Match LGBTQ form */
-    margin-left: auto;
-    margin-right: auto;
+  width: 100%;
+  max-width: 900px;
+  margin: 12px auto 25px auto;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+}
+
+/* Invisible card wrapper to align actions with cards without visible chrome */
+.kk-card-invisible {
+    background: transparent;
+    box-shadow: none;
+    padding: 8px 20px 0 20px; /* tighter top, no bottom padding */
+    margin-top: -8px; /* slightly overlap previous card to reduce gap */
+    margin-bottom: 0;
 }
 
 .kk-label {
@@ -176,16 +218,23 @@ body {
     background: #1a4c9c;
 }
 
+/* Disabled state for placeholder Previous button on first step */
+.kk-btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .kk-intro h2 {
-    font-size: 22px;
+    font-size: 24px;
+    font-weight: bold;
     color: #143d77;
     margin-bottom: 15px;
 }
 
 .kk-intro p {
-    margin-bottom: 12px;
-    font-size: 14px;
-    line-height: 1.6;
+  font-size: 16px;
+    margin-bottom: 10px;
+    line-height: 1.5;
 }
 
 .kk-checkbox-group {
@@ -235,11 +284,12 @@ body {
     margin-bottom: 25px;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Add to kkform.css */
 .card.intro p {
-  margin-bottom: 10px;
   font-size: 16px;
   line-height: 1.6;
 }
@@ -283,7 +333,7 @@ body {
 label {
   display: block;
   font-weight: 600;
-  color: #0A2C59;
+  color: #3e70b3;
   margin-bottom: 5px;
 }
 
@@ -302,6 +352,25 @@ select.form-control:focus {
   box-shadow: 0 0 5px rgba(10, 44, 89, 0.3);
 }
 
+.kk-btn, .kk-next-btn {
+    min-width: 120px;
+    min-height: 50px;
+    background: #143d77;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 0 12px 0;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(20,61,119,0.08);
+    cursor: pointer;
+    outline: none;
+    display: inline-block;
+    margin-left: 0;
+    margin-bottom: 0;
+}
+
 
 /* Responsive behavior */
 @media (max-width: 1048px) {
@@ -310,9 +379,13 @@ select.form-control:focus {
     }
     .navbar-hamburger {
         display: inline-block !important;
+        margin-top: 1%;
     }
-    .form-group{
-
+    .notif{
+      margin-top: 4%;
+    }
+    .notifs{
+      margin-bottom: 4%;
     }
 }
 @media (min-width: 1049px) {
@@ -371,10 +444,11 @@ select.form-control:focus {
         max-width: 100vw;
     }
     .kk-card {
-        padding: 10px;
+        padding: 20px;
         margin-bottom: 16px;
-        border-radius: 10px;
+        border-radius: 15px;
         max-width: 80vw;
+        margin-top: 12px;
     }
     .form-group{
         padding: 10px;
@@ -395,7 +469,16 @@ select.form-control:focus {
         padding: 10px 0;
     }
     .kk-intro h2 {
-        font-size: 18px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    /* Ensure Next button sits at the right side on small screens */
+    .kk-btn-group {
+        justify-content: flex-end;
+    }
+    .kk-next-btn {
+        margin-left: auto;
+        display: inline-block;
     }
     .kk-upload-col {
         padding: 100px;
@@ -404,6 +487,13 @@ select.form-control:focus {
         border-radius: 10px;
         max-width: 80vw !important;
     }
+    /* Invisible card wrapper to align actions with cards without visible chrome */
+.kk-card-invisibles {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin-top: -10px; /* pull a bit closer if needed */
+}
 }
 
 /* Side-by-side upload containers */
@@ -499,4 +589,132 @@ select.form-control:focus {
   max-width: 180px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Footer */
+.footer {
+  background: #0A2C59;
+  color: #fff;
+  padding: 40px 60px 20px;
+  margin-top: auto; /* pushes footer down */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.footer-left h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.footer-left p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #cfd9e8;
+}
+
+.footer-middle h4,
+.footer-right h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer-middle ul,
+.footer-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-middle ul li,
+.footer-right ul li {
+  margin-bottom: 8px;
+}
+
+.footer-middle ul li a,
+.footer-right ul li a {
+  text-decoration: none;
+  color: #cfd9e8;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.footer-middle ul li a:hover,
+.footer-right ul li a:hover {
+  color: #ffffff;
+}
+
+.footer-right ul li i {
+  margin-right: 8px;
+  font-size: 15px;
+}
+
+.footer hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px 0;
+}
+
+.footer-bottom {
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 14px;
+  color: #cfd9e8;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .footer-left,
+  .footer-middle,
+  .footer-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 20px 15px;
+  }
+
+  .footer-left h3 {
+    font-size: 18px;
+  }
+
+  .footer-left p {
+    font-size: 14px;
+  }
+
+  .footer-middle h4,
+  .footer-right h4 {
+    font-size: 15px;
+  }
+
+  .footer-middle ul li a,
+  .footer-right ul li a {
+    font-size: 14px;
+  }
+
+  .footer-bottom p {
+    font-size: 12px;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

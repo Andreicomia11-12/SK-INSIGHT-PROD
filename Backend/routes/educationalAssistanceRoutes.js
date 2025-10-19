@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 const ctrl = require("../controllers/educationalAssistanceController");
 const { protect, authorizeRoles } = require("../middleware/authMiddleware");
-const multer = require("multer");
-const upload = require("../middleware/signatureUploadMiddleware"); // or your custom middleware
+const uploadEducational = require("../middleware/educationalUploadMiddleware");
 
 // ===== User Routes =====
 router.post(
   "/",
   protect,
-  upload.fields([
-    { name: "signature", maxCount: 1 },
-    { name: "sedulaImage", maxCount: 1 },
+  uploadEducational.fields([
+    { name: "frontImage", maxCount: 1 },
+    { name: "backImage", maxCount: 1 },
     { name: "coeImage", maxCount: 1 },
+    { name: "voter", maxCount: 1 },
   ]),
   ctrl.submitApplication
 );

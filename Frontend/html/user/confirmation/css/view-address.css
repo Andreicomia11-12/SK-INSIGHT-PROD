@@ -86,18 +86,20 @@ body {
 }
 
 .kk-container {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 20px;
-    overflow-y: auto; /* Allow container to scroll if content overflows */
+    max-width: 900px;
+    margin: 40px auto 0 auto;
+    padding: 0 12px;
 }
 
 .kk-card {
     background: #fff;
-    padding: 22px;
+    padding: 20px;
     margin-bottom: 25px;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+    max-width: 900px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .kk-label {
@@ -148,6 +150,7 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s;
+    margin-bottom: 5%;
 }
 
 .kk-btn:hover {
@@ -170,18 +173,11 @@ body {
     background: #1a4c9c;
 }
 
-.kk-butn {
-    background: #143d77;
-    color: #fff;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-    margin-right: 1.5%;
-}
+.kk-btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}x  
 
 .kk-butn:hover {
     background: #1a4c9c;
@@ -330,6 +326,17 @@ body {
     }
 }
 
+@media (max-width: 700px) {
+  .kk-container {
+    max-width: 100vw;
+    padding: 0 4vw;
+  }
+  .kk-card {
+    max-width: 100vw;
+    padding: 12px;
+  }
+}
+
 @media (max-width: 600px) {
     .kk-container {
         max-width: 100vw;
@@ -337,7 +344,7 @@ body {
         padding: 8px;
     }
     .kk-card {
-        max-width: 340px;
+        max-width: 80vw;
         margin-left: auto;
         margin-right: auto;
         padding: 8px;
@@ -475,4 +482,125 @@ body {
     background: #1e4e9e;
     color: #fff;
     text-decoration: underline;
+}
+
+.footer {
+  background: #0A2C59;
+  color: #fff;
+  padding: 40px 60px 20px;
+  margin-top: auto; /* pushes footer down */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.footer-left h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.footer-left p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #cfd9e8;
+}
+
+.footer-middle h4,
+.footer-right h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer-middle ul,
+.footer-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-middle ul li,
+.footer-right ul li {
+  margin-bottom: 8px;
+}
+
+.footer-middle ul li a,
+.footer-right ul li a {
+  text-decoration: none;
+  color: #cfd9e8;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.footer-middle ul li a:hover,
+.footer-right ul li a:hover {
+  color: #ffffff;
+}
+
+.footer-right ul li i {
+  margin-right: 8px;
+  font-size: 15px;
+}
+
+.footer hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px 0;
+}
+
+.footer-bottom {
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 14px;
+  color: #cfd9e8;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .footer-left,
+  .footer-middle,
+  .footer-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 20px 15px;
+  }
+
+  .footer-left h3 {
+    font-size: 18px;
+  }
+
+  .footer-left p {
+    font-size: 14px;
+  }
+
+  .footer-middle h4,
+  .footer-right h4 {
+    font-size: 15px;
+  }
+
+  .footer-middle ul li a,
+  .footer-right ul li a {
+    font-size: 14px;
+  }
+
+  .footer-bottom p {
+    font-size: 12px;
+  }
 }

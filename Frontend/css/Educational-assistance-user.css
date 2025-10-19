@@ -8,11 +8,16 @@
     body {
         font-family: 'Poppins', Arial, sans-serif;
         background-color: #D1E1F5;
+        font-size: 16px;
         color: #0a1a3a;
         min-height: 100vh;
-        display: flex;
         flex-direction: column;
-        padding-top: 6rem;
+        padding-top: 4.5rem;
+    }
+
+    /* Headings */
+    h2 {
+        font-size: 24px;
     }
 
     /* Navbar */
@@ -22,6 +27,7 @@
         left: 50%;
         transform: translateX(-50%);
         width: 90%;
+        height: 74px;
         background: #0A2C59;
         color: #fff;
         display: flex;
@@ -36,6 +42,7 @@
     .navbar img {
         height: 40px;
         border-radius: 50%;
+        margin-top: 10%;
     }
 
     .navbar .title {
@@ -47,6 +54,7 @@
     }
 
     .navbar-left {
+      font-size: 18px;
         display: flex;
         align-items: center;
     }
@@ -55,6 +63,11 @@
         display: flex;
         gap: 15px;
         font-size: 20px;
+        margin-bottom: 0.6%;
+    }
+
+    .notif{
+      margin-top: 2%;
     }
 
     /* Centered Navbar Items */
@@ -64,6 +77,7 @@
       justify-content: center;
       align-items: center;
       flex: 1;
+      margin-top: 0.1%;
     }
 
     .bell {
@@ -89,6 +103,7 @@
       font-size: 1.8rem;
       cursor: pointer;
       margin-right: 10px;
+      margin-top: 2%;
     }
 
     @media (max-width: 1024px) {
@@ -149,7 +164,7 @@
     .container {
         width: 90%;
         max-width: 1000px;
-        margin: 40px auto;
+        margin: 2rem auto;
         padding: 0 25px;
         box-sizing: border-box;
     }
@@ -170,6 +185,7 @@
     .card.intro h2 {
         margin-bottom: 10px;
         color: #0a2c59;
+        font-size: 24px;
     }
 
     .card.intro p {
@@ -265,9 +281,11 @@ textarea:focus {
 
     @media (max-width: 600px) {
         .navbar-left .title {
-            font-size: 1.2rem;
+            font-size: 18px;
         }
-        .container { padding: 0 10px; }
+        .container { 
+          padding: 5%; 
+        }
     }
 
     @media (max-width: 564px) {
@@ -363,51 +381,57 @@ textarea:focus {
     .submit-btn-container {
       max-width: 900px;
       margin: 0 auto 25px auto;
-      text-align: left;
+      text-align: right;
     }
     .submit-btn {
       width: auto;
       padding: 8px 20px;
     }
 
+    /* Invisible Card for Button Alignment */
+    .invisible-card {
+      background: transparent;
+      box-shadow: none;
+      padding: 8px 20px 0 20px;
+      margin-top: -8px;
+      margin-bottom: 0;
+    }
+
     /* Image Preview Modal */
     #imagePreviewModal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.7);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
       justify-content: center;
       align-items: center;
-      z-index: 9999;
+      z-index: 1000;
     }
-    #previewImg {
-      max-width: 80vw;
-      max-height: 80vh;
-      border: 8px solid #fff;
-      border-radius: 8px;
+
+    #imagePreviewModal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
     }
 
     /* Close Preview Button */
 .close-preview-btn {
   position: absolute;
-  top: 18px;
-  right: 24px;
+  top: 20px;
+  right: 20px;
   background: #fff;
-  color: #143d77;
   border: none;
-  font-size: 2rem;
+  font-size: 24px;
+  cursor: pointer;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  cursor: pointer;
-  z-index: 10001;
-  box-shadow: 0 2px 8px rgba(20,61,119,0.12);
-  transition: background 0.2s, color 0.2s;
-}
-.close-preview-btn:hover {
-  background: #143d77;
-  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Add to Educational-assistance-user.css */
@@ -437,4 +461,125 @@ textarea:focus {
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.footer {
+  background: #0A2C59;
+  color: #fff;
+  padding: 40px 60px 20px;
+  margin-top: auto; /* pushes footer down */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.footer-left h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.footer-left p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #cfd9e8;
+}
+
+.footer-middle h4,
+.footer-right h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer-middle ul,
+.footer-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-middle ul li,
+.footer-right ul li {
+  margin-bottom: 8px;
+}
+
+.footer-middle ul li a,
+.footer-right ul li a {
+  text-decoration: none;
+  color: #cfd9e8;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.footer-middle ul li a:hover,
+.footer-right ul li a:hover {
+  color: #ffffff;
+}
+
+.footer-right ul li i {
+  margin-right: 8px;
+  font-size: 15px;
+}
+
+.footer hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px 0;
+}
+
+.footer-bottom {
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 14px;
+  color: #cfd9e8;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .footer-left,
+  .footer-middle,
+  .footer-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 20px 15px;
+  }
+
+  .footer-left h3 {
+    font-size: 18px;
+  }
+
+  .footer-left p {
+    font-size: 14px;
+  }
+
+  .footer-middle h4,
+  .footer-right h4 {
+    font-size: 15px;
+  }
+
+  .footer-middle ul li a,
+  .footer-right ul li a {
+    font-size: 14px;
+  }
+
+  .footer-bottom p {
+    font-size: 12px;
+  }
 }

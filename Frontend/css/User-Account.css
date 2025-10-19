@@ -371,6 +371,111 @@ h1, h2 {
   background: #07B0F2;
 }
 
+.tables th, .tables td {
+  text-align: left;
+  vertical-align: middle;
+  padding: 10px 12px;
+}
+
+.tables th:last-child, .tables td:last-child {
+  text-align: center;
+  width: 10%;
+}
+
+.tables th, .tables td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Match KK Profiling column widths and alignment */
+.tables th:nth-child(1), .tables td:nth-child(1) { width: 10%; text-align: center; }
+.tables th:nth-child(2), .tables td:nth-child(2) { width: 25%; text-align: center;}
+.tables th:nth-child(3), .tables td:nth-child(3) { width: 30%; }
+.tables th:nth-child(4), .tables td:nth-child(4) { width: 15%; text-align: center; }
+.tables th:nth-child(5), .tables td:nth-child(5) { width: 20%; text-align: center; }
+
+.view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #0A2C59;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.view-btn:hover {
+  background: #08305e;
+}
+
+/* Modal Styles */
+.user-modal-popup {
+  border-radius: 15px;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.user-modal-content {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.user-info-group {
+  display: flex;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.user-info-group label {
+  width: 100px;
+  color: #0A2C59;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-info-group span {
+  flex: 1;
+  color: #333;
+  font-size: 14px;
+}
+
+.user-modal-close {
+  color: #0A2C59 !important;
+  font-size: 20px !important;
+}
+
+.swal2-title {
+  border-bottom: 2px solid #0A2C59;
+}
+
+/* Hover effect for close button */
+.user-modal-close:hover {
+  color: #08305e !important;
+}
+
+/* Add some animation */
+.swal2-show {
+  animation: modalFadeIn 0.3s !important;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 
 
