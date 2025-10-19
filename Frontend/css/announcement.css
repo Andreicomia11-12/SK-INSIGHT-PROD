@@ -7,8 +7,8 @@
 
 /* Body */
 body, html {
-    overflow: hidden !important;
-    height: 100vh;
+    overflow-x: hidden;
+    min-height: 100vh;
 }
 
 body {
@@ -21,10 +21,14 @@ body {
     overflow-x: hidden;
 }
 
-/* Main content wrapper to push footer down */
 .main-content {
-    flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centers vertically */
+  min-height: calc(100vh - 200px); /* adjusts for navbar + footer */
 }
+
 
 /* Navbar */
 .navbar {
@@ -133,6 +137,10 @@ body {
   display: flex;
 }
 
+.announcement{
+  font-style: 2rem;
+}
+
 @media (max-width: 600px) {
     .navbar-left .title {
         font-size: 1rem;
@@ -162,31 +170,36 @@ body {
     width: 45%;
     margin: 120px auto 20px auto; 
     padding: 20px 25px;
-    background: #fff; 
+    /* background: #fff;  */
     color: #000;
     border-radius: 10px;
     text-align: center;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    /* box-shadow: 0 6px 12px rgba(0,0,0,0.1); */
 }
 
 .announcement-heading-container h2 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 700;
 }
 
 /* Announcement Table Container */
 .announcement-container {
-    max-width: 1100px;
-    width: 90%;
-    margin: 20px auto 50px auto;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.10);
-    padding: 20px;
-    overflow-x: auto;
-    max-height: 420px; /* Adjust height as needed for 5 rows */
-    overflow-y: auto;
+  max-width: 1100px;
+  width: 90%;
+  margin: 20px auto 50px auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.10);
+  padding: 20px;
+  overflow-x: auto;
+  overflow-y: auto;
+
+  /* 👇 Force container to fit 8 rows */
+  height: calc(70px * 8 + 60px) !important;
+  max-height: calc(70px * 8 + 60px) !important;
+  min-height: calc(70px * 8 + 60px) !important;
 }
+
 
 /* Table Styling */
 .announcement-table {
@@ -210,10 +223,65 @@ body {
   height: 70px; /* Adjust as needed */
   vertical-align: middle;
 }
+.announcement-table tr:hover {
+  background-color: #f5f8ff;
+}
+
+/* Pinned announcement styling */
+.announcement-table tr.pinned-row {
+  background-color: #fff8e1; /* Light golden background */
+  border-left: 4px solid #d4af37; /* Golden left border */
+  font-weight: 500; /* Slightly bolder text */
+}
+
+.announcement-table tr.pinned-row:hover {
+  background-color: #fff3cd; /* Darker golden background on hover */
+}
+
+/* Modal description styling */
+.description-container {
+  margin-top: 20px;
+}
+
+.description-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #143d77;
+  margin-bottom: 8px;
+}
+
+.description-box {
+  width: 100%;
+  min-height: 120px;
+  max-height: 200px; /* Set maximum height */
+  padding: 15px;
+  border: 1px solid #bcd4ec;
+  border-radius: 8px;
+  background-color: #f5faff;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  box-sizing: border-box;
+  white-space: pre-wrap; /* Preserve line breaks */
+  word-wrap: break-word;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal scroll */
+}
+
+.description-box:focus {
+  outline: none;
+  border: 1.5px solid #143d77;
+  background-color: #eaf3fa;
+  box-shadow: 0 0 0 2px rgba(20, 61, 119, 0.1);
+}
+
 
 .announcement-table td {
-  vertical-align: middle;
+  color: #444;
+  font-size: 15px;
 }
+
 
 /* Define specific column widths */
 .announcement-table th:nth-child(1),
@@ -406,7 +474,7 @@ body {
     }
 
     .announcement-heading-container h2 {
-        font-size: 1.4rem;
+        font-size: 2rem;
     }
 
     .announcement-container {
@@ -446,6 +514,30 @@ body {
 
     .announcement-table a {
         font-size: 13px;
+    }
+}
+
+/* Hide event date column on very small screens (480px and below) */
+@media (max-width: 480px) {
+    .announcement-table th:nth-child(2),
+    .announcement-table td:nth-child(2) {
+        display: none; /* Hide event date column */
+    }
+
+    /* Adjust remaining column widths */
+    .announcement-table th:nth-child(1),
+    .announcement-table td:nth-child(1) {
+        width: 50%; /* Title column gets more space */
+    }
+
+    .announcement-table th:nth-child(3),
+    .announcement-table td:nth-child(3) {
+        width: 30%; /* Status column */
+    }
+
+    .announcement-table th:nth-child(4),
+    .announcement-table td:nth-child(4) {
+        width: 20%; /* Actions column */
     }
 }
 
@@ -549,7 +641,7 @@ body {
   background: #0A2C59;
   color: #fff;
   padding: 40px 60px 20px;
-  margin-top: 40px; /* Adds space above the footer */
+  margin-top: auto; /* Pushes footer to bottom */
 }
 
 .footer-container {

@@ -67,18 +67,25 @@ exports.submitApplication = async (req, res) => {
       return res.status(400).json({ error: "User not found in request." });
     }
 
+    // Debug: Log all files received
+    console.log('Files received:', req.files);
+    
     // Save file paths if files are uploaded
     if (req.files?.frontImage?.[0]) {
       data.frontImage = req.files.frontImage[0].path;
+      console.log('Front image saved:', data.frontImage);
     }
     if (req.files?.backImage?.[0]) {
       data.backImage = req.files.backImage[0].path;
+      console.log('Back image saved:', data.backImage);
     }
     if (req.files?.coeImage?.[0]) {
       data.coeImage = req.files.coeImage[0].path;
+      console.log('COE image saved:', data.coeImage);
     }
     if (req.files?.voter?.[0]) {
       data.voter = req.files.voter[0].path;
+      console.log('Voter certificate saved:', data.voter);
     }
 
     const presentCycle = await getPresentCycle("Educational Assistance");

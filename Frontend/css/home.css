@@ -314,9 +314,7 @@ a.disabled, button.disabled {
   }
 
   .card {
-    width: 80%;
-    max-width: 400px;
-    padding: 15px;
+    background-color: #fff;
   }
 
   .card img {
