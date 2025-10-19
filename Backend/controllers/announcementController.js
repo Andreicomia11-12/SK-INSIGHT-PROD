@@ -14,12 +14,6 @@ exports.createAnnouncement = async (req, res) => {
       createdBy: req.user.id,
       isActive: true // Ensure new announcements are active by default
     });
-    
-    // Emit WebSocket event for real-time updates
-    if (req.io) {
-      req.io.emit('announcement:created', announcement);
-    }
-    
     res.status(201).json({ success: true, announcement });
   } catch (err) {
     res.status(500).json({ success: false, message: "Error creating announcement", error: err.message });
@@ -74,12 +68,6 @@ exports.updateAnnouncement = async (req, res) => {
       { new: true }
     );
     if (!updated) return res.status(404).json({ success: false, message: "Announcement not found" });
-    
-    // Emit WebSocket event for real-time updates
-    if (req.io) {
-      req.io.emit('announcement:updated', updated);
-    }
-    
     res.json({ success: true, announcement: updated });
   } catch (err) {
     res.status(500).json({ success: false, message: "Error updating announcement", error: err.message });
@@ -93,12 +81,6 @@ exports.deleteAnnouncement = async (req, res) => {
     if (!deleted) {
       return res.status(404).json({ success: false, message: "Announcement not found" });
     }
-    
-    // Emit WebSocket event for real-time updates
-    if (req.io) {
-      req.io.emit('announcement:deleted', { id: req.params.id });
-    }
-    
     res.json({ success: true, message: "Announcement deleted successfully" });
   } catch (err) {
     res.status(500).json({ success: false, message: "Error deleting announcement", error: err.message });
@@ -115,13 +97,6 @@ exports.pinAnnouncement = async (req, res) => {
       { new: true }
     );
     if (!updated) return res.status(404).json({ success: false, message: "Announcement not found" });
-    
-    // Emit WebSocket event for real-time updates
-    if (req.io) {
-      const eventName = isPinned ? 'announcement:pinned' : 'announcement:unpinned';
-      req.io.emit(eventName, { id: req.params.id, isPinned: !!isPinned });
-    }
-    
     res.json({ success: true, announcement: updated });
   } catch (err) {
     res.status(500).json({ success: false, message: "Error pinning/unpinning announcement", error: err.message });
