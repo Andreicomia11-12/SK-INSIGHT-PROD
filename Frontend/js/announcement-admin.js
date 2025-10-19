@@ -175,6 +175,8 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: { "Authorization": `Bearer ${token}` }
           });
           if (res.ok) {
+            // Emit WebSocket event for real-time updates
+            emitAnnouncementEvent("deleted", { id });
             fetchAnnouncements();
           }
         } catch (err) {
@@ -231,6 +233,9 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({ isPinned: !isPinned })
         });
         if (res.ok) {
+          // Emit WebSocket event for real-time updates
+          emitAnnouncementEvent(isPinned ? "unpinned" : "pinned", { id, isPinned: !isPinned });
+          
           // Refetch and re-render the current tab immediately
           await fetchAnnouncements();
           renderCurrentTab();
@@ -275,6 +280,16 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (res.ok) {
+        const result = await res.json();
+        const announcement = result.announcement || result;
+        
+        // Emit WebSocket event for real-time updates
+        if (editingId) {
+          emitAnnouncementEvent("updated", announcement);
+        } else {
+          emitAnnouncementEvent("created", announcement);
+        }
+        
         hideModal(); // Use the new hide function
         form.reset();
         editingId = null;
@@ -338,4 +353,7 @@ socket.on("educational-assistance:newSubmission", (data) => {
   // Optionally refresh or update something if needed
 });
 
-// WebSocket events are now handled by the backend
+// Emit WebSocket events for real-time updates
+function emitAnnouncementEvent(eventType, data) {
+  socket.emit(`announcement:${eventType}`, data);
+}
