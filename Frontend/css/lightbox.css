@@ -1,0 +1,71 @@
+/* Lightbox container */
+.image-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85); /* Dark overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999; /* Ensure it appears above all other elements */
+}
+
+/* Lightbox content */
+.lightbox-content {
+  position: relative;
+  max-width: 95vw; /* Ensure the image doesn't exceed 90% of the viewport width */
+  max-height: 95vh; /* Ensure the image doesn't exceed 90% of the viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Lightbox image */
+.lightbox-image {
+  max-width: 90vw; /* Scale the image to fit within the container */
+  max-height: 90vh; /* Scale the image to fit within the container */
+  object-fit: contain; /* Ensure the image maintains its aspect ratio */
+  border-radius: 10px; /* Optional: Add rounded corners */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4); /* Add a shadow for better visibility */
+  background: #fff; /* Optional: Add a background color */
+}
+
+/* Close button */
+.lightbox-close {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  background: #fff;
+  color: #222;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 2rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Add a shadow for better visibility */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s; /* Smooth fade-in animation for the close button */
+}
+
+.lightbox-close:hover {
+  background: #eee; /* Slight zoom effect on hover */
+}
+
+/* Add smooth fade-in animation for the lightbox */
+.image-lightbox {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

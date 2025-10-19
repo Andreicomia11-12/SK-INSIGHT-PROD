@@ -108,12 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function populateCycleDropdown(cycles) {
-    cycleContent.innerHTML = "";
+    cycleContent.innerHTML = ""; // Clear existing options
     cycles.forEach(cycle => {
       const cycleOption = document.createElement("a");
       cycleOption.href = "#";
       cycleOption.className = "dropdown-option";
-      cycleOption.textContent = `Cycle ${cycle}`;
+      cycleOption.textContent = `Cycle ${cycle}`; // Add "Cycle" prefix
+      cycleOption.style.display = "block"; // Ensure options are displayed as blocks
       cycleOption.addEventListener("click", (e) => {
         e.preventDefault();
         cycleButton.textContent = `Cycle ${cycle}`;
@@ -155,6 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
     renderYouthAgeGroupBar(currentFilters.year, currentFilters.cycle);
     renderYouthClassificationBar(currentFilters.year, currentFilters.cycle);
     renderWorkStatusBar(currentFilters.year, currentFilters.cycle);
+
+    // Fetch filtered KK Profiling summary
+    fetchDashboardSummaries(currentFilters.year, currentFilters.cycle);
   });
 
   // --- Clear filter resets everything ---
@@ -172,6 +176,9 @@ document.addEventListener("DOMContentLoaded", () => {
     renderYouthAgeGroupBar();
     renderYouthClassificationBar();
     renderWorkStatusBar();
+
+    // Fetch unfiltered dashboard summaries
+    fetchDashboardSummaries();
   });
 
   // Initial load: show all data
@@ -385,11 +392,11 @@ function initPredictionChart() {
 }
 
 // --- Dashboard summaries fetch logic ---
-async function fetchDashboardSummaries() {
+async function fetchDashboardSummaries(year, cycle) {
   const token = sessionStorage.getItem("token");
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-  // User Accounts
+  // User Accounts (Unfiltered)
   fetch("http://localhost:5000/api/users", { headers })
     .then(res => res.json())
     .then(data => {
@@ -399,21 +406,33 @@ async function fetchDashboardSummaries() {
       document.getElementById("userAccountCount").textContent = "-";
     });
 
-  // KK Profiling
-  fetch("http://localhost:5000/api/kkprofiling", { headers })
+  // KK Profiling (Filtered by year, cycle, and excluding deleted profiles)
+  let kkProfilingUrl = "http://localhost:5000/api/kkprofiling";
+  if (year && cycle) {
+    kkProfilingUrl += `?year=${year}&cycle=${cycle}`;
+  }
+  fetch(kkProfilingUrl, { headers })
     .then(res => res.json())
     .then(data => {
-      document.getElementById("kkProfilingCount").textContent = Array.isArray(data) ? data.length : "-";
+      // Filter out deleted profiles
+      const validProfiles = Array.isArray(data) ? data.filter(profile => !profile.isDeleted) : [];
+      document.getElementById("kkProfilingCount").textContent = validProfiles.length;
+    })
+    .catch(() => {
+      document.getElementById("kkProfilingCount").textContent = "-";
     });
 
-  // LGBTQ Profiling
+  // LGBTQ Profiling (Unfiltered)
   fetch("http://localhost:5000/api/lgbtqprofiling", { headers })
     .then(res => res.json())
     .then(data => {
       document.getElementById("lgbtqProfilingCount").textContent = Array.isArray(data) ? data.length : "-";
+    })
+    .catch(() => {
+      document.getElementById("lgbtqProfilingCount").textContent = "-";
     });
 
-  // Educational Assistance (pending + accepted)
+  // Educational Assistance (Unfiltered)
   Promise.all([
     fetch("http://localhost:5000/api/educational-assistance/status?status=pending", { headers }).then(res => res.json()),
     fetch("http://localhost:5000/api/educational-assistance/status?status=accepted", { headers }).then(res => res.json())

@@ -390,6 +390,15 @@ let applicants = [];
     const mi = app.middlename ? app.middlename[0].toUpperCase() + "." : "";
     nameDiv.textContent = `${app.firstname} ${mi} ${app.surname}`;
 
+    // Default image placeholders
+    const defaultImage = "/Frontend/assets/default-profile.jpg";
+
+    // Use Cloudinary URLs or default placeholders for images
+    const frontImage = app.frontImage || defaultImage;
+    const backImage = app.backImage || defaultImage;
+    const coeImage = app.coeImage || defaultImage;
+    const voterImage = app.voter || defaultImage;
+
     details.innerHTML = `
       <div class="profile-details-modal">
         <!-- Personal Info -->
@@ -529,6 +538,40 @@ let applicants = [];
           </div>
         </div>
 
+        
+
+
+
+        <!-- ID and Document Images -->
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">Valid ID (Front)</div>
+            <div class="id-image-container">
+              <img src="${frontImage}" alt="Front of ID" class="id-image clickable-image" data-image-src="${frontImage}" onclick="openImageLightbox('${frontImage}')"/>
+            </div>
+          </div>
+          <div class="profile-detail">
+            <div class="label">Valid ID (Back)</div>
+            <div class="id-image-container">
+              <img src="${backImage}" alt="Back of ID" class="id-image clickable-image" data-image-src="${backImage}" onclick="openImageLightbox('${backImage}')"/>
+            </div>
+          </div>
+        </div>
+        <div class="profile-details-row">
+          <div class="profile-detail">
+            <div class="label">Certificate of Enrollment</div>
+            <div class="id-image-container">
+              <img src="${coeImage}" alt="Certificate of Enrollment" class="id-image clickable-image" data-image-src="${coeImage}" onclick="openImageLightbox('${coeImage}')"/>
+            </div>
+          </div>
+          <div class="profile-detail">
+            <div class="label">Voter's ID</div>
+            <div class="id-image-container">
+              <img src="${voterImage}" alt="Voter's ID" class="id-image clickable-image" data-image-src="${voterImage}" onclick="openImageLightbox('${voterImage}')"/>
+            </div>
+          </div>
+        </div>
+
         <!-- Action Buttons -->
         ${app.status === "pending" ? `
           <div class="modal-actions">
@@ -539,12 +582,13 @@ let applicants = [];
       </div>
     `;
 
+
     // Add event listeners for approve/reject buttons if status is pending
     if (app.status === "pending") {
       const approveBtn = modal.querySelector(".modal-btn-primary");
       const rejectBtn = modal.querySelector(".modal-btn-danger");
 
-      // Approve button handler
+      // Approve button logic remains unchanged
       approveBtn.addEventListener("click", async () => {
         modal.style.display = "none";
         const confirmed = await Swal.fire({
@@ -596,7 +640,7 @@ let applicants = [];
         }
       });
 
-      // Reject button handler
+      // Reject button logic remains unchanged
       rejectBtn.addEventListener("click", async () => {
         const rejectionModal = document.getElementById("rejectionModal");
         const rejectionReasonSelect = document.getElementById("rejectionReasonSelect");
