@@ -13,19 +13,19 @@ body {
 
 /* Navbar */
 .navbar {
-  position: fixed;            /* stays on top when scrolling */
-  top: 1rem;                  /* distance from top */
-  left: 50%;                  /* start at horizontal center */
-  transform: translateX(-50%);/* center it exactly */
-  width: 90%;                 /* navbar width (not full screen) */         /* optional max width */
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
   background: #0A2C59;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 15px 30px;
-  border-radius: 15px;        /* rounded corners */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* stronger shadow for floating effect */
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   z-index: 1000;
 }
 
@@ -42,14 +42,33 @@ body {
   margin-left: 10px;
 }
 
-.bell{
-  color: white;
-  margin-top: 5px;
-  margin-right: 5px;
-  font-size: 20px;
+.nav-btn{
+  text-decoration: none;
+  margin: 0 10px;
 }
 
-.prof{
+.navbar-center {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.bell {
+    color: white;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 5px;
+    font-size: 22px;
+}
+
+.prof {
     color: #ffffff;
     text-decoration: none;
     font-size: 16px;
@@ -59,22 +78,44 @@ body {
     transition: background 0.2s, color 0.2s;
 }
 
-.navbar-left {
-  display: flex;
-  align-items: center;
-}
-
 .navbar-right {
   display: flex;
   gap: 15px;
   font-size: 20px;
 }
 
+.navbar-right a {
+  text-decoration: none;
+}
+
+.navbar-right a {
+    text-decoration: none;
+}
+
+.nav-btn {
+    color: #ffffff;
+    padding: 7px 18px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+    border: none;
+    outline: none;
+}
+.nav-btn:hover, .nav-btn.active {
+    background: #1e4e9e;
+    color: #fff;
+}
+/* Default: hide hamburger, show center */
 .navbar-hamburger {
-    display: none;
-    font-size: 1.8rem;
-    cursor: pointer;
-    margin-right: 10px;
+  display: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.navbar-center {
+  display: flex;
 }
 
 @media (max-width: 1048px) {

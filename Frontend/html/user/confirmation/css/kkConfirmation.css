@@ -114,11 +114,9 @@ body {
 /* ✅ Thank You Card */
 .container {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
+  max-width: 900px;      /* match kk form container width */
+  margin: 2rem auto;     /* consistent vertical spacing */
+  padding: 20px;         /* consistent inner padding */
 }
 
 .card {

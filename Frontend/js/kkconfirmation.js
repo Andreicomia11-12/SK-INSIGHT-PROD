@@ -49,7 +49,7 @@ function handleKKProfileNavClick(event) {
       text: 'Please log in to access KK Profiling.',
       confirmButtonText: 'OK'
     }).then(() => {
-      window.location.href = '../../login.html';
+      window.location.href = '/Frontend/html/user/login.html';
     });
     return;
   }
@@ -78,7 +78,7 @@ function handleKKProfileNavClick(event) {
         confirmButtonText: "Yes, view my response",
         cancelButtonText: "No"
       }).then(result => {
-        if (result.isConfirmed) window.location.href = "kkcofirmation.html";
+        if (result.isConfirmed) window.location.href = "kkconfirmation.html";
       });
       return;
     }
@@ -102,12 +102,22 @@ function handleKKProfileNavClick(event) {
         confirmButtonText: "Yes",
         cancelButtonText: "No"
       }).then(result => {
-        if (result.isConfirmed) window.location.href = "kkcofirmation.html";
+        if (result.isConfirmed) window.location.href = "kkconfirmation.html";
       });
       return;
     }
-    // CASE 4: Form open, no profile → Go to form
-    window.location.href = "../../kkform-personal.html";
+    // CASE 4: Form open, no profile → Show SweetAlert and go to form
+    if (isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `No profile found`,
+        text: `You don't have a profile yet. Please fill out the form to create one.`,
+        confirmButtonText: "Go to form"
+      }).then(() => {
+        window.location.href = "../../kkform-personal.html";
+      });
+      return;
+    }
   })
   .catch(() => window.location.href = "../../kkform-personal.html");
 }
@@ -180,10 +190,20 @@ function handleLGBTQProfileNavClick(event) {
       });
       return;
     }
-    // CASE 4: Form open, no profile → Go to form
-    window.location.href = "lgbtqform.html";
+    // CASE 4: Form open, no profile → Show SweetAlert and go to form
+    if (isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `No profile found`,
+        text: `You don't have a profile yet. Please fill out the form to create one.`,
+        confirmButtonText: "Go to form"
+      }).then(() => {
+        window.location.href = "../../lgbtqform.html";
+      });
+      return;
+    }
   })
-  .catch(() => window.location.href = "lgbtqform.html");
+  .catch(() => window.location.href = "../../lgbtqform.html");
 }
 
 // Educational Assistance Navigation
@@ -254,8 +274,18 @@ function handleEducAssistanceNavClick(event) {
       });
       return;
     }
-    // CASE 4: Form open, no profile → Go to form
-    window.location.href = "Educational-assistance-user.html";
+    // CASE 4: Form open, no profile → Show SweetAlert and go to form
+    if (isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `No profile found`,
+        text: `You don't have a profile yet. Please fill out the form to create one.`,
+        confirmButtonText: "Go to form"
+      }).then(() => {
+        window.location.href = "../../Educational-assistance-user.html";
+      });
+      return;
+    }
   })
-  .catch(() => window.location.href = "Educational-assistance-user.html");
+  .catch(() => window.location.href = "../../Educational-assistance-user.html");
 }

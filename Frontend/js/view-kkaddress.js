@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         text: 'Please log in to access KK Profiling.',
         confirmButtonText: 'OK'
       }).then(() => {
-        window.location.href = '../../login.html';
+        window.location.href = '/Frontend/html/user/login.html';
       });
       return;
     }
@@ -115,8 +115,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
         return;
       }
-      // CASE 4: Form open, no profile → Go to form
-      window.location.href = "../../kkform-personal.html";
+      // CASE 4: Form open, no profile → Show SweetAlert and go to form
+      if (isFormOpen && !hasProfile) {
+        Swal.fire({
+          icon: "info",
+          title: `No profile found`,
+          text: `You don't have a profile yet. Please fill out the form to create one.`,
+          confirmButtonText: "Go to form"
+        }).then(() => {
+          window.location.href = "../../kkform-personal.html";
+        });
+        return;
+      }
     })
     .catch(() => window.location.href = "../../kkform-personal.html");
   }
@@ -197,10 +207,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
       }
 
-      window.location.href = "/html/user/lgbtqform.html";
+      // CASE 4: Form open, no profile → Show SweetAlert and go to form
+      if (isFormOpen && !hasProfile) {
+        Swal.fire({
+          icon: "info",
+          title: `No profile found`,
+          text: `You don't have a profile yet. Please fill out the form to create one.`,
+          confirmButtonText: "Go to form"
+        }).then(() => {
+          window.location.href = "../../lgbtqform.html";
+        });
+        return;
+      }
     } catch (err) {
       console.error(err);
-      window.location.href = "/html/user/lgbtqform.html";
+      window.location.href = "../../lgbtqform.html";
     }
   }
 
@@ -240,7 +261,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       const formName = latestCycle?.formName || "Educational Assistance";
       const isFormOpen = latestCycle?.isOpen ?? false;
-      const hasProfile = !!profileData?._id;
+      const hasProfile = profileData && profileData._id ? true : false;
 
       if (!isFormOpen && hasProfile) {
         const result = await Swal.fire({
@@ -280,7 +301,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
       }
 
-      window.location.href = "../../Educational-assistance-user.html";
+      // CASE 4: Form open, no profile → Show SweetAlert and go to form
+      if (isFormOpen && !hasProfile) {
+        Swal.fire({
+          icon: "info",
+          title: `No profile found`,
+          text: `You don't have a profile yet. Please fill out the form to create one.`,
+          confirmButtonText: "Go to form"
+        }).then(() => {
+          window.location.href = "../../Educational-assistance-user.html";
+        });
+        return;
+      }
     } catch (err) {
       console.error(err);
       window.location.href = "../../Educational-assistance-user.html";

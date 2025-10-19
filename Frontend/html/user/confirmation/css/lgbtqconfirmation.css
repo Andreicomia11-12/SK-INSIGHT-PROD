@@ -114,11 +114,9 @@ body {
 /* ✅ Thank You Card */
 .container {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
+  max-width: 900px;      /* match kk form container width */
+  margin: 2rem auto;     /* consistent vertical spacing */
+  padding: 20px;         /* consistent inner padding */
 }
 
 .card {
@@ -127,6 +125,7 @@ body {
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   text-align: left;
+  text-decoration: none;
 }
 
 .card h2 {
@@ -139,7 +138,7 @@ body {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 10px;
-  text-decoration: underline; /* underline THANK YOU */
+  text-decoration: none; /* underline THANK YOU */
 }
 
 .card p {
@@ -156,6 +155,7 @@ body {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
   transition: all 0.3s ease;
 
   /* ✅ Fix for Safari & old Edge */

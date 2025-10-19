@@ -14,7 +14,7 @@
       <a href="./index.html">
         <img src="../../../../assets/logo.png" alt="Logo" class="logo"/>
       </a>
-      <a href="./index.html" class="title">SK-PBW</a>
+      <a href="../../index.html" class="title">SK-PBW</a>
     </div>
     <div class="navbar-center">
       <!-- Desktop Navbar -->
@@ -26,8 +26,8 @@
       <span class="navbar-hamburger" id="navbarHamburger">
         <i class="fa-solid fa-bars"></i>
       </span>
-      <a class="notif" href="../user/announcement.html"><i class="fa-solid fa-bell bell"></i></a>
-      <a href="../user/userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
+      <a class="notif" href="../../announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+      <a href="../../userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
     </div>
   </div>
   <div class="kk-container">
@@ -49,7 +49,7 @@
         <label for="youthClassification">Youth Classification</label>
         <select id="youthClassification" name="youthClassification" class="kk-input">
           <option value="">Select classification</option>
-          <option value="In-School Youth">In-School Youth</option>
+          <option value="In School Youth">In-School Youth</option>
           <option value="Out of School Youth">Out-of-School Youth</option>
           <option value="Working Youth">Working Youth</option>
           <option value="Youth with Specific Needs">Youth with Specific Needs</option>
@@ -157,10 +157,12 @@
           <input type="file" id="signatureImage" accept="image/*" style="display:none;">
         </div>
       </div>
-
-      <div class="kk-btn-group">
-        <button type="button" id="previousBtn" class="kk-btn" onclick="window.location.href='view-kkaddress.html'">Previous</button>
-        <button type="submit" class="kk-btn kk-submit-btn">Finish</button>
+      
+      <div class="kk-card kk-card-invisible">
+        <div class="kk-btn-group">
+          <button type="button" id="previousBtn" class="kk-btn" onclick="window.location.href='view-kkaddress.html'">Previous</button>
+          <button type="button" id="previousBtn" class="kk-btn" onclick="window.location.href='kkcofirmation.html'">Done</button>
+        </div>
       </div>
     </form>
   </div>

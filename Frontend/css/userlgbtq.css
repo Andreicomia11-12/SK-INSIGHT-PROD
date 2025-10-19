@@ -9,11 +9,10 @@
 body {
   font-family: 'Poppins', Arial, sans-serif;
   background-color: #D1E1F5;
-  color: #0a1a3a;
+  color: #0A1A3A;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding-top: 6rem;   /* space for fixed navbar */
+  margin: 0;
+  padding-top: 80px; /* space for fixed navbar */
 }
 
 /* Navbar */
@@ -23,6 +22,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
+  height: 74px;
   background: #0A2C59;
   color: #fff;
   display: flex;
@@ -30,13 +30,14 @@ body {
   justify-content: space-between;
   padding: 15px 30px;
   border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
 
 .navbar img {
   height: 40px;
   border-radius: 50%;
+  margin-top: 10%; /* nudge logo slightly down */
 }
 
 .navbar .title {
@@ -52,6 +53,14 @@ body {
   margin: 0 10px;
 }
 
+.navbar-center {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
 .navbar-left {
   display: flex;
   align-items: center;
@@ -60,9 +69,10 @@ body {
 .bell {
     color: white;
     cursor: pointer;
-    margin-top: 5px;
+    margin-top: 0;        /* keep centered vertically */
     margin-right: 5px;
     font-size: 22px;
+    line-height: 1;       /* normalize vertical alignment */
 }
 
 .prof {
@@ -73,42 +83,79 @@ body {
     font-weight: bold;
     border-radius: 8px;
     transition: background 0.2s, color 0.2s;
+    margin-top: 2px; /* nudge nav buttons down */
 }
 
 .navbar-right {
   display: flex;
   gap: 15px;
   font-size: 20px;
+  align-items: center;  /* vertically center icons/links */
 }
 
 .navbar-right a {
   text-decoration: none;
 }
 
-.navbar-mobile-menu .nav-btn {
-    display: block;
-    width: 100%;
-    padding: 12px 0;
-    font-size: 1rem;
-    border-radius: 8px;
-    color: #143d77;
-    background: none;
-    text-align: left;
-    border: none;
-    margin-bottom: 8px;
-    text-decoration: none;
+.nav-btn {
+    color: #ffffff;
+    padding: 7px 18px;
+    border-radius: 6px;
     font-weight: 500;
-    transition: background 0.18s, color 0.18s;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+    border: none;
+    outline: none;
+}
+.nav-btn:hover, .nav-btn.active {
+    background: #1e4e9e;
+    color: #fff;
+}
+.notif{
+    color: white;
+    margin-bottom: 4%; /* nudge announcement/user links down */
+}
+.kk-container {
+    max-width: 900px;      /* Match LGBTQ form */
+    margin: 2rem auto;
+    padding: 20px;
 }
 
-/* Hide center nav and show hamburger on 1024px and below */
-@media (max-width: 1024px) {
-  .navbar-center {
-    display: none !important;
-  }
-  .navbar-hamburger {
-    display: inline-block !important;
-  }
+.kk-card {
+    background: #fff;
+    padding: 20px;         /* Match LGBTQ form */
+    margin-bottom: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+    max-width: 900px;      /* Match LGBTQ form */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive behavior */
+@media (max-width: 1048px) {
+    .navbar-center {
+        display: none !important;
+    }
+    .navbar-hamburger {
+        display: inline-block !important;
+        margin-top: 1%;
+    }
+    .notif{
+      margin-top: 3.5%;
+    }
+    .notifs{
+      margin-bottom: 4%;
+    }
+}
+@media (min-width: 1049px) {
+    .navbar-center {
+        display: flex !important;
+    }
+    .navbar-hamburger {
+        display: none !important;
+    }
 }
 
 /* By default, show center nav and hide hamburger */
@@ -126,30 +173,51 @@ body {
   margin-right: 10px;
 }
 
-/* Mobile Menu */
 .navbar-mobile-menu {
-  display: none;
-  position: fixed;
-  top: 60px;
-  right: 16px;
-  width: 240px;
-  background: #fff;
-  flex-direction: column;
-  align-items: stretch;
-  z-index: 2000;
-  padding: 18px 12px;
-  border-radius: 14px;
-  box-shadow: 0 8px 32px rgba(20,61,119,0.18);
-  border: 1px solid #e3eaf3;
+    display: none;
+    position: fixed;
+    top: 60px;
+    right: 16px;
+    width: 220px;
+    background: #fff;
+    flex-direction: column;
+    align-items: stretch;
+    z-index: 2000;
+    padding: 18px 12px;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(20,61,119,0.18);
+    border: 1px solid #e3eaf3;
 }
 .navbar-mobile-menu.active {
-  display: flex !important;
+    display: flex !important;
+}
+.navbar-mobile-menu .nav-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1rem;
+    border-radius: 8px;
+    color: #143d77;
+    background: none;
+    text-align: left;
+    border: none;
+    margin-bottom: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.18s, color 0.18s;
+}
+.navbar-mobile-menu .nav-btn:last-child {
+    margin-bottom: 0;
+}
+.navbar-mobile-menu .nav-btn:hover {
+    background: #eaf3fa;
+    color: #1e4e9e;
 }
 
 /* Container */
 .container {
   max-width: 900px;
-  margin: 4.5rem auto 2rem auto; /* Increased top margin for tunnel effect */
+  margin:2rem auto; /* Increased top margin for tunnel effect */
   padding: 20px;
 }
 
@@ -168,19 +236,27 @@ body {
 
 /* Card */
 .card {
-  background: #fff;
-  padding: 20px;
-  margin-bottom: 25px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 25px auto;
+  background-color: #fff;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  padding: 30px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
 }
+    /* Intro Card */
+    .card.intro h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #0a2c59;
+  }
 
-.card label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
+  .card.intro p {
+    font-size: 16px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+  }
 
 .card input[type="text"],
 .card input[type="date"],
@@ -189,7 +265,7 @@ body {
 .card textarea {
   width: 100%;
   padding: 10px 14px;
-  border: 1.5px solid #bbb;
+  border: 1px solid #bcd4ec; /* match kkform */
   border-radius: 8px;
   background: #f5faff;
   font-size: 15px;
@@ -204,14 +280,15 @@ body {
 .card input[type="file"]:focus,
 .card select:focus,
 .card textarea:focus {
-  border: 1.5px solid #0A2C59;
+  border: 1.5px solid #143d77; /* match kkform */
   outline: none;
-  box-shadow: 0 0 0 2px #eaf3fa;
+  background: #eaf3fa;        /* match kkform */
+  box-shadow: none;
 }
 
 /* Intro Card */
 .intro h2 {
-  font-size: 22px;
+  font-size: 24px;
   color: #0A2C59;
   margin-bottom: 15px;
 }
@@ -224,19 +301,26 @@ body {
 
 /* Submit Button */
 .submit-btn {
-  background: #0A2C59;
+  padding: 12px 30px !important;
+  justify-content: center;
+  text-align: center;
+  background: #143d77;        /* match kkform */
   color: #fff;
-  padding: 12px 30px;
   border: none;
-  border-radius: 10px;
-  font-size: 14px;
+  border-radius: 7px;          /* match kkform */
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease;
+  min-width: 120px;            /* match kkform */
+  min-height: 40px;
+  box-shadow: 0 2px 8px rgba(20,61,119,0.08);
+  display: inline-block;
+  float: right;                /* right-align within its block */
 }
 
 .submit-btn:hover {
-  background: #143d77;
+  background: #1a4c9c;         /* match kkform hover */
 }
 .image-preview-container {
   position: relative;
@@ -355,6 +439,10 @@ body {
 
 /* Responsive Footer */
 @media (max-width: 768px) {
+  .card {
+      padding: 20px;
+  }
+  
   .footer-container {
     flex-direction: column;
     align-items: center;
@@ -397,50 +485,122 @@ body {
   }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 12px 20px;
-    width: 95%;
-  }
-
-  .container {
-    padding: 15px;
-  }
-
-  .card {
-    padding: 15px;
-  }
+@media (max-width: 600px) {
+    .kk-container {
+        padding: 8px;
+        max-width: 100vw;
+    }
+    .kk-card {
+        padding: 10px;
+        margin-bottom: 16px;
+        border-radius: 10px;
+        max-width: 80vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .card {
+        padding: 20px;
+        margin-bottom: 16px;
+        border-radius: 15px;
+        max-width: 80vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .kk-label {
+        font-size: 15px;
+    }
+    .kk-input {
+        font-size: 15px;
+        padding: 10px 6px;
+    }
+    .kk-btn {
+        width: 100%;
+        font-size: 15px;
+        padding: 10px 0;
+    }
+    .submit-btn {
+        width: 100%;
+        font-size: 15px;
+        padding: 10px 0;
+    }
+    .kk-intro h2 {
+        font-size: 24px;
+    }
+    .intro h2 {
+        font-size: 24px;
+    }
+    /* Ensure Next button sits at the right side on small screens */
+    .kk-btn-group {
+        justify-content: flex-end;
+    }
+    .kk-next-btn {
+        margin-left: auto;
+        display: inline-block;
+    }
+    /* Center image preview container like cards on small screens */
+    .image-preview-container {
+        max-width: 80vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .image-preview-container img {
+        width: 100%;
+        height: auto;
+    }
+    .kk-upload-col {
+        padding: 100px;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-bottom: 16px;
+        border-radius: 10px;
+        max-width: 80vw !important;
+    }
+    /* Invisible card wrapper to align actions with cards without visible chrome */
+    .kk-card-invisible {
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+      margin-top: -10px; /* pull a bit closer if needed */
+    }
 }
 
+
+/* Side-by-side upload containers */
 .kk-upload-row {
   display: flex;
-  gap: 24px;
+  gap: 32px;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 25px;
 }
-
 .kk-upload-col {
   flex: 1 1 0;
   min-width: 220px;
 }
-
-/* Responsive: stack on mobile */
 @media (max-width: 700px) {
+    .form-group{
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
   .kk-upload-row {
     flex-direction: column;
     gap: 0;
+    width: 100%;
   }
   .kk-upload-col {
-    margin-bottom: 18px;
+    width: 100%;
+    max-width: 100vw;
     background: #fff;
-    padding: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    max-width: 900px;
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+    margin-left: 0;
+    margin-right: 0;
   }
 }

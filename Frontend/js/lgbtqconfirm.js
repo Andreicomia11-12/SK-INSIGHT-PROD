@@ -229,7 +229,7 @@ function handleEducAssistanceNavClick(event) {
       return;
     }
     // CASE 4: Form open, no profile → Go to form
-    window.location.href = "Educational-assistance-user.html";
+    window.location.href = "../../Educational-assistance-user.html";
   })
   .catch(() => window.location.href = "Educational-assistance-user.html");
 }

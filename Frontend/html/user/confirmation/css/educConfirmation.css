@@ -39,8 +39,8 @@ body {
 }
 
 .navbar .title {
-  color: white;
-  text-decoration: none;
+    color: white;
+    text-decoration: none;
   font-size: 18px;
   font-weight: bold;
   margin-left: 10px;
@@ -52,11 +52,11 @@ body {
 }
 
 .navbar-center {
-  display: flex;
-  gap: 18px;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
 
 .navbar-left {
@@ -65,21 +65,21 @@ body {
 }
 
 .bell {
-  color: white;
-  cursor: pointer;
-  margin-top: 5px;
-  margin-right: 5px;
-  font-size: 22px;
+    color: white;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 5px;
+    font-size: 22px;
 }
 
 .prof {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 8px 12px;
-  font-weight: bold;
-  border-radius: 8px;
-  transition: background 0.2s, color 0.2s;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
 }
 
 .navbar-right {
@@ -92,23 +92,34 @@ body {
   text-decoration: none;
 }
 
+.navbar-right a {
+    text-decoration: none;
+}
+
 .nav-btn {
-  color: #ffffff;
-  padding: 7px 18px;
-  border-radius: 6px;
-  font-weight: 500;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: background 0.2s, color 0.2s;
-  border: none;
-  outline: none;
+    color: #ffffff;
+    padding: 7px 18px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+    border: none;
+    outline: none;
 }
 .nav-btn:hover, .nav-btn.active {
-  background: #1e4e9e;
-  color: #fff;
+    background: #1e4e9e;
+    color: #fff;
 }
-.notif{
-  color: white;
+/* Default: hide hamburger, show center */
+.navbar-hamburger {
+  display: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.navbar-center {
+  display: flex;
 }
 
 /* Responsive behavior */
@@ -173,11 +184,9 @@ body {
 /* ✅ Thank You Card */
 .container {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
+  max-width: 900px;      /* match kk form container width */
+  margin: 2rem auto;     /* consistent vertical spacing */
+  padding: 20px;         /* consistent inner padding */
 }
 
 .card {
@@ -186,6 +195,7 @@ body {
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   text-align: left;
+  text-decoration: none;
 }
 
 .card h2 {
@@ -198,7 +208,7 @@ body {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 10px;
-  text-decoration: underline; /* underline THANK YOU */
+  text-decoration: none; /* underline THANK YOU */
 }
 
 .card p {

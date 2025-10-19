@@ -54,10 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Add to the top of your user JS files (after DOMContentLoaded)
+  // KK Profile Navigation
 function handleKKProfileNavClick(event) {
   event.preventDefault();
-
   const token = sessionStorage.getItem('token') || localStorage.getItem('token');
   if (!token) {
     Swal.fire({
@@ -70,303 +69,244 @@ function handleKKProfileNavClick(event) {
     });
     return;
   }
-
-  // Fetch both form cycle status and user profile
   Promise.all([
-    fetch('http://localhost:5000/api/formcycle/status?formName=KK Profiling', {
+    fetch('http://localhost:5000/api/formcycle/status?formName=KK%20Profiling', {
       headers: { Authorization: `Bearer ${token}` }
     }),
     fetch('http://localhost:5000/api/kkprofiling/me', {
       headers: { Authorization: `Bearer ${token}` }
     })
   ])
-.then(async ([cycleRes, profileRes]) => {
-  let cycleData = null, profileData = {};
-  try {
-    cycleData = await cycleRes.json();
-  } catch (e) {
-    console.error("Cycle JSON error:", e);
-  }
-  try {
-    profileData = await profileRes.json();
-  } catch (e) {
-    console.error("Profile JSON error:", e);
-  }
-
-  console.log("Profile response status:", profileRes.status, "Profile data:", profileData);
-
-  // ✅ Handle both array and object response types
-  const latestCycle = Array.isArray(cycleData)
-    ? cycleData[cycleData.length - 1]
-    : cycleData;
-
-  const formName = latestCycle?.formName || "KK Profiling";
-  const isFormOpen = latestCycle?.isOpen ?? false; // ✅ default to false, not true
-  const hasProfile = profileRes.ok && profileData && profileData._id;
-
-
-      // 🔹 CASE 1: Form closed, user already has profile
-      if (!isFormOpen && hasProfile) {
-        Swal.fire({
-          icon: "info",
-          title: `The ${formName} is currently closed`,
-          text: `but you already have a ${formName} profile. Do you want to view your response?`,
-          showCancelButton: true,
-          confirmButtonText: "Yes, view my response",
-          cancelButtonText: "No"
-        }).then(result => {
-          if (result.isConfirmed) {
-            window.location.href = "confirmation/html/kkcofirmation.html";
-          }
-        });
-        return;
-      }
-
-      // 🔹 CASE 2: Form closed, user has NO profile
-      if (!isFormOpen && !hasProfile) {
-        Swal.fire({
-          icon: "warning",
-          title: `The ${formName} form is currently closed`,
-          text: "You cannot submit a new response at this time.",
-          confirmButtonText: "OK"
-        });
-        return;
-      }
-
-      // 🔹 CASE 3: Form open, user already has a profile
-      if (isFormOpen && hasProfile) {
-        Swal.fire({
-          title: `You already answered ${formName} Form`,
-          text: "Do you want to view your response?",
-          icon: "info",
-          showCancelButton: true,
-          confirmButtonText: "Yes",
-          cancelButtonText: "No"
-        }).then(result => {
-          if (result.isConfirmed) {
-            window.location.href = "confirmation/html/kkcofirmation.html";
-          }
-        });
-        return;
-      }
-
-      // 🔹 CASE 4: Form open, no profile → Go to form
-      window.location.href = "kkform-personal.html";
-    })
-    .catch(err => {
-      console.error("Error checking form status or profile:", err);
-      window.location.href = "kkform-personal.html";
-    });
+  .then(async ([cycleRes, profileRes]) => {
+    let cycleData = await cycleRes.json().catch(() => null);
+    let profileData = await profileRes.json().catch(() => ({}));
+    const latestCycle = Array.isArray(cycleData) ? cycleData[cycleData.length - 1] : cycleData;
+    const formName = latestCycle?.formName || "KK Profiling";
+    const isFormOpen = latestCycle?.isOpen ?? false;
+    const hasProfile = profileRes.ok && profileData && profileData._id;
+    // CASE 1: Form closed, user already has profile
+    if (!isFormOpen && hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `The ${formName} is currently closed`,
+        text: `but you already have a ${formName} profile. Do you want to view your response?`,
+        showCancelButton: true,
+        confirmButtonText: "Yes, view my response",
+        cancelButtonText: "No"
+      }).then(result => {
+        if (result.isConfirmed) window.location.href = "./confirmation/html/kkcofirmation.html";
+      });
+      return;
+    }
+    // CASE 2: Form closed, user has NO profile
+    if (!isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "warning",
+        title: `The ${formName} form is currently closed`,
+        text: "You cannot submit a new response at this time.",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
+    // CASE 3: Form open, user already has a profile
+    if (isFormOpen && hasProfile) {
+      Swal.fire({
+        title: `You already answered ${formName} Form`,
+        text: "Do you want to view your response?",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No"
+      }).then(result => {
+        if (result.isConfirmed) window.location.href = "./confirmation/html/kkcofirmation.html";
+      });
+      return;
+    }
+    // CASE 4: Form open, no profile → Show SweetAlert and go to form
+    if (isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `No profile found`,
+        text: `You don't have a profile yet. Please fill out the form to create one.`,
+        confirmButtonText: "Go to form"
+      }).then(() => {
+        window.location.href = "kkform-personal.html";
+      });
+      return;
+    }
+  })
+  .catch(() => window.location.href = "kkform-personal.html");
 }
 
-
-  function handleLGBTQProfileNavClick(event) {
-    event.preventDefault();
-
-    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-    if (!token) {
+// LGBTQ+ Profile Navigation
+function handleLGBTQProfileNavClick(event) {
+  event.preventDefault();
+  const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+  if (!token) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'You need to log in first',
+      text: 'Please log in to access LGBTQ+ Profiling.',
+      confirmButtonText: 'OK'
+    }).then(() => {
+      window.location.href = '/Frontend/html/user/login.html';
+    });
+    return;
+  }
+  Promise.all([
+    fetch('http://localhost:5000/api/formcycle/status?formName=LGBTQIA%2B%20Profiling', {
+      headers: { Authorization: `Bearer ${token}` }
+    }),
+    fetch('http://localhost:5000/api/lgbtqprofiling/me/profile', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+  ])
+  .then(async ([cycleRes, profileRes]) => {
+    let cycleData = await cycleRes.json().catch(() => null);
+    let profileData = await profileRes.json().catch(() => ({}));
+    const latestCycle = Array.isArray(cycleData) ? cycleData[cycleData.length - 1] : cycleData;
+    const formName = latestCycle?.formName || "LGBTQIA+ Profiling";
+    const isFormOpen = latestCycle?.isOpen ?? false;
+    const hasProfile = profileData && profileData._id ? true : false;
+    // CASE 1: Form closed, user already has profile
+    if (!isFormOpen && hasProfile) {
       Swal.fire({
-        icon: 'warning',
-        title: 'You need to log in first',
-        text: 'Please log in to access LGBTQ+ Profiling.',
-        confirmButtonText: 'OK'
-      }).then(() => {
-        window.location.href = '/Frontend/html/user/login.html';
+        icon: "info",
+        title: `The ${formName} is currently closed`,
+        text: `but you already have a ${formName} profile. Do you want to view your response?`,
+        showCancelButton: true,
+        confirmButtonText: "Yes, view my response",
+        cancelButtonText: "No"
+      }).then(result => {
+        if (result.isConfirmed) window.location.href = "./confirmation/html/lgbtqconfirmation.html";
       });
       return;
     }
-
-    Promise.all([
-      fetch('http://localhost:5000/api/formcycle/status?formName=LGBTQIA%2B%20Profiling', {
-        headers: { Authorization: `Bearer ${token}` }
-      }),
-      fetch('http://localhost:5000/api/lgbtqprofiling/me/profile', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-    ])
-    .then(async ([cycleRes, profileRes]) => {
-      let cycleData = null, profileData = {};
-      try {
-        cycleData = await cycleRes.json();
-      } catch (e) {
-        console.error("Cycle JSON error:", e);
-      }
-      try {
-        profileData = await profileRes.json();
-      } catch (e) {
-        console.error("Profile JSON error:", e);
-      }
-
-      const latestCycle = Array.isArray(cycleData)
-        ? cycleData[cycleData.length - 1]
-        : cycleData;
-
-      const formName = latestCycle?.formName || "LGBTQIA+ Profiling";
-      const isFormOpen = latestCycle?.isOpen ?? false;
-      const hasProfile = profileData && profileData._id ? true : false;
-
-      console.log("Form open:", isFormOpen, "Has profile:", hasProfile);
-      console.log("Cycle data:", cycleData);
-console.log("Profile data:", profileData);
-
-
-
-      // CASE 1: Form closed, user already has profile
-      if (!isFormOpen && hasProfile) {
-        Swal.fire({
-          icon: "info",
-          title: `The ${formName} is currently closed`,
-          text: `but you already have a ${formName} profile. Do you want to view your response?`,
-          showCancelButton: true,
-          confirmButtonText: "Yes, view my response",
-          cancelButtonText: "No"
-        }).then(result => {
-          if (result.isConfirmed) {
-            window.location.href = "confirmation/html/lgbtqconfirmation.html";
-          }
-        });
-        return;
-      }
-
-      // CASE 2: Form closed, user has NO profile
-      if (!isFormOpen && !hasProfile) {
-        Swal.fire({
-          icon: "warning",
-          title: `The ${formName} form is currently closed`,
-          text: "You cannot submit a new response at this time.",
-          confirmButtonText: "OK"
-        });
-        return;
-      }
-
-      // CASE 3: Form open, user already has a profile
-      if (isFormOpen && hasProfile) {
-        Swal.fire({
-          title: `You already answered ${formName} Form`,
-          text: "Do you want to view your response?",
-          icon: "info",
-          showCancelButton: true,
-          confirmButtonText: "Yes",
-          cancelButtonText: "No"
-        }).then(result => {
-          if (result.isConfirmed) {
-            window.location.href = "confirmation/html/lgbtqconfirmation.html";
-          }
-        });
-        return;
-      }
-
-      // CASE 4: Form open, no profile → Go to form
-      window.location.href = "lgbtqform.html";
-    })
-    .catch(err => {
-      console.error("Error checking form status or profile:", err);
-      window.location.href = "lgbtqform.html";
-    });
-  }
-
-  function handleEducAssistanceNavClick(event) {
-    event.preventDefault();
-
-    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-    if (!token) {
+    // CASE 2: Form closed, user has NO profile
+    if (!isFormOpen && !hasProfile) {
       Swal.fire({
-        icon: 'warning',
-        title: 'You need to log in first',
-        text: 'Please log in to access Educational Assistance.',
-        confirmButtonText: 'OK'
-      }).then(() => {
-        window.location.href = '/Frontend/html/user/login.html';
+        icon: "warning",
+        title: `The ${formName} form is currently closed`,
+        text: "You cannot submit a new response at this time.",
+        confirmButtonText: "OK"
       });
       return;
     }
+    // CASE 3: Form open, user already has a profile
+    if (isFormOpen && hasProfile) {
+      Swal.fire({
+        title: `You already answered ${formName} Form`,
+        text: "Do you want to view your response?",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No"
+      }).then(result => {
+        if (result.isConfirmed) window.location.href = "./confirmation/html/lgbtqconfirmation.html";
+      });
+      return;
+    }
+    // CASE 4: Form open, no profile → Show SweetAlert and go to form
+    if (isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `No profile found`,
+        text: `You don't have a profile yet. Please fill out the form to create one.`,
+        confirmButtonText: "Go to form"
+      }).then(() => {
+        window.location.href = "lgbtqform.html";
+      });
+      return;
+    }
+  })
+  .catch(() => window.location.href = "lgbtqform.html");
+}
 
-    Promise.all([
-      fetch('http://localhost:5000/api/formcycle/status?formName=Educational%20Assistance', {
-        headers: { Authorization: `Bearer ${token}` }
-      }),
-      fetch('http://localhost:5000/api/educational-assistance/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-    ])
-    .then(async ([cycleRes, profileRes]) => {
-      let cycleData = null, profileData = {};
-      try {
-        cycleData = await cycleRes.json();
-      } catch (e) {
-        console.error("Cycle JSON error:", e);
-      }
-      try {
-        profileData = await profileRes.json();
-      } catch (e) {
-        console.error("Profile JSON error:", e);
-      }
-
-      const latestCycle = Array.isArray(cycleData)
-        ? cycleData[cycleData.length - 1]
-        : cycleData;
-
-      const formName = latestCycle?.formName || "Educational Assistance";
-      const isFormOpen = latestCycle?.isOpen ?? false;
-      const hasProfile = profileData && profileData._id ? true : false;
-
-      console.log("Form open:", isFormOpen, "Has profile:", hasProfile);
-
-      // CASE 1: Form closed, user already has profile
-      if (!isFormOpen && hasProfile) {
-        Swal.fire({
-          icon: "info",
-          title: `The ${formName} is currently closed`,
-          text: `but you already have an application. Do you want to view your response?`,
-          showCancelButton: true,
-          confirmButtonText: "Yes, view my response",
-          cancelButtonText: "No"
-        }).then(result => {
-          if (result.isConfirmed) {
-            window.location.href = "confirmation/html/educConfirmation.html";
-          }
-        });
-        return;
-      }
-
-      // CASE 2: Form closed, user has NO profile
-      if (!isFormOpen && !hasProfile) {
-        Swal.fire({
-          icon: "warning",
-          title: `The ${formName} form is currently closed`,
-          text: "You cannot submit a new application at this time.",
-          confirmButtonText: "OK"
-        });
-        return;
-      }
-
-      // CASE 3: Form open, user already has a profile
-      if (isFormOpen && hasProfile) {
-        Swal.fire({
-          title: `You already applied for ${formName}`,
-          text: "Do you want to view your response?",
-          icon: "info",
-          showCancelButton: true,
-          confirmButtonText: "Yes",
-          cancelButtonText: "No"
-        }).then(result => {
-          if (result.isConfirmed) {
-            window.location.href = "confirmation/html/educConfirmation.html";
-          }
-        });
-        return;
-      }
-
-      // CASE 4: Form open, no profile → Go to form
-      window.location.href = "Educational-assistance-user.html";
-    })
-    .catch(err => {
-      console.error("Error checking form status or profile:", err);
-      window.location.href = "Educational-assistance-user.html";
+// Educational Assistance Navigation
+function handleEducAssistanceNavClick(event) {
+  event.preventDefault();
+  const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+  if (!token) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'You need to log in first',
+      text: 'Please log in to access Educational Assistance.',
+      confirmButtonText: 'OK'
+    }).then(() => {
+      window.location.href = '/Frontend/html/user/login.html';
     });
+    return;
   }
+  Promise.all([
+    fetch('http://localhost:5000/api/formcycle/status?formName=Educational%20Assistance', {
+      headers: { Authorization: `Bearer ${token}` }
+    }),
+    fetch('http://localhost:5000/api/educational-assistance/me', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+  ])
+  .then(async ([cycleRes, profileRes]) => {
+    let cycleData = await cycleRes.json().catch(() => null);
+    let profileData = await profileRes.json().catch(() => ({}));
+    const latestCycle = Array.isArray(cycleData) ? cycleData[cycleData.length - 1] : cycleData;
+    const formName = latestCycle?.formName || "Educational Assistance";
+    const isFormOpen = latestCycle?.isOpen ?? false;
+    const hasProfile = profileData && profileData._id ? true : false;
+    // CASE 1: Form closed, user already has profile
+    if (!isFormOpen && hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `The ${formName} is currently closed`,
+        text: `but you already have an application. Do you want to view your response?`,
+        showCancelButton: true,
+        confirmButtonText: "Yes, view my response",
+        cancelButtonText: "No"
+      }).then(result => {
+        if (result.isConfirmed) window.location.href = "./confirmation/html/educConfirmation.html";
+      });
+      return;
+    }
+    // CASE 2: Form closed, user has NO profile
+    if (!isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "warning",
+        title: `The ${formName} form is currently closed`,
+        text: "You cannot submit a new application at this time.",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
+    // CASE 3: Form open, user already has a profile
+    if (isFormOpen && hasProfile) {
+      Swal.fire({
+        title: `You already applied for ${formName}`,
+        text: "Do you want to view your response?",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No"
+      }).then(result => {
+        if (result.isConfirmed) window.location.href = "./confirmation/html/educConfirmation.html";
+      });
+      return;
+    }
+    // CASE 4: Form open, no profile → Show SweetAlert and go to form
+    if (isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `No profile found`,
+        text: `You don't have a profile yet. Please fill out the form to create one.`,
+        confirmButtonText: "Go to form"
+      }).then(() => {
+        window.location.href = "Educational-assistance-user.html";
+      });
+      return;
+    }
+  })
+  .catch(() => window.location.href = "Educational-assistance-user.html");
+}
 
-  // ✅ Attach event listeners properly
+// ✅ Attach event listeners properly
   const kkProfileNavBtn = document.querySelector('.navbar-center a[href="./kkform-personal.html"]');
   const kkProfileNavBtnMobile = document.getElementById('kkProfileNavBtnMobile');
 

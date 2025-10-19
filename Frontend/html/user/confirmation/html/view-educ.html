@@ -12,28 +12,29 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-      <!-- Navbar -->
-    <div class="navbar">
+  <!-- ✅ Navbar -->
+  <div class="navbar">
     <div class="navbar-left">
-      <a href="./index.html">
+      <a href="../../index.html">
         <img src="../../../../assets/logo.png" alt="Logo" class="logo"/>
       </a>
       <a href="../../index.html" class="title">SK-PBW</a>
     </div>
+    
     <div class="navbar-center">
       <!-- Desktop Navbar -->
       <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
       <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
       <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
     </div>
-      <div class="navbar-right">
-        <span class="navbar-hamburger" id="navbarHamburger">
-          <i class="fa-solid fa-bars"></i>
-        </span>
-      <a href="./announcement.html"><i class="fa-solid fa-bell bell"></i></a>
-      <a href="../user/userProfile.html"><i class="fa-solid fa-user bell"></i></a>
-      </div>
+    <div class="navbar-right">
+      <span class="navbar-hamburger" id="navbarHamburger">
+        <i class="fa-solid fa-bars"></i>
+      </span>
+      <a class="notif" href="../user/announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+      <a class="notif" href="../user/userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
     </div>
+  </div>
     <div class="navbar-mobile-menu" id="navbarMobileMenu">
       <!-- Mobile Navbar -->
       <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
@@ -218,26 +219,31 @@
       </thead>
       <tbody>
         <tr>
-          <td>Sedula</td>
-          <td><i class="fa-solid fa-eye view-icon" id="viewSedula"></i></td>
-          <td id="sedulaUploadColumn"></td>
+          <td>Front ID</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewFront"></i></td>
+          <td id="frontImageUploadColumn"></td>
+        </tr>
+        <tr>
+          <td>Back ID</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewBack"></i></td>
+          <td id="backImageUploadColumn"></td>
         </tr>
         <tr>
           <td>Certificate of Enrollment</td>
           <td><i class="fa-solid fa-eye view-icon" id="viewCOE"></i></td>
-          <td id="coeUploadColumn"></td>
+          <td id="coeImageUploadColumn"></td>
         </tr>
         <tr>
-          <td>Signature</td>
-          <td><i class="fa-solid fa-eye view-icon" id="viewSchoolId"></i></td>
-          <td id="signatureUploadColumn"></td>
+          <td>Parent's Voter's Certificate</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewVoter"></i></td>
+          <td id="voterUploadColumn"></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="submit-btn-container">
-    <a href="../html/educConfirmation.html" type="submit" class="submit-btn">Done</a>
+    <button type="submit" class="submit-btn">Done</button>
   </div>
 </form>
 </div>

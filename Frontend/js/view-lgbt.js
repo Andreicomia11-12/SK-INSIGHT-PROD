@@ -147,7 +147,7 @@ function handleLGBTQProfileNavClick(event) {
       text: 'Please log in to access LGBTQ+ Profiling.',
       confirmButtonText: 'OK'
     }).then(() => {
-      window.location.href = '/Frontend/html/user/login.html';
+      window.location.href = '../../login.html';
     });
     return;
   }
@@ -205,9 +205,9 @@ function handleLGBTQProfileNavClick(event) {
       return;
     }
     // CASE 4: Form open, no profile → Go to form
-    window.location.href = "lgbtqform.html";
+    window.location.href = "../../lgbtqform.html";
   })
-  .catch(() => window.location.href = "lgbtqform.html");
+  .catch(() => window.location.href = "../../lgbtqform.html");
 }
 
 // Educational Assistance Navigation
@@ -279,9 +279,9 @@ function handleEducAssistanceNavClick(event) {
       return;
     }
     // CASE 4: Form open, no profile → Go to form
-    window.location.href = "Educational-assistance-user.html";
+    window.location.href = "../../Educational-assistance-user.html";
   })
-  .catch(() => window.location.href = "Educational-assistance-user.html");
+  .catch(() => window.location.href = "../../Educational-assistance-user.html");
 }
 
 document.addEventListener('DOMContentLoaded', function() {
