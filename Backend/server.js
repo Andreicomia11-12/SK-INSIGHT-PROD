@@ -49,7 +49,7 @@ app.use("/api/notifications", require("./routes/notificationRoutes"));
 app.use(express.static("public"));
 app.use("/api/formcycle", require("./routes/formCycleRoutes"));
 app.use("/api/kkprofile", require("./routes/kkProfileRoutes"));
-
+app.use("/api/cycle-predict", require("./routes/cyclePredictRoutes"));
 
 const PORT = process.env.PORT || 5000;
 
