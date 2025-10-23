@@ -27,7 +27,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 30px;
+  padding: 2.5% 2%;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   z-index: 1000;
@@ -209,28 +209,10 @@ body {
   }
 }
 
-/* Navbar */
-.navbar {
-  position: fixed;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  height: 7.9%;
-  background: #0A2C59;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 30px;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  z-index: 1000;
-}
-
 .navbar img {
   height: 40px;
   border-radius: 50%;
+    padding: 4% 3%;
 }
 
 .navbar .title {
@@ -618,7 +600,8 @@ body {
 
 /* Add to kkform.css */
 .card.intro h2{
-  margin-bottom: 5%;
+  font-size: 2rem;
+  font-weight: bold;
 }
 .card.intro p {
   font-size: 1rem;
