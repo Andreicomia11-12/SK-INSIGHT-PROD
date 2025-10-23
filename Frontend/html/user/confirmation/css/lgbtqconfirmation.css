@@ -278,6 +278,50 @@ body {
   }
 }
 
+/* Mobile navbar optimization */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+  
+  .navbar img {
+    height: 32px;
+  }
+  
+  .navbar .title {
+    font-size: 14px;
+    margin-left: 8px;
+  }
+  
+  .navbar-hamburger {
+    font-size: 1.5rem;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .bell {
+    font-size: 18px;
+    margin-right: 3px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-right {
+    gap: 5px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-right .prof {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+  }
+}
+
 .navbar-mobile-menu {
   display: none;
   position: fixed;
@@ -333,11 +377,17 @@ body {
   .footer-right {
     width: 100%;
   }
+
+  /* Add space between content and footer on mobile */
+  .footer {
+    margin-top: 80px;
+  }
 }
 
 @media (max-width: 480px) {
   .footer {
     padding: 30px 20px 15px;
+    margin-top: 80px;
   }
 
   .footer-left h3 {

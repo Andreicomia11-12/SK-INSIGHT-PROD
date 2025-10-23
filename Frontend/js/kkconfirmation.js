@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+  if (!validateTokenAndRedirect("KK Confirmation")) {
+    return;
+  }
+  
   const hamburger = document.getElementById('navbarHamburger');
   const mobileMenu = document.getElementById('navbarMobileMenu');
 
@@ -78,7 +82,7 @@ function handleKKProfileNavClick(event) {
         confirmButtonText: "Yes, view my response",
         cancelButtonText: "No"
       }).then(result => {
-        if (result.isConfirmed) window.location.href = "kkconfirmation.html";
+        if (result.isConfirmed) window.location.href = "kkcofirmation.html";
       });
       return;
     }
@@ -102,7 +106,7 @@ function handleKKProfileNavClick(event) {
         confirmButtonText: "Yes",
         cancelButtonText: "No"
       }).then(result => {
-        if (result.isConfirmed) window.location.href = "kkconfirmation.html";
+        if (result.isConfirmed) window.location.href = "kkcofirmation.html";
       });
       return;
     }

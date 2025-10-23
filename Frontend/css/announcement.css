@@ -107,10 +107,6 @@ body {
   text-decoration: none;
 }
 
-.navbar-right a {
-    text-decoration: none;
-}
-
 .nav-btn {
     color: #ffffff;
     padding: 7px 18px;
@@ -132,9 +128,6 @@ body {
   font-size: 1.8rem;
   cursor: pointer;
   margin-right: 10px;
-}
-.navbar-center {
-  display: flex;
 }
 
 .announcement{
@@ -162,6 +155,95 @@ body {
     .navbar-hamburger {
         display: none !important;
     }
+}
+
+/* Mobile navbar optimization */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+  
+  .navbar img {
+    height: 32px;
+  }
+  
+  .navbar .title {
+    font-size: 14px;
+    margin-left: 8px;
+  }
+  
+  .navbar-hamburger {
+    font-size: 1.5rem;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .bell {
+    font-size: 18px;
+    margin-right: 3px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-right {
+    gap: 5px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-right .prof {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+  }
+}
+
+.navbar-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  width: 220px;
+  background: #fff;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 2000;
+  padding: 18px 12px;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(20,61,119,0.18);
+  border: 1px solid #e3eaf3;
+}
+
+.navbar-mobile-menu.active {
+  display: flex !important;
+}
+
+.navbar-mobile-menu .nav-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1rem;
+  border-radius: 8px;
+  color: #143d77;
+  background: none;
+  text-align: left;
+  border: none;
+  margin-bottom: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.18s, color 0.18s;
+}
+
+.navbar-mobile-menu .nav-btn:last-child {
+  margin-bottom: 0;
+}
+
+.navbar-mobile-menu .nav-btn:hover {
+  background: #eaf3fa;
+  color: #1e4e9e;
 }
 
 /* Announcement Heading Container */
@@ -580,13 +662,36 @@ body {
     margin-left: 6px;
   }
 
+  .announcement-card .card-header .title span {
+    font-size: 0.95rem;
+  }
+  .announcement-card .card-header .title i {
+    font-size: 0.95rem;
+  }
+  .announcement-card .status-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+  .announcement-card .card-meta {
+    font-size: 0.85rem;
+  }
+  .announcement-card .card-meta .meta-row i {
+    font-size: 0.9rem;
+    margin-right: 6px;
+  }
+
   .announcement-card button,
   .announcement-card .view-btn {
     width: 100%;
     margin-top: 10px;
-    font-size: 1rem;
-    padding: 10px 0;
+    font-size: 0.95rem;
+    padding: 8px 0;
     border-radius: 6px;
+  }
+
+  .announcement-table th,
+  .announcement-table td {
+    font-size: 12.5px;
   }
 }
 
@@ -622,6 +727,7 @@ body {
     text-decoration: none;
     font-weight: 500;
     transition: background 0.18s, color 0.18s;
+    text-decoration: none;
 }
 .navbar-mobile-menu .nav-btn:last-child {
     margin-bottom: 0;

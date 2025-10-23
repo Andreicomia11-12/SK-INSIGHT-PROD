@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', async function() {
+  if (!validateTokenAndRedirect("Educational Assistance Form")) {
+    return;
+  }
+  
   function calculateAge(birthday) {
     if (!birthday) return '';
     const birthDate = new Date(birthday);
@@ -98,15 +102,41 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
     });
     formData.append('expenses', JSON.stringify(expenses));
 
-    // Files (only append if present)
+    // Files (only append if present and valid)
     const maybeAppendFile = (id, key) => {
       const inp = document.getElementById(id);
-      if (inp && inp.files && inp.files.length > 0) formData.append(key, inp.files[0]);
+      if (inp && inp.files && inp.files.length > 0) {
+        const file = inp.files[0];
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        
+        // Double-check file size before submission
+        if (file.size > maxSize) {
+          throw new Error(`File "${file.name}" is too large (${(file.size / (1024 * 1024)).toFixed(2)}MB). Maximum size allowed is 5MB.`);
+        }
+        
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+          throw new Error(`File "${file.name}" is not a valid image file. Please upload JPG, PNG, GIF, or other image formats.`);
+        }
+        
+        formData.append(key, file);
+      }
     };
-    maybeAppendFile('voter', 'voter');
-    maybeAppendFile('coeImage', 'coeImage');
-    maybeAppendFile('frontImage', 'frontImage');
-    maybeAppendFile('backImage', 'backImage');
+    try {
+      // Validate and append files
+      maybeAppendFile('voter', 'voter');
+      maybeAppendFile('coeImage', 'coeImage');
+      maybeAppendFile('frontImage', 'frontImage');
+      maybeAppendFile('backImage', 'backImage');
+    } catch (fileError) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'File Validation Error',
+        text: fileError.message,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#0A2C59'
+      });
+    }
 
     try {
       // Show loading SweetAlert
@@ -141,7 +171,7 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
       }
 
       // success
-      Swal.fire('✅ Success', data?.message || 'Form submitted successfully!', 'success').then(() => {
+      Swal.fire('Success', data?.message || 'Form submitted successfully!', 'success').then(() => {
         sessionStorage.removeItem('educ_siblings');
         sessionStorage.removeItem('educ_expenses');
         sessionStorage.removeItem('educationalAssistanceFormData');
@@ -325,6 +355,16 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
     });
   }
 
+  // Helper function to truncate file names
+  function truncateFileName(fileName, maxLength = 6) {
+    if (fileName.length <= maxLength) {
+      return fileName;
+    }
+    
+    // Always show first 6 characters + "..." for files longer than 6 characters
+    return fileName.substring(0, maxLength) + "...";
+  }
+
   function handleFileInput(inputId, labelId, fileNameId, viewId, deleteId) {
     const input = document.getElementById(inputId);
     const label = document.getElementById(labelId);
@@ -334,23 +374,86 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
 
     function updateIcons() {
       const hasFile = input && input.files && input.files.length > 0;
-      if (viewIcon) viewIcon.classList.toggle('disabled', !hasFile);
-      if (deleteIcon) deleteIcon.classList.toggle('disabled', !hasFile);
-      if (viewIcon) viewIcon.style.pointerEvents = hasFile ? 'auto' : 'none';
-      if (deleteIcon) deleteIcon.style.pointerEvents = hasFile ? 'auto' : 'none';
-      if (viewIcon) viewIcon.style.opacity = hasFile ? '1' : '0.5';
-      if (deleteIcon) deleteIcon.style.opacity = hasFile ? '1' : '0.5';
+      
+      if (viewIcon) {
+        // Restore proper eye icon when file is present
+        if (hasFile) {
+          viewIcon.classList.remove('fa-eye-slash', 'disabled');
+          viewIcon.classList.add('fa-eye');
+          viewIcon.style.pointerEvents = 'auto';
+          viewIcon.style.opacity = '1';
+        } else {
+          viewIcon.classList.remove('fa-eye');
+          viewIcon.classList.add('fa-eye-slash', 'disabled');
+          viewIcon.style.pointerEvents = 'none';
+          viewIcon.style.opacity = '0.5';
+        }
+      }
+      
+      if (deleteIcon) {
+        deleteIcon.classList.toggle('disabled', !hasFile);
+        deleteIcon.style.pointerEvents = hasFile ? 'auto' : 'none';
+        deleteIcon.style.opacity = hasFile ? '1' : '0.5';
+      }
     }
 
     if (input && label && fileNameSpan) {
       input.addEventListener('change', function() {
         if (input.files && input.files.length > 0) {
+          const file = input.files[0];
+          const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+          
+          // Check file size
+          if (file.size > maxSize) {
+            Swal.fire({
+              icon: 'error',
+              title: 'File Too Large',
+              text: `File size (${(file.size / (1024 * 1024)).toFixed(2)}MB) exceeds the maximum limit of 5MB. Please choose a smaller file.`,
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#0A2C59'
+            });
+            
+            // Clear the input
+            input.value = '';
+            label.style.display = 'inline-flex';
+            fileNameSpan.textContent = '';
+            fileNameSpan.title = '';
+            fileNameSpan.style.display = 'none';
+            updateIcons();
+            return;
+          }
+          
+          // Check file type (optional - only allow image files)
+          if (!file.type.startsWith('image/')) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Invalid File Type',
+              text: 'Please select an image file (JPG, PNG, GIF, etc.).',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#0A2C59'
+            });
+            
+            // Clear the input
+            input.value = '';
+            label.style.display = 'inline-flex';
+            fileNameSpan.textContent = '';
+            fileNameSpan.title = '';
+            fileNameSpan.style.display = 'none';
+            updateIcons();
+            return;
+          }
+          
+          // File is valid, proceed with normal handling
           label.style.display = 'none';
-          fileNameSpan.textContent = input.files[0].name;
+          const originalFileName = file.name;
+          const truncatedFileName = truncateFileName(originalFileName);
+          fileNameSpan.textContent = truncatedFileName;
+          fileNameSpan.title = originalFileName; // Show full name on hover
           fileNameSpan.style.display = 'inline-block';
         } else {
           label.style.display = 'inline-flex';
           fileNameSpan.textContent = '';
+          fileNameSpan.title = '';
           fileNameSpan.style.display = 'none';
         }
         updateIcons();
@@ -359,7 +462,7 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
     }
   }
 
-  // --- ADD: showImagePreview helper (creates modal if missing) ---
+  // --- ADD: showImagePreview helper (uses existing modal) ---
   function showImagePreview(inputId) {
     const input = document.getElementById(inputId);
     let src = '';
@@ -379,68 +482,40 @@ formData.append('motherPhone', document.getElementById('mothercontact')?.value |
       return;
     }
 
-    // create modal if not present
-    let modal = document.getElementById('imagePreviewModal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'imagePreviewModal';
-      Object.assign(modal.style, {
-        position: 'fixed',
-        inset: '0',
-        display: 'none',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        zIndex: 2000
-      });
+    // Use existing modal from HTML
+    const modal = document.getElementById('imagePreviewModal');
+    const imgEl = document.getElementById('previewImg');
+    const closeBtn = document.getElementById('closePreviewBtn');
 
-      const img = document.createElement('img');
-      img.id = 'previewImg';
-      Object.assign(img.style, {
-        maxWidth: '90%',
-        maxHeight: '80%',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.5)',
-        borderRadius: '6px'
-      });
-
-      const closeBtn = document.createElement('button');
-      closeBtn.id = 'closePreviewBtn';
-      closeBtn.textContent = 'Close';
-      Object.assign(closeBtn.style, {
-        position: 'absolute',
-        top: '20px',
-        right: '20px',
-        padding: '8px 12px',
-        background: '#fff',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer'
-      });
-
-      closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        const imgEl = document.getElementById('previewImg');
-        if (imgEl) {
-          // revoke only if it was a blob URL
-          if (imgEl.dataset.objectUrl === 'true') {
-            URL.revokeObjectURL(imgEl.src);
-          }
-          imgEl.src = '';
-          delete imgEl.dataset.objectUrl;
-        }
-      });
-
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeBtn.click();
-      });
-
-      modal.appendChild(img);
-      modal.appendChild(closeBtn);
-      document.body.appendChild(modal);
+    if (!modal || !imgEl || !closeBtn) {
+      console.error('Modal elements not found');
+      return;
     }
 
-    const imgEl = document.getElementById('previewImg');
-    // set image src and mark if it's an object URL so we can revoke later
+    // Set up close button event listener (only once)
+    if (!closeBtn.hasAttribute('data-listener-added')) {
+      closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        if (imgEl.dataset.objectUrl === 'true') {
+          URL.revokeObjectURL(imgEl.src);
+        }
+        imgEl.src = '';
+        delete imgEl.dataset.objectUrl;
+      });
+      closeBtn.setAttribute('data-listener-added', 'true');
+    }
+
+    // Set up modal click-to-close (only once)
+    if (!modal.hasAttribute('data-listener-added')) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeBtn.click();
+        }
+      });
+      modal.setAttribute('data-listener-added', 'true');
+    }
+
+    // Set image source and show modal
     if (imgEl) {
       // revoke previous object URL if any
       if (imgEl.dataset.objectUrl === 'true' && imgEl.src) {
@@ -811,6 +886,7 @@ function handleFileDelete(inputId, labelId, fileNameId) {
   if (label) label.style.display = 'inline-flex';
   if (fileNameSpan) {
     fileNameSpan.textContent = '';
+    fileNameSpan.title = '';
     fileNameSpan.style.display = 'none';
   }
 

@@ -45,8 +45,8 @@
           <option value="Young Youth">Young Youth</option>
         </select>
       </div>
-      <div class="form-group">
-        <label for="youthClassification">Youth Classification</label>
+      <div class="kk-card">
+        <label for="youthClassification" class="kk-label">Youth Classification</label>
         <select id="youthClassification" name="youthClassification" class="kk-input">
           <option value="">Select classification</option>
           <option value="In School Youth">In School Youth</option>
@@ -56,7 +56,7 @@
         </select>
 
         <div id="specificNeedsGroup" style="display: none; margin-top: 12px;">
-          <label for="specificNeedType">If Youth with Specific Needs, specify:</label>
+          <label for="specificNeedType" class="kk-label">If Youth with Specific Needs, specify:</label>
           <select id="specificNeedType" name="specificNeedType" class="kk-input">
             <option value="">Select Specific Need</option>
             <option value="Person w/Disability">Person w/Disability</option>
@@ -162,7 +162,7 @@
       </div>
 
       <div class="kk-btn-group">
-        <button type="button" id="previousBtn" class="kk-btn" onclick="window.location.href='kkform-address.html'">Previous</button>
+        <button type="button" id="previousBtn" class="kk-btn kk-submit-btn" onclick="window.location.href='kkform-address.html'">Previous</button>
         <button type="submit" class="kk-btn kk-submit-btn">Finish</button>
       </div>
     </form>
@@ -205,6 +205,7 @@
         <p>© 2025 SK-INSIGHT. All rights reserved.</p>
       </div>
     </footer>
+  <!-- <script src="../../js/token-validation.js"></script> -->
   <script src="../../js/kkform-youth.js"></script>
 </body>
 </html>

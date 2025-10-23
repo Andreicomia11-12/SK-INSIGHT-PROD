@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+  if (!validateTokenAndRedirect("LGBTQ+ Confirmation")) {
+    return;
+  }
+  
   const token = sessionStorage.getItem('token') || localStorage.getItem('token');
   const hamburger = document.getElementById('navbarHamburger');
   const mobileMenu = document.getElementById('navbarMobileMenu');

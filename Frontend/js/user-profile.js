@@ -1,6 +1,29 @@
+// Token validation helper function
+function validateTokenAndRedirect(featureName = "this feature") {
+  const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+  if (!token) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Authentication Required',
+      text: `You need to log in first to access ${featureName}.`,
+      confirmButtonText: 'Go to Login',
+      confirmButtonColor: '#0A2C59',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => {
+      window.location.href = '/Frontend/html/user/login.html';
+    });
+    return false;
+  }
+  return true;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+  if (!validateTokenAndRedirect("user profile")) {
+    return;
+  }
+  
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-  if (!token) return;
 
   let user = null; // keep user data so we can use birthday later
 

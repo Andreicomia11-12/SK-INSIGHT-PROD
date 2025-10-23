@@ -1,6 +1,10 @@
 console.log("✅ kkform-youth.js loaded");
 
 document.addEventListener('DOMContentLoaded', function() {
+  if (!validateTokenAndRedirect("KK Youth Form")) {
+    return;
+  }
+  
   console.log("✅ DOM ready");
 
   const educationalBackground = document.getElementById('educationalBackground');
@@ -293,18 +297,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Always save before confirmation
     saveStep3();
 
-    // Show loading SweetAlert before confirmation
-    await Swal.fire({
-      title: "Preparing confirmation...",
-      text: "Please wait...",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
-    Swal.close();
-
     // SweetAlert confirmation before actual submit
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -316,6 +308,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     if (!result.isConfirmed) return;
+
+    // Show loading while submitting
+    Swal.fire({
+      title: 'Submitting...',
+      text: 'Please wait while we submit your form',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => { Swal.showLoading(); }
+    });
 
     // Check if profile image is present (either in file input or localStorage)
     const hasImage = form.profileImage.files.length > 0 || (JSON.parse(localStorage.getItem('kkProfileStep3') || '{}').profileImage);
@@ -404,6 +405,15 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('signatureImage', file);
     }
 
+    // Show loading while submitting
+    Swal.fire({
+      title: 'Submitting...',
+      text: 'Please wait while we submit your form',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => { Swal.showLoading(); }
+    });
+
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/kkprofiling', {
@@ -412,12 +422,14 @@ document.addEventListener('DOMContentLoaded', function() {
         body: formData
       });
       if (response.ok) {
+        Swal.close();
         await Swal.fire("Submitted!", "Form submitted successfully!", "success");
         localStorage.removeItem('kkProfileStep1');
         localStorage.removeItem('kkProfileStep2');
         localStorage.removeItem('kkProfileStep3');
         window.location.href = '../../html/user/confirmation/html/kkcofirmation.html';
       } else if (response.status === 409) {
+        Swal.close();
         Swal.fire("Already Submitted", "You already submitted a KKProfile for this cycle.", "error");
         return;
       } else {
@@ -427,9 +439,11 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch {
           error = { message: await response.text() };
         }
+        Swal.close();
         Swal.fire("Error", error.message || 'Something went wrong', "error");
       }
     } catch (error) {
+      Swal.close();
       Swal.fire("Error", "Failed to submit form", "error");
     }
   });
@@ -451,6 +465,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // KK Profile Navigation
   function handleKKProfileNavClick(event) {
     event.preventDefault();
+    if (!validateTokenAndRedirect("KK Youth Form")) {
+      return;
+    }
+    
     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     if (!token) {
       Swal.fire({
@@ -535,6 +553,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // LGBTQ+ Profile Navigation
   function handleLGBTQProfileNavClick(event) {
     event.preventDefault();
+    if (!validateTokenAndRedirect("KK Youth Form")) {
+      return;
+    }
+    
     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     if (!token) {
       Swal.fire({
@@ -619,6 +641,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Educational Assistance Navigation
   function handleEducAssistanceNavClick(event) {
     event.preventDefault();
+    if (!validateTokenAndRedirect("KK Youth Form")) {
+      return;
+    }
+    
     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     if (!token) {
       Swal.fire({
@@ -720,18 +746,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Always save before confirmation
     saveStep3();
 
-    // Show loading SweetAlert before confirmation
-    await Swal.fire({
-      title: "Preparing confirmation...",
-      text: "Please wait...",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
-    Swal.close();
-
     // SweetAlert confirmation before actual submit
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -744,10 +758,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!result.isConfirmed) return;
 
+    // Show loading SweetAlert after confirmation
+    Swal.fire({
+      title: "Submitting...",
+      text: "Please wait...",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     // Check if profile image is present (either in file input or localStorage)
     const hasImage = form.profileImage.files.length > 0 || (JSON.parse(localStorage.getItem('kkProfileStep3') || '{}').profileImage);
 
     if (!hasImage) {
+      Swal.close();
       await Swal.fire("Missing Image", "Please upload a profile image before submitting.", "warning");
       return;
     }
@@ -778,6 +804,7 @@ document.addEventListener('DOMContentLoaded', function() {
       form.profileImage.files.length === 0 &&
       !step3.profileImage
     ) {
+      Swal.close();
       await Swal.fire("Missing Image", "Please upload a profile image before submitting.", "warning");
       return;
     }
@@ -788,6 +815,7 @@ document.addEventListener('DOMContentLoaded', function() {
       (JSON.parse(localStorage.getItem('kkProfileStep3') || '{}').signatureImage);
 
     if (!hasSignature) {
+      Swal.close();
       await Swal.fire("Missing Signature", "Please upload a signature image before submitting.", "warning");
       return;
     }
@@ -814,16 +842,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
-    // ✅ Add actual image file if selected
+    // Add actual image file if selected
     if (form.profileImage.files.length > 0) {
       formData.append('profileImage', form.profileImage.files[0]);
     } else if (step3.profileImage) {
-      // ✅ Fallback: convert Base64 from localStorage into a File
+      // Fallback: convert Base64 from localStorage into a File
       const file = base64ToFile(step3.profileImage, "profile.png");
       formData.append('profileImage', file);
     }
 
-    // ✅ Add signature image file if selected
+    // Add signature image file if selected
     if (form.signatureImage && form.signatureImage.files.length > 0) {
       formData.append('signatureImage', form.signatureImage.files[0]);
     } else if (step3.signatureImage) {
@@ -838,6 +866,7 @@ document.addEventListener('DOMContentLoaded', function() {
         headers: { 'Authorization': `Bearer ${token}` }, // don't set Content-Type manually
         body: formData
       });
+      Swal.close();
       if (response.ok) {
         await Swal.fire("Submitted!", "Form submitted successfully!", "success");
         localStorage.removeItem('kkProfileStep1');
@@ -857,6 +886,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Swal.fire("Error", error.message || 'Something went wrong', "error");
       }
     } catch (error) {
+      Swal.close();
       Swal.fire("Error", "Failed to submit form", "error");
     }
   });

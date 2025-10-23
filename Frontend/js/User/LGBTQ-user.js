@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+  if (!validateTokenAndRedirect("LGBTQ+ Form")) {
+    return;
+  }
+  
   console.log("✅ LGBTQ-user.js loaded");
 
   const form = document.getElementById("lgbtqForm");

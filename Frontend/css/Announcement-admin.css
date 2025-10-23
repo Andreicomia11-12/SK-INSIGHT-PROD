@@ -403,15 +403,15 @@ tbody tr:hover {
   background-color: rgba(0,0,0,0.5);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal.show {
+  display: flex;
   opacity: 1;
   visibility: visible;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .themed-modal {
@@ -421,12 +421,14 @@ tbody tr:hover {
   padding: 0;
   width: 600px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  transform: translateY(-20px);
-  transition: transform 0.3s;
+  transform: translateY(-30px) scale(0.95);
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
 }
 
 .modal.show .themed-modal {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .modal-header {
@@ -538,21 +540,7 @@ tbody tr:hover {
   background: #083464;
 }
 
-/* Animation */
-.modal {
-  animation: modalFade 0.3s;
-}
-
-@keyframes modalFade {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Animation - Removed conflicting keyframes */
 
 /* Announcement Modal Specific Styles */
 .announcement-modal-content {

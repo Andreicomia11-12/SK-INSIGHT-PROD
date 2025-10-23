@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', async function() {
+  if (!validateTokenAndRedirect("LGBTQ+ Profile")) {
+    return;
+  }
+  
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-  if (!token) return;
   
 
   try {

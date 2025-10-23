@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
       allowOutsideClick: false,
       allowEscapeKey: false,
     }).then(() => {
-      window.location.href = "./admin-log.html";
+      window.location.href = "/Frontend/html/user/login.html";
     });
   }
   if (!token) {

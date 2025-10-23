@@ -1,6 +1,27 @@
 // =========================
 // ANNOUNCEMENT SECTION
 // =========================
+
+// Token validation helper function
+function validateTokenAndRedirect(featureName = "this feature") {
+  const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+  if (!token) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Authentication Required',
+      text: `You need to log in first to access ${featureName}.`,
+      confirmButtonText: 'Go to Login',
+      confirmButtonColor: '#0A2C59',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => {
+      window.location.href = '/Frontend/html/user/login.html';
+    });
+    return false;
+  }
+  return true;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const tableBody = document.querySelector(".announcement-table tbody");
   const modal = document.getElementById("announcementModal");
@@ -10,8 +31,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalDescription = modal.querySelector(".description-box");
   const closeModalBtn = modal.querySelector(".close-modal");
 
+  // Create or select a cards container for mobile view
+  let cardsContainer = document.querySelector(".announcement-cards");
+  if (!cardsContainer) {
+    cardsContainer = document.createElement("div");
+    cardsContainer.className = "announcement-cards";
+    // Insert before the table for layout consistency
+    const tableEl = document.querySelector(".announcement-table");
+    if (tableEl && tableEl.parentNode) {
+      tableEl.parentNode.insertBefore(cardsContainer, tableEl);
+    }
+  }
+
+  // Keep last loaded announcements to support responsive re-rendering
+  let lastAnnouncements = [];
+
   // Fetch announcements
   async function fetchAnnouncements() {
+    // Check token first
+    if (!validateTokenAndRedirect("announcements")) {
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
@@ -29,7 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(data.message || "Failed to fetch announcements");
       }
 
-      renderAnnouncements(data.announcements || []);
+      lastAnnouncements = data.announcements || [];
+      renderAnnouncementsResponsive(lastAnnouncements);
     } catch (err) {
       console.error("Error fetching announcements:", err);
       tableBody.innerHTML = `
@@ -40,8 +82,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Render announcements into table
-  function renderAnnouncements(announcements) {
+  // Responsive renderer: choose cards (mobile) or table (desktop)
+  function renderAnnouncementsResponsive(announcements) {
+    const isMobile = window.matchMedia('(max-width: 600px)').matches;
+    if (isMobile) {
+      document.querySelector('.announcement-table')?.classList.add('hidden');
+      renderAnnouncementsCards(announcements);
+    } else {
+      document.querySelector('.announcement-table')?.classList.remove('hidden');
+      renderAnnouncementsTable(announcements);
+    }
+  }
+
+  // Render announcements into table (desktop)
+  function renderAnnouncementsTable(announcements) {
     tableBody.innerHTML = "";
 
     const now = new Date();
@@ -98,9 +152,81 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Render announcements as cards (mobile)
+  function renderAnnouncementsCards(announcements) {
+    // Ensure container exists
+    if (!cardsContainer) return;
+    cardsContainer.innerHTML = "";
+
+    // Hide the table body content when in mobile cards mode
+    if (tableBody) tableBody.innerHTML = "";
+
+    const now = new Date();
+    const upcomingAnnouncements = (announcements || []).filter(a => {
+      const ev = new Date(a.eventDate);
+      return ev >= now;
+    });
+
+    upcomingAnnouncements.sort((a, b) => {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      return new Date(a.eventDate) - new Date(b.eventDate);
+    });
+
+    const limitedAnnouncements = upcomingAnnouncements.slice(0, 8);
+
+    limitedAnnouncements.forEach(a => {
+      const status = getAnnouncementStatus(a.eventDate);
+      const card = document.createElement('div');
+      card.className = 'announcement-card';
+      card.innerHTML = `
+        <div class="card-header">
+          <div class="title">
+            ${a.isPinned ? '<i class="fa-solid fa-location-pin" style="color: #d4af37; margin-right: 8px;"></i>' : ''}
+            <i class="fa-solid fa-bullhorn"></i>
+            <span>${a.title}</span>
+          </div>
+          <span class="status-badge ${status.toLowerCase()}">${status}</span>
+        </div>
+        <div class="card-meta">
+          <div class="meta-row"><i class="fa-regular fa-calendar"></i> ${a.eventDate ? formatDateTime(a.eventDate) : '-'}</div>
+          <div class="meta-row"><i class="fa-regular fa-clock"></i> Posted: ${a.createdAt ? formatDateTime(a.createdAt) : '-'}</div>
+        </div>
+        <div class="card-actions">
+          <button class="view-btn" data-id="${a._id}"><i class="fas fa-eye"></i> View</button>
+        </div>
+      `;
+      cardsContainer.appendChild(card);
+    });
+
+    // Show cards container and hide table on mobile
+    cardsContainer.style.display = 'block';
+    const tableEl = document.querySelector('.announcement-table');
+    if (tableEl) tableEl.style.display = 'none';
+  }
+
+  // Handle resize to re-render appropriately
+  window.addEventListener('resize', () => {
+    if (!lastAnnouncements) return;
+    // Toggle visibility styles back when moving to desktop
+    const tableEl = document.querySelector('.announcement-table');
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      if (cardsContainer) cardsContainer.style.display = 'block';
+      if (tableEl) tableEl.style.display = 'none';
+    } else {
+      if (cardsContainer) cardsContainer.style.display = 'none';
+      if (tableEl) tableEl.style.display = '';
+    }
+    renderAnnouncementsResponsive(lastAnnouncements);
+  });
+
   // View modal handler
   document.addEventListener("click", async (e) => {
     if (e.target.closest(".view-btn")) {
+      if (!validateTokenAndRedirect("announcement details")) {
+        return;
+      }
+      
       const id = e.target.closest(".view-btn").dataset.id;
       try {
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -227,18 +353,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // KK Profile Navigation
   function handleKKProfileNavClick(event) {
     event.preventDefault();
-    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-    if (!token) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'You need to log in first',
-        text: 'Please log in to access KK Profiling.',
-        confirmButtonText: 'OK'
-      }).then(() => {
-        window.location.href = '/Frontend/html/user/login.html';
-      });
+    if (!validateTokenAndRedirect("KK Profiling")) {
       return;
     }
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     Promise.all([
       fetch('http://localhost:5000/api/formcycle/status?formName=KK%20Profiling', {
         headers: { Authorization: `Bearer ${token}` }
@@ -311,18 +429,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // LGBTQ+ Profile Navigation
   function handleLGBTQProfileNavClick(event) {
     event.preventDefault();
-    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-    if (!token) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'You need to log in first',
-        text: 'Please log in to access LGBTQ+ Profiling.',
-        confirmButtonText: 'OK'
-      }).then(() => {
-        window.location.href = '/Frontend/html/user/login.html';
-      });
+    if (!validateTokenAndRedirect("LGBTQ+ Profiling")) {
       return;
     }
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     Promise.all([
       fetch('http://localhost:5000/api/formcycle/status?formName=LGBTQIA%2B%20Profiling', {
         headers: { Authorization: `Bearer ${token}` }
@@ -395,18 +505,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Educational Assistance Navigation
   function handleEducAssistanceNavClick(event) {
     event.preventDefault();
-    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-    if (!token) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'You need to log in first',
-        text: 'Please log in to access Educational Assistance.',
-        confirmButtonText: 'OK'
-      }).then(() => {
-        window.location.href = '/Frontend/html/user/login.html';
-      });
+    if (!validateTokenAndRedirect("Educational Assistance")) {
       return;
     }
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     Promise.all([
       fetch('http://localhost:5000/api/formcycle/status?formName=Educational%20Assistance', {
         headers: { Authorization: `Bearer ${token}` }

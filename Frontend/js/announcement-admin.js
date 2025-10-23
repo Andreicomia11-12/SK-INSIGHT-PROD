@@ -43,7 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show modal
   function showModal() {
     modal.style.display = "flex";
-    setTimeout(() => modal.classList.add("show"), 10);
+    // Force a reflow to ensure the modal is rendered before adding the show class
+    modal.offsetHeight;
+    modal.classList.add("show");
     document.body.style.overflow = "hidden"; // Prevent background scrolling
   }
 
@@ -73,7 +75,48 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.target === modal) {
       hideModal();
     }
+    // Close time picker when clicking outside
+    if (!event.target.closest('input[type="time"]') && !event.target.closest('.time-picker')) {
+      const activeTimeInput = document.activeElement;
+      if (activeTimeInput && activeTimeInput.type === 'time') {
+        activeTimeInput.blur();
+      }
+    }
   };
+
+  // Handle time input to close time picker when time is selected
+  const timeInput = document.getElementById("time");
+  
+  // Close time picker when time is selected
+  timeInput.addEventListener("change", function() {
+    // Force blur to close the time picker
+    setTimeout(() => {
+      this.blur();
+      // Also trigger a click on the document to ensure picker closes
+      document.body.click();
+    }, 50);
+  });
+
+  // Handle input event for immediate response when typing
+  timeInput.addEventListener("input", function() {
+    // Check if the input has a valid time format
+    if (this.value.match(/^\d{1,2}:\d{2}$/)) {
+      setTimeout(() => {
+        this.blur();
+        document.body.click();
+      }, 100);
+    }
+  });
+
+  // Handle click outside to close time picker
+  timeInput.addEventListener("blur", function() {
+    // Additional blur handling if needed
+    setTimeout(() => {
+      if (document.activeElement === this) {
+        this.blur();
+      }
+    }, 10);
+  });
 
   // Fetch announcements
   async function fetchAnnouncements() {

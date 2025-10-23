@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+  if (!validateTokenAndRedirect("Educational Assistance Confirmation")) {
+    return;
+  }
+  
   const hamburger = document.getElementById('navbarHamburger');
   const mobileMenu = document.getElementById('navbarMobileMenu');
   hamburger.addEventListener('click', function() {

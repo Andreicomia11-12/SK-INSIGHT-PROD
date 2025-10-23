@@ -17,7 +17,7 @@
 
     /* Headings */
     h2 {
-        font-size: 24px;
+        font-size: 1.4rem;
     }
 
     /* Navbar */
@@ -27,7 +27,7 @@
         left: 50%;
         transform: translateX(-50%);
         width: 90%;
-        height: 74px;
+        height: 7.9%;
         background: #0A2C59;
         color: #fff;
         display: flex;
@@ -42,51 +42,43 @@
     .navbar img {
         height: 40px;
         border-radius: 50%;
-        margin-top: 10%;
     }
 
     .navbar .title {
-    color: white;
-    text-decoration: none;
+        color: white;
+        text-decoration: none;
         font-size: 18px;
         font-weight: bold;
         margin-left: 10px;
     }
 
+    .nav-btn{
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .navbar-center {
+        display: flex;
+        gap: 18px;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+
     .navbar-left {
-      font-size: 18px;
         display: flex;
         align-items: center;
-    }
-
-    .navbar-right {
-        display: flex;
-        gap: 15px;
-        font-size: 20px;
-        margin-bottom: 0.6%;
-    }
-
-    .notif{
-      margin-top: 2%;
-    }
-
-    /* Centered Navbar Items */
-    .navbar-center {
-      display: flex;
-      gap: 18px;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      margin-top: 0.1%;
     }
 
     .bell {
         color: white;
         cursor: pointer;
-        margin-top: 5px;
+        margin-top: 0;
         margin-right: 5px;
         font-size: 22px;
+        line-height: 1;
     }
+
     .prof {
         color: #ffffff;
         text-decoration: none;
@@ -97,67 +89,148 @@
         transition: background 0.2s, color 0.2s;
     }
 
-    /* Hamburger Icon */
-    .navbar-hamburger {
-      display: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      margin-right: 10px;
-      margin-top: 2%;
+    .navbar-right {
+        display: flex;
+        gap: 8px;
+        font-size: 20px;
     }
 
-    @media (max-width: 1024px) {
-      .navbar-center {
-        display: none !important;
+    .navbar-right a {
+        text-decoration: none;
+    }
+
+    .nav-btn {
+        color: #ffffff;
+        padding: 7px 18px;
+        border-radius: 6px;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: background 0.2s, color 0.2s;
+        border: none;
+        outline: none;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+        background: #1e4e9e;
+        color: #fff;
+    }
+
+    /* Hamburger Icon */
+    .navbar-hamburger {
+        display: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    /* Responsive behavior */
+    @media (max-width: 1048px) {
+        .navbar-center {
+            display: none !important;
+        }
+        .navbar-hamburger {
+            display: inline-block !important;
+        }
+    }
+
+    @media (min-width: 1049px) {
+        .navbar-center {
+            display: flex !important;
+        }
+        .navbar-hamburger {
+            display: none !important;
+        }
+    }
+
+    /* Mobile navbar optimization */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 10px 15px;
       }
+      
+      .navbar img {
+        height: 32px;
+      }
+      
+      .navbar .title {
+        font-size: 14px;
+        margin-left: 8px;
+      }
+      
       .navbar-hamburger {
-        display: inline-block !important;
+        font-size: 1.5rem;
+        margin-right: 5px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .bell {
+        font-size: 18px;
+        margin-right: 3px;
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+      }
+      
+      .navbar-right {
+        gap: 5px;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .navbar-right .prof {
+        display: flex;
+        align-items: center;
+        margin-top: 0;
       }
     }
 
     /* Mobile Menu */
     .navbar-mobile-menu {
-      display: none;
-      position: fixed;
-      top: 60px;
-      right: 16px;
-      width: 240px;
-      background: #fff;
-      flex-direction: column;
-      align-items: stretch;
-      z-index: 2000;
-      padding: 18px 12px;
-      border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(20,61,119,0.18);
-      border: 1px solid #e3eaf3;
+        display: none;
+        position: fixed;
+        top: 60px;
+        right: 16px;
+        width: 220px;
+        background: #fff;
+        flex-direction: column;
+        align-items: stretch;
+        z-index: 2000;
+        padding: 18px 12px;
+        border-radius: 14px;
+        box-shadow: 0 8px 32px rgba(20,61,119,0.18);
+        border: 1px solid #e3eaf3;
     }
 
     .navbar-mobile-menu.active {
-      display: flex !important;
+        display: flex !important;
     }
 
     .navbar-mobile-menu .nav-btn {
-      display: block;
-      width: 100%;
-      padding: 12px 0;
-      font-size: 1rem;
-      border-radius: 8px;
-      color: #143d77;
-      background: none;
-      text-align: left;
-      border: none;
-      margin-bottom: 8px;
-      font-weight: 500;
-      transition: background 0.18s, color 0.18s;
+        display: block;
+        width: 100%;
+        padding: 12px 0;
+        font-size: 1rem;
+        border-radius: 8px;
+        color: #143d77;
+        background: none;
+        text-align: left;
+        border: none;
+        margin-bottom: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.18s, color 0.18s;
     }
 
     .navbar-mobile-menu .nav-btn:last-child {
-      margin-bottom: 0;
+        margin-bottom: 0;
     }
 
     .navbar-mobile-menu .nav-btn:hover {
-      background: #eaf3fa;
-      color: #1e4e9e;
+        background: #eaf3fa;
+        color: #1e4e9e;
     }
 
     /* Container */
@@ -171,7 +244,7 @@
 
     /* Cards */
     .card {
-        width: 90.5%;
+        width: 90%;
         max-width: 900px;
         margin: 0 auto 25px auto;
         background-color: #fff;
@@ -181,27 +254,21 @@
         box-sizing: border-box;
     }
 
-    .cardintro{
-      width: 90.5%;
-      max-width: 900px;
-      margin: 0 auto 25px auto;
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-      box-sizing: border-box;
+    .card.intro{
+      margin-top: 3.7%;
     }
 
     /* Intro Card */
-    .cardintro h2 {
-        margin-bottom: 10px;
-        color: #0a2c59;
-        font-size: 24px;
+    .card.intro h2 {
+      font-size: 1.4rem;
+      margin-bottom: 5%;
+      color: #0a2c59;
     }
 
-    .cardintro p {
-        margin-bottom: 10px;
-        line-height: 1.5;
+    .card.intro p {
+      font-size: 16px;
+      margin-bottom: 10px;
+      line-height: 1.5;
     }
 
     /* Form Inputs */
@@ -237,15 +304,15 @@ textarea:focus {
         
     min-width: 120px;
     min-height: 40px;
-        padding: 12px 30px !important;
-        background-color: #143d77;
-        color: white;
-        font-size: 15px;
-        font-weight: bold;
-        border: none;
-        border-radius: 7px;
-        cursor: pointer;
-        text-decoration: none;
+    padding: 12px 30px !important;
+    background-color: #143d77;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    text-decoration: none;
     }
 
     .submit-btn:hover {
@@ -276,21 +343,25 @@ textarea:focus {
 
     /* Responsive Adjustments */
     @media (max-width: 768px) {
-      .cardintro{
+      .card.intro{
         margin-top: -3%;
         padding: 20px; 
-        width: 80vw;
+        width: 90%;
       }
-        .card { 
-          padding: 20px; 
-          width: 80vw;
-        }
+      .card { 
+        padding: 20px; 
+        width: 90%;
+      }
     }
 
     @media (max-width: 480px) {
-        .card, .cardintro {
+        .card {
             padding: 15px;
             margin-bottom: 20px;
+        }
+        .card.intro{
+            margin-top: 1%;
+            width: 90%;
         }
         .container {
             width: 95%;
@@ -303,7 +374,7 @@ textarea:focus {
 
     @media (max-width: 600px) {
         .navbar-left .title {
-            font-size: 18px;
+            font-size: 1rem;
         }
         .container { 
           padding: 5%; 
@@ -319,7 +390,7 @@ textarea:focus {
             width: 100vw;
             padding: 0 4px;
         }
-        .card, .cardintro {
+        .card {
             margin-left: auto;
             margin-right: auto;
             width: 90%;
@@ -375,18 +446,289 @@ textarea:focus {
       width: 100%;
       border-collapse: collapse;
       margin-top: 15px;
+      table-layout: fixed;
     }
     .requirements-table th, .requirements-table td {
       border: 1px solid black;
       padding: 8px;
       text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
     }
+    
+    /* Set specific column widths */
+    .requirements-table th:nth-child(1), 
+    .requirements-table td:nth-child(1) {
+      width: 35%; /* Documents column */
+    }
+    .requirements-table th:nth-child(2), 
+    .requirements-table td:nth-child(2) {
+      width: 15%; /* View column */
+    }
+    .requirements-table th:nth-child(3), 
+    .requirements-table td:nth-child(3) {
+      width: 15%; /* Delete column */
+    }
+    .requirements-table th:nth-child(4), 
+    .requirements-table td:nth-child(4) {
+      width: 35%; /* Upload column */
+    }
+    
     input[type="file"] { display: none; }
     .file-name {
       display: none;
       font-size: 0.95em;
       color: #143d77;
       margin-left: 8px;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    /* Show file name when file is selected */
+    .file-name.show {
+      display: inline-block;
+    }
+
+    /* Responsive Font Sizes for Mobile and Tablet */
+    
+    /* Tablet (768px - 1024px) */
+    @media (max-width: 1024px) and (min-width: 769px) {
+      body {
+        font-size: 15px;
+      }
+      
+      .card, .cardintro {
+        font-size: 14px;
+      }
+      
+      .requirements-table th, .requirements-table td {
+        font-size: 13px;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      h3 {
+        font-size: 18px;
+      }
+      
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      input[type="email"],
+      input[type="password"],
+      select,
+      textarea {
+        font-size: 14px;
+      }
+    }
+    
+    /* Mobile Large (481px - 768px) */
+    @media (max-width: 768px) and (min-width: 481px) {
+      body {
+        font-size: 14px;
+      }
+      
+      .card, .cardintro {
+        font-size: 13px;
+      }
+      
+      .requirements-table th, .requirements-table td {
+        font-size: 12px;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      h3 {
+        font-size: 16px;
+      }
+      
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      input[type="email"],
+      input[type="password"],
+      select,
+      textarea {
+        font-size: 13px;
+      }
+      
+      .file-name {
+        max-width: 100%;
+        font-size: 0.9em;
+      }
+      
+      /* Adjust table column widths for mobile */
+      .requirements-table th:nth-child(1), 
+      .requirements-table td:nth-child(1) {
+        width: 40%; /* Documents column */
+      }
+      .requirements-table th:nth-child(2), 
+      .requirements-table td:nth-child(2) {
+        width: 20%; /* View column */
+      }
+      .requirements-table th:nth-child(3), 
+      .requirements-table td:nth-child(3) {
+        width: 20%; /* Delete column */
+      }
+      .requirements-table th:nth-child(4), 
+      .requirements-table td:nth-child(4) {
+        width: 20%; /* Upload column */
+      }
+      
+      .submit-btn {
+        min-width: 100px;
+        min-height: 36px;
+        padding: 10px 20px !important;
+        font-size: 14px;
+      }
+      
+      .submit-btn-container {
+        padding-right: 20px;
+      }
+    }
+    
+    /* Mobile Medium (321px - 480px) */
+    @media (max-width: 480px) and (min-width: 321px) {
+      body {
+        font-size: 13px;
+      }
+      
+      .card, .cardintro {
+        font-size: 12px;
+      }
+      
+      .requirements-table th, .requirements-table td {
+        font-size: 11px;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      h3 {
+        font-size: 15px;
+      }
+      
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      input[type="email"],
+      input[type="password"],
+      select,
+      textarea {
+        font-size: 12px;
+      }
+      
+      .file-name {
+        max-width: 100%;
+        font-size: 0.85em;
+        margin-left: 6px;
+      }
+      
+      /* Further adjust table for small mobile */
+      .requirements-table th:nth-child(1), 
+      .requirements-table td:nth-child(1) {
+        width: 45%; /* Documents column */
+      }
+      .requirements-table th:nth-child(2), 
+      .requirements-table td:nth-child(2) {
+        width: 18%; /* View column */
+      }
+      .requirements-table th:nth-child(3), 
+      .requirements-table td:nth-child(3) {
+        width: 18%; /* Delete column */
+      }
+      .requirements-table th:nth-child(4), 
+      .requirements-table td:nth-child(4) {
+        width: 19%; /* Upload column */
+      }
+      
+      .submit-btn {
+        min-width: 90px;
+        min-height: 34px;
+        padding: 8px 16px !important;
+        font-size: 13px;
+      }
+      
+      .submit-btn-container {
+        padding-right: 15px;
+      }
+    }
+    
+    /* Mobile Small (up to 320px) */
+    @media (max-width: 320px) {
+      body {
+        font-size: 12px;
+      }
+      
+      .card, .cardintro {
+        font-size: 11px;
+      }
+      
+      .requirements-table th, .requirements-table td {
+        font-size: 10px;
+        padding: 6px;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      h3 {
+        font-size: 14px;
+      }
+      
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      input[type="email"],
+      input[type="password"],
+      select,
+      textarea {
+        font-size: 11px;
+      }
+      
+      .file-name {
+        max-width: 100%;
+        font-size: 0.8em;
+        margin-left: 4px;
+      }
+      
+      /* Ultra-compact table for very small screens */
+      .requirements-table th:nth-child(1), 
+      .requirements-table td:nth-child(1) {
+        width: 50%; /* Documents column */
+      }
+      .requirements-table th:nth-child(2), 
+      .requirements-table td:nth-child(2) {
+        width: 16%; /* View column */
+      }
+      .requirements-table th:nth-child(3), 
+      .requirements-table td:nth-child(3) {
+        width: 16%; /* Delete column */
+      }
+      .requirements-table th:nth-child(4), 
+      .requirements-table td:nth-child(4) {
+        width: 18%; /* Upload column */
+      }
+      
+      .submit-btn {
+        min-width: 80px;
+        min-height: 32px;
+        padding: 7px 14px !important;
+        font-size: 12px;
+      }
+      
+      .submit-btn-container {
+        padding-right: 15px;
+      }
     }
 
     /* Icons */
@@ -401,9 +743,12 @@ textarea:focus {
 
     /* Submit Button Container */
     .submit-btn-container {
+      width: 90%;
       max-width: 900px;
       margin: 0 auto 25px auto;
       text-align: right;
+      padding-right: 30px;
+      box-sizing: border-box;
     }
     .submit-btn {
       width: auto;
@@ -437,6 +782,48 @@ textarea:focus {
       max-width: 90%;
       max-height: 90%;
       border-radius: 10px;
+      object-fit: contain;
+    }
+
+    /* Mobile and Tablet Responsive Styles for Image Preview */
+    @media (max-width: 1024px) {
+      #imagePreviewModal {
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      
+      #imagePreviewModal img {
+        max-width: 95%;
+        max-height: 85%;
+        width: auto;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #imagePreviewModal {
+        padding: 15px;
+      }
+      
+      #imagePreviewModal img {
+        max-width: 98%;
+        max-height: 80%;
+        border-radius: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #imagePreviewModal {
+        padding: 10px;
+      }
+      
+      #imagePreviewModal img {
+        max-width: 100%;
+        max-height: 75%;
+        border-radius: 6px;
+      }
     }
 
     /* Close Preview Button */
@@ -454,6 +841,28 @@ textarea:focus {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1001;
+}
+
+/* Mobile Close Button Adjustments */
+@media (max-width: 768px) {
+  .close-preview-btn {
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .close-preview-btn {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
 }
 
 /* Add to Educational-assistance-user.css */
@@ -576,11 +985,17 @@ textarea:focus {
   .footer-right {
     width: 100%;
   }
+
+  /* Add space between content and footer on mobile */
+  .footer {
+    margin-top: 80px;
+  }
 }
 
 @media (max-width: 480px) {
   .footer {
     padding: 30px 20px 15px;
+    margin-top: 80px;
   }
 
   .footer-left h3 {

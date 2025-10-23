@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', async function() {
+  if (!validateTokenAndRedirect("Educational Assistance Profile")) {
+    return;
+  }
+  
   const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-  if (!token) return;
 
     const hamburger = document.getElementById('navbarHamburger');
   const mobileMenu = document.getElementById('navbarMobileMenu');
@@ -120,18 +123,42 @@ if (birthdayInput && data.birthday) {
       });
     }
 
-    // Requirements: Sedula, COE, Signature (show file name only, remove folder path)
+    // Requirements: Sedula, COE, Signature (show truncated file name only, remove folder path)
     if (data.frontImage) {
-      document.getElementById('frontImageUploadColumn').textContent = data.frontImage.replace(/^.*[\\/]/, '');
+      const fileName = data.frontImage.replace(/^.*[\\/]/, '');
+      const truncatedName = truncateFileName(fileName);
+      const element = document.getElementById('frontImageUploadColumn');
+      if (element) {
+        element.textContent = truncatedName;
+        element.title = fileName; // Show full name on hover
+      }
     }
     if (data.backImage) {
-      document.getElementById('backImageUploadColumn').textContent = data.backImage.replace(/^.*[\\/]/, '');
+      const fileName = data.backImage.replace(/^.*[\\/]/, '');
+      const truncatedName = truncateFileName(fileName);
+      const element = document.getElementById('backImageUploadColumn');
+      if (element) {
+        element.textContent = truncatedName;
+        element.title = fileName; // Show full name on hover
+      }
     }
     if (data.coeImage) {
-      document.getElementById('coeImageUploadColumn').textContent = data.coeImage.replace(/^.*[\\/]/, '');
+      const fileName = data.coeImage.replace(/^.*[\\/]/, '');
+      const truncatedName = truncateFileName(fileName);
+      const element = document.getElementById('coeImageUploadColumn');
+      if (element) {
+        element.textContent = truncatedName;
+        element.title = fileName; // Show full name on hover
+      }
     }
     if (data.voter) {
-      document.getElementById('voterUploadColumn').textContent = data.voter.replace(/^.*[\\/]/, '');
+      const fileName = data.voter.replace(/^.*[\\/]/, '');
+      const truncatedName = truncateFileName(fileName);
+      const element = document.getElementById('voterUploadColumn');
+      if (element) {
+        element.textContent = truncatedName;
+        element.title = fileName; // Show full name on hover
+      }
     }
 
     // Optionally, add preview logic for images if you want
@@ -140,8 +167,7 @@ if (birthdayInput && data.birthday) {
 if (viewFront) {
   viewFront.onclick = function() {
     if (data.frontImage) {
-      document.getElementById('previewImg').src = data.frontImage;
-      document.getElementById('imagePreviewModal').style.display = 'block';
+      showImagePreview(data.frontImage);
     }
   };
 }
@@ -150,8 +176,7 @@ if (viewFront) {
 if (viewBack) {
   viewBack.onclick = function() {
     if (data.backImage) {
-      document.getElementById('previewImg').src = data.backImage;
-      document.getElementById('imagePreviewModal').style.display = 'block';
+      showImagePreview(data.backImage);
     }
   };
 }
@@ -163,8 +188,7 @@ if (viewCOE) {
     if (data.coeImage) {
       // Use Cloudinary URL directly if it's already a full URL
       const imageUrl = data.coeImage.startsWith('http') ? data.coeImage : `/uploads/${data.coeImage}`;
-      document.getElementById('previewImg').src = imageUrl;
-      document.getElementById('imagePreviewModal').style.display = 'block';
+      showImagePreview(imageUrl);
     }
   };
 }
@@ -182,8 +206,7 @@ if (closePreviewBtn) {
 if (viewVoter) {
   viewVoter.onclick = function() {
     if (data.voter) {
-      document.getElementById('previewImg').src = data.voter;
-      document.getElementById('imagePreviewModal').style.display = 'block';
+      showImagePreview(data.voter);
     }
   };
 }
@@ -458,9 +481,22 @@ function handleEducAssistanceNavClick(event) {
   .catch(() => window.location.href = "../../Educational-assistance-user.html");
 }
 
+// Helper function to truncate file names
+function truncateFileName(fileName, maxLength = 6) {
+  if (fileName.length <= maxLength) {
+    return fileName;
+  }
+  
+  // Always show first 6 characters + "..." for files longer than 6 characters
+  return fileName.substring(0, maxLength) + "...";
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
+  if (!validateTokenAndRedirect("Educational Assistance Profile")) {
+    return;
+  }
+  
   const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-  if (!token) return;
 
   try {
     const res = await fetch('http://localhost:5000/api/educational-assistance/me', {
