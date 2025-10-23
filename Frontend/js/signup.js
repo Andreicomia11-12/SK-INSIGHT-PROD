@@ -2,13 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Signup.js loaded');
 
     const signupForm = document.getElementById('signupForm');
+    const passwordField = document.getElementById('passwordField');
+    const togglePassword = document.getElementById('togglePassword');
+
     if (!signupForm) {
         console.error('Signup form not found.');
         return;
     }
 
-    console.log('Signup form found. Adding event listener...');
+    // Show/Hide Password Toggle
+    togglePassword.addEventListener('click', () => {
+        const isPassword = passwordField.type === 'password';
+        passwordField.type = isPassword ? 'text' : 'password';
+        togglePassword.innerHTML = isPassword
+            ? '<i class="fa-solid fa-eye-slash"></i>'
+            : '<i class="fa-solid fa-eye"></i>';
+    });
 
+    // Submit Form
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         console.log('Form submitted. Preparing FormData...');
@@ -32,29 +43,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Parsed Data:', data);
             } catch (error) {
                 console.error('Invalid JSON response:', responseText);
-                alert('Unexpected server response.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Unexpected Response',
+                    text: 'The server returned an invalid response.',
+                });
                 return;
             }
 
             if (response.ok) {
-                alert(data.message || 'Registration Successful!');
-                console.log('Redirecting to login page...');
-
-                // Primary Redirect
-                window.location.href = '/html/login.html';
-                // Fallback Redirect after 1 second (in case the first fails)
-                setTimeout(() => {
-                    console.log('Fallback redirect executing...');
-                    window.location.href = 'login.html';
-                }, 1000);
-
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registration Successful!',
+                    text: data.message || 'You can now log in.',
+                    timer: 1000,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = '/Frontend/html/user/login.html';
+                });
             } else {
-                alert(data.message || 'Registration failed.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration Failed',
+                    text: data.message || 'Please try again.',
+                });
             }
 
         } catch (error) {
             console.error('Fetch Error:', error);
-            alert('An error occurred during registration.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Network Error',
+                text: 'An error occurred during registration.',
+            });
         }
     });
 });

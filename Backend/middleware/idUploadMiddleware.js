@@ -22,4 +22,4 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-module.exports = upload.single('idImage');
+module.exports = upload;

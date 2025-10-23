@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SK-INSIGHT</title>
+    <link rel="stylesheet" href="../../css/about.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <div class="navbar-left">
+        <a href="./index.html">
+          <img src="../../assets/logo.png" alt="Logo" class="logo"/>
+        </a>
+        <a href="./index.html" class="title">SK-PBW</a>
+      </div>
+      <div class="navbar-center">
+        <!-- Desktop Navbar -->
+        <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+        <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+        <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
+      </div>
+      <div class="navbar-right">
+        <span class="navbar-hamburger" id="navbarHamburger">
+          <i class="fa-solid fa-bars"></i>
+        </span>
+        <a class="notif" href="../user/announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+        <a href="../user/userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
+      </div>
+    </div>
+
+    <div class="navbar-mobile-menu" id="navbarMobileMenu">
+      <!-- Mobile Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
+    </div>
+
+        <!-- Login Required Strip -->
+    <div id="login-strip" class="login-strip" style="display:none;">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>
+        You need to <a href="/Frontend/html/user/login.html">login</a> to access full features.
+      </span>
+    </div>
+
+    <!-- About Section -->
+    <div class="about-card">
+      <div class="about-left">
+        <img src="../../assets/logo.png" alt="SK Logo" />
+      </div>
+      <div class="about-right">
+        <h2>About SK Insight</h2>
+        <p>
+          SK Insight is a digital platform developed to empower the Sangguniang Kabataan (SK) councils 
+          by providing smart analytics, centralized data collection, and streamlined community 
+          engagement tools.
+        </p>
+        <p>
+          Our goal is to promote transparency, improve public service, and enable data-driven decision 
+          making, especially in tracking youth assistance, profiling, and community program effectiveness.
+        </p>
+        <p>
+          The Sangguniang Kabataan (SK) is the youth council of every barangay. It serves as the voice 
+          of young people in governance, encouraging civic engagement and leadership development among the youth.
+        </p>
+      </div>
+    </div>
+
+    <!-- ✅ Footer should be OUTSIDE the about card -->
+    <footer class="footer">
+      <div class="footer-container">
+        <!-- Left Section -->
+        <div class="footer-left">
+          <h3>SK-INSIGHT</h3>
+          <p>Empowering the youth through data-driven governance.</p>
+        </div>
+    
+        <!-- Middle Section -->
+        <div class="footer-middle">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Things About US</a></li>
+            <li><a href="#">Things About SK</a></li>
+            <li><a href="#">Things About SK-INSIGHT</a></li>
+          </ul>
+        </div>
+    
+        <!-- Right Section -->
+        <div class="footer-right">
+          <h4>Follow Us</h4>
+          <ul>
+            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+    
+      <hr />
+    
+      <div class="footer-bottom">
+        <p>© 2025 SK-INSIGHT. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+  <script src="../../js/about.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</html>

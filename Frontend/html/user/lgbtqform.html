@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK-INSIGHT</title>
+  <link rel="stylesheet" href="../../css/userlgbtq.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <!-- ✅ Navbar -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <a href="./index.html">
+        <img src="../../assets/logo.png" alt="Logo" class="logo"/>
+      </a>
+      <a href="./index.html" class="title">SK-PBW</a>
+    </div>
+    
+    <div class="navbar-center">
+      <!-- Desktop Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
+    </div>
+    <div class="navbar-right">
+      <span class="navbar-hamburger" id="navbarHamburger">
+        <i class="fa-solid fa-bars"></i>
+      </span>
+      <a class="notif" href="../user/announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+      <a href="../user/userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
+    </div>
+  </div>
+  <div class="navbar-mobile-menu" id="navbarMobileMenu">
+      <!-- Mobile Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
+    </div>
+
+  <div class="container">
+    <!-- Intro Card -->
+    <div class="card intro">
+      <h2>LGBTQIA+ Profiling</h2>
+      <p><strong>TO THE RESPONDENT:</strong></p>
+      <p>
+        Ang form na ito ay ginawa ng Sangguniang Kabataan ng Barangay Puting Bato West upang makilala ang mga miyembro ng LGBTQIA+ sa ating komunidad. 
+        Sa pamamagitan ng impormasyong ito, mas maipaplano at maisasagawa ang mga aktibidad at kaganapan para sa Pride Month.
+      </p>
+      <p>
+        <strong>REST ASSURED THAT ALL INFORMATION GATHERED FROM THIS STUDY WILL BE TREATED WITH UTMOST CONFIDENTIALITY.</strong>
+      </p>
+    </div>
+
+    <!-- Form -->
+    <!-- ✅ Added novalidate -->
+    <form id="lgbtqForm" enctype="multipart/form-data" novalidate>
+      <div class="card">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastname" placeholder="Your Answer" required>
+      </div>
+      <div class="card">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstname" placeholder="Your Answer" required>
+      </div>
+      <div class="card">
+        <label for="middleName">Middle Name:</label>
+        <input type="text" id="middleName" name="middlename" placeholder="Your Answer" required>
+      </div>
+      <div class="card">
+        <label for="birthday">Birthday:</label>
+        <input type="date" id="birthday" name="birthday" required>
+      </div>
+      <div class="card">
+        <label for="sex">Sex Assigned at Birth:</label>
+        <select id="sex" name="sexAssignedAtBirth" required>
+          <option value="">Select Sex Assigned at Birth</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+      <div class="card">
+        <label for="identity">LGBTQIA+ Classification:</label>
+        <select id="identity" name="lgbtqClassification" required>
+          <option value="">Select your Gender Identity</option>
+          <option value="Lesbian">Lesbian</option>
+          <option value="Gay">Gay</option>
+          <option value="Bisexual">Bisexual</option>
+          <option value="Transgender">Transgender</option>
+          <option value="Queer">Queer</option>
+          <option value="Intersex">Intersex</option>
+          <option value="Asexual">Asexual</option>
+        </select>
+      </div>
+
+      <!-- Front ID Image Upload -->
+      <div class="kk-upload-row">
+        <div class="card kk-upload-col">
+        <label for="idImageFront">Upload Valid ID Image (Front):</label>
+        <input type="file" id="idImageFront" name="idImageFront" accept="image/*" required>
+        <div id="imagePreviewContainerFront" class="image-preview-container">
+          <button type="button" id="removeImageBtnFront" class="remove-image-btn" title="Remove image">&times;</button>
+          <img id="imagePreviewFront" alt="Front ID preview" />
+        </div>
+      </div>
+
+      <!-- Back ID Image Upload -->
+      <div class="card kk-upload-col">
+        <label for="idImageBack">Upload Valid ID Image (Back):</label>
+        <input type="file" id="idImageBack" name="idImageBack" accept="image/*" required>
+        <div id="imagePreviewContainerBack" class="image-preview-container">
+          <button type="button" id="removeImageBtnBack" class="remove-image-btn" title="Remove image">&times;</button>
+          <img id="imagePreviewBack" alt="Back ID preview" />
+        </div>
+      </div>
+       </div>
+      
+
+      <div style="max-width: 900px; margin: 0 auto 25px auto; text-align: left;">
+        <button type="submit" id="submitBtn" class="submit-btn" style="width: auto; padding: 8px 20px;">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+
+        <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <h3>SK-INSIGHT</h3>
+          <p>Empowering the youth through data-driven governance.</p>
+        </div>
+
+        <div class="footer-middle">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Things About US</a></li>
+            <li><a href="#">Things About SK</a></li>
+            <li><a href="#">Things About SK-INSIGHT</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-right">
+          <h4>Follow Us</h4>
+          <ul>
+            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="footer-bottom">
+        <p>© 2025 SK-INSIGHT. All rights reserved.</p>
+      </div>
+    </footer>
+  <!-- ✅ Scripts -->
+  <script src="../../js/User/LGBTQ-user.js"></script>
+</body>
+</html>

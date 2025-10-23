@@ -12,27 +12,27 @@ const protect = asyncHandler(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+    console.log("Token received:", token);
 
     try {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("Token decoded:", decoded);
 
       // Find user by decoded ID and exclude password
       const user = await User.findById(decoded.id).select('-password');
+      console.log("User found:", user);
 
       if (!user) {
+        console.log("User not found for id:", decoded.id);
         return res.status(401).json({ message: 'User not found' });
       }
 
       // Attach user to request
       req.user = user;
 
-      // ✅ Only allow verified users — EXCEPT admins
-      if (!user.isVerified && user.role !== 'admin') {
-        return res
-          .status(403)
-          .json({ message: 'Please verify your email to access this feature.' });
-      }
+      // Allow all authenticated users, regardless of verification status
+      console.log("protect passed for user:", user.email, user.role);
 
       next(); // Proceed to route
     } catch (err) {
@@ -48,6 +48,8 @@ const protect = asyncHandler(async (req, res, next) => {
 // Middleware to restrict access by role
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
+
+    console.log("authorizeRoles check:", req.user.role, roles);
     if (!roles.includes(req.user.role)) {
       return res
         .status(403)

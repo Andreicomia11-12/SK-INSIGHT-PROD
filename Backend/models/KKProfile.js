@@ -1,20 +1,17 @@
 const mongoose = require("mongoose");
 
 const kkProfileSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   formCycle: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "FormCycle",
     required: true,
   },
-
   lastname: String,
   firstname: String,
   middlename: String,
   suffix: String,
   gender: String,
-  age: Number,
-  birthday: Date,
 
   region: String,
   province: String,
@@ -25,11 +22,44 @@ const kkProfileSchema = new mongoose.Schema({
   email: String,
   contactNumber: String,
 
-  civilStatus: String,
-  youthAgeGroup: String,
-  youthClassification: String,
-  educationalBackground: String,
-  workStatus: String,
+  civilStatus: {
+    type: String,
+    enum: ["Single", "Live-in", "Married", "Unknown", "Separated", "Annulled", "Divorced", "Widowed"],
+  },
+  youthAgeGroup: {
+    type: String,
+    enum: ["Child Youth", "Core Youth", "Young Youth"],
+  },
+  youthClassification: {
+    type: String,
+    enum: ["In School Youth","Out of School Youth","Working Youth","Youth with Specific Needs"],
+  },
+    specificNeedType: {
+    type: String,
+    enum: [
+      'Person w/Disability',
+      'Children in Conflict w/Law',
+      'Indigenous People'
+    ],
+    default: null
+  },
+  educationalBackground: {
+    type: String,
+    enum: [
+      "Elementary Undergraduate", "Elementary Graduate",
+      "High School Undergraduate", "High School Graduate",
+      "Vocational Graduate", "College Undergraduate",
+      "College Graduate", "Masters Level", "Masters Graduate",
+      "Doctorate Level", "Doctorate Graduate"
+    ],
+  },
+  workStatus: {
+    type: String,
+    enum: [
+      "Employed", "Unemployed", "Self-Employed",
+      "Currently looking for a Job", "Not interested in looking for a Job"
+    ],
+  },
 
   registeredSKVoter: Boolean,
   registeredNationalVoter: Boolean,
@@ -42,14 +72,18 @@ const kkProfileSchema = new mongoose.Schema({
   },
   reasonDidNotAttend: {
     type: String,
-    enum: ["there was no kk assembly", "not interested"],
+    enum: ["There was no KK Assembly", "Not interested"],
   },
-  profileImage: { type: String, required: false },
+  profileImage: { type: String, required: true },
+  signatureImagePath: { type: String },
+  birthday: { type: Date, required: true },
 
   submittedAt: {
     type: Date,
     default: Date.now,
   },
+  isDeleted: { type: Boolean, default: false },
+  deletedAt: { type: Date, default: null },
 });
 
 module.exports = mongoose.model("KKProfile", kkProfileSchema);

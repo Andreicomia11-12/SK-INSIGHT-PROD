@@ -1,0 +1,126 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #0A2C59 50%, #ffffff 50%);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    overflow: hidden;
+}
+
+.sign {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+.container1 {
+    text-align: center;
+    margin-top: 20px;
+    width: auto; /* remove any width restriction */
+}
+
+.logo {
+    width: 20vw;
+    max-width: 100px;
+    height: auto;
+    margin: 0 auto 10px auto;
+}
+
+.title1 {
+    font-size: 20px;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    white-space: nowrap; /* Force in one line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    min-width: 300px; /* Ensure wide enough to fit */
+}
+
+.title2 h1 {
+    font-size: 20px;
+    color: #ffffff;
+    margin: 5px 0;
+}
+
+.container {
+    width: 50%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    margin: 50px auto 0 auto;
+}
+
+.acc {
+    margin-top: 10%;
+    text-align: center;
+}
+
+/* Desktop Split Screen (1024px and above) */
+@media (min-width: 1024px) {
+    body {
+        background: linear-gradient(to right, #0A2C59 50%, #ffffff 50%);
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
+    }
+
+    .sign {
+        flex-direction: row;
+        height: 100vh;
+    }
+
+    .container1 {
+        margin-top: -10%;
+        width: auto; /* Remove width: 50%; */
+        text-align: center;
+    }
+
+    .left-side, .right-side {
+        width: 50%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .left-side {
+        background-color: #0A2C59;
+        color: white;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .right-side {
+        background-color: white;
+    }
+
+    .container {
+        margin: 10%;
+        max-width: 400px;
+    }
+
+    .logo {
+        width: 120px;
+        margin: 0 auto 20px auto;
+    }
+
+    .title1 {
+        font-size: 30px;
+        min-width: 400px; 
+    }
+
+    .title2 h1 {
+        font-size: 30px;
+    }
+}

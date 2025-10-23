@@ -1,21 +1,16 @@
 const multer = require('multer');
-const path = require('path');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../config/cloudinaryConfig');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/profile_images');
+const profileStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'kk_profile_images',
+    allowed_formats: ['jpg', 'jpeg', 'png'],
+    public_id: (req, file) => Date.now() + '-' + file.originalname.replace(/\s+/g, '_'),
   },
-  filename: (req, file, cb) => {
-    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, unique + path.extname(file.originalname));
-  }
 });
 
-const fileFilter = (req, file, cb) => {
-  const allowed = ['image/jpeg', 'image/png', 'image/jpg'];
-  allowed.includes(file.mimetype)
-    ? cb(null, true)
-    : cb(new Error('Only JPG/PNG files allowed'));
-};
+const uploadProfileImage = multer({ storage: profileStorage });
 
-module.exports = multer({ storage, fileFilter });
+module.exports = uploadProfileImage;

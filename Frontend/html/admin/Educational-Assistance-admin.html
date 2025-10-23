@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK-INSIGHT</title>
+  <!-- Add this in your <head> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/Frontend/css/Educational-Assistance-admin.css">
+  <link rel="stylesheet" href="/Frontend/css/header.css">
+  <link rel="stylesheet" href="/Frontend/css/lightbox.css">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+  <!-- Sidebar (unchanged) -->
+  <div class="sidebar">
+    <h3 class="text-2xl font-normal">Sangguniang Kabataan</h3>
+    <div class="logos">
+      <img src="/Frontend/assets/logo.png" alt="logo" class="logo">
+      <div class="title-container">
+        <p class="text-lg font-semibold">SK Officials</p>
+        <p class="admin">Admin</p>
+      </div>
+    </div>
+    <div class="menu">
+          <a
+            href="./admin-dashboard.html"
+            class="flex items-center space-x-2"
+          >
+            <i class="dashs fas fa-columns"></i>
+            <span class="dashb">Dashboard</span>
+          </a>
+        <a href="./KK-Profile.html" class="flex items-center space-x-2">
+          <i class="Kk fas fa-id-badge"></i>
+          <span class="kk">KK Profile</span>
+        </a>
+        <a href="./LGBTQ-Profile.html" class="flex items-center space-x-2">
+          <i class="fas fa-rainbow"></i>
+          <span class="dash">LGBTQ Profile</span>
+        </a>
+        <div class="dashh">
+          <a href="./Educational-Assistance-admin.html" class="flex items-center space-x-2">
+            <i class="fas fa-graduation-cap"></i>
+            <span class="educ">Educational Assistance</span>
+          </a>
+        </div>
+        <a href="./Announcement-admin.html" class="flex items-center space-x-2">
+          <i class="fas fa-bell"></i>
+          <span class="dash">Announcement</span>
+        </a>
+        <a href="./user-account.html" class="flex items-center space-x-2">
+          <i class="fas fa-user"></i>
+          <span class="dash">User Accounts</span>
+        </a>
+        <a href="./exports.html" class="flex items-center space-x-2">
+          <i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+          <span class="dash">Settings</span>
+        </a>
+        <div class="log">
+          <a href="./admin-log.html" class="flex items-center space-x-2">
+            <i class="fas fa-right-from-bracket"></i>
+            <span class="dash">Log out</span>
+          </a>
+        </div>
+      </div>
+  </div>
+
+  
+
+  <!-- Content -->
+    
+
+   
+  <div class="content">
+
+     <div id="header-container"></div>
+<div class="content-container">
+
+
+    <!-- Notification Bell & Dropdown -->
+  <div class="notification-bell" id="notifBell" style="position:absolute; right:40px; top:65px; cursor:pointer; z-index:200;">
+    <i class="fas fa-bell" id="bell1" style="font-size: 1.7em; color: #0A2C59;"></i>
+  </div>
+  <div class="notification-dropdown" id="notifDropdown" style="display:none;">
+    <div class="notif-tabs">
+      <button class="notif-tab active" data-tab="new">New Applications</button>
+      <button class="notif-tab" data-tab="overdue">Overdue Applications</button>
+    </div>
+    <div class="notif-list" id="notifListNew"></div>
+    <div class="notif-list" id="notifListOverdue" style="display:none;"></div>
+  </div>
+
+    <header class="page-header">
+      <h1>Educational Assistance</h1>
+      <p class="subtitle">Manage applicants and track their application status</p>
+    </header>
+
+    <!-- Filters Bar -->
+    <section class="filters-bar">
+      <div class="filter-row">
+        <div class="filter-group">
+          <div class="dropdown" id="yearDropdown" style="position:relative;">
+            <button class="dropdown-button filter-select" type="button" id="yearButton">Year</button>
+            <div class="dropdown-content" id="yearContent"></div>
+          </div>
+          <div class="dropdown" id="cycleDropdown" style="position:relative;">
+            <button class="dropdown-button filter-select" type="button" id="cycleButton" disabled>Cycle</button>
+            <div class="dropdown-content" id="cycleContent"></div>
+          </div>
+          <div class="search-container" style="margin-bottom:0;">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search Resident...">
+          </div>
+          <button id="filterBtn" class="filt-btn">Filter</button>
+          <button id="clearFilterBtn" class="filt-btn clear-btn">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="pending"><i class="fas fa-clock"></i> Pending</button>
+      <button class="tab-btn" data-tab="approved"><i class="fas fa-check-circle"></i> Approved</button>
+      <button class="tab-btn" data-tab="rejected"><i class="fas fa-times-circle"></i> Rejected</button>
+    </nav>
+
+    <!-- Tables -->
+    <section class="tables">
+      <div class="tab-content active" data-tab="pending">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Name</th>
+              <th>Age</th>
+
+              <th>Civil Status</th>
+              <th>Religion</th>
+              <th>Year Level</th>
+              <th>Gender</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="pending"></tbody>
+        </table>
+        <div class="pagination-container" id="pagination-pending"></div>
+      </div>
+
+      <div class="tab-content" data-tab="approved">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Civil Status</th>
+              <th>Religion</th>
+              <th>Year Level</th>
+              <th>Gender</th>
+            </tr>
+          </thead>
+          <tbody id="approved"></tbody>
+        </table>
+        <div class="pagination-container" id="pagination-approved"></div>
+      </div>
+
+      <div class="tab-content" data-tab="rejected">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Name</th>
+              <th>Age</th>  
+              <th>Civil Status</th>
+              <th>Religion</th>
+              <th>Year Level</th>
+              <th>Gender</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="rejected"></tbody>
+        </table>
+        <div class="pagination-container" id="pagination-rejected"></div>
+      </div>
+    </section> <!-- end of .tables -->
+    <div id="pagination" class="pagination-container"></div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profileModal" class="modal">
+  <div class="modal-content modern-modal">
+    <div class="modern-modal-header">
+      <div class="profile-header">
+        <img src="/Frontend/assets/default-profile.jpg" alt="Profile" />
+        <div class="profile-name" id="profileName"></div>
+      </div>
+      <button class="modern-modal-close" title="Close">&times;</button>
+    </div>
+    <div class="modern-modal-body" id="profileDetails">
+      <!-- Content will be injected here -->
+    </div>
+  </div>
+</div>
+
+  <!-- Rejection Reason Modal -->
+  <div id="rejectionModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header" style="background:#0A2C59;color:#fff;border-radius:16px 16px 0 0;padding:18px 28px;position:relative;">
+      <span>Reject Application</span>
+      <span id="closeRejectionModal" class="close-btn" style="position:absolute;top:18px;right:24px;cursor:pointer;">&times;</span>
+    </div>
+    <div class="modal-body" style="padding:24px 28px;">
+      <label for="rejectionReasonSelect">Rejection Reason</label>
+      <select id="rejectionReasonSelect" style="width:100%;border-radius:8px;border:1.5px solid #e0e0e0;padding:10px;font-size:1em;background:#f7f7f7;color:#222;margin-bottom:12px;">
+        <option value="">Select a reason...</option>
+        <option value="requirements not correct">Requirements not correct</option>
+        <option value="incomplete documents">Incomplete documents</option>
+        <option value="not eligible">Not eligible</option>
+        <option value="duplicate application">Duplicate application</option>
+      </select>
+      <label for="rejectionReasonInput">Custom Message (optional)</label>
+      <textarea id="rejectionReasonInput" rows="3" placeholder="Type your message here..." style="width:100%;border-radius:8px;border:1.5px solid #e0e0e0;padding:10px;font-size:1em;background:#f7f7f7;color:#222;margin-bottom:18px;"></textarea>
+      <div style="margin-top:18px;text-align:right;">
+        <button id="submitRejectionBtn" style="background:#e74c3c;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-weight:500;font-size:1em;cursor:pointer;transition:background 0.2s;">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading Modal (highlighted for reuse) -->
+<div id="loadingModal" class="modal">
+  <div class="loading-content">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Processing rejection...</div>
+  </div>
+</div>
+ </div>
+ <script src="/Frontend/js/lightbox.js"></script>
+
+  <script src="../../js/Educational-Assistance-admin.js"></script>
+  <script>
+      fetch('./header.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('header-container').innerHTML = html;
+          // After injecting, run the header JS
+          const script = document.createElement('script');
+          script.src = '/Frontend/js/admin/header.js';
+          document.body.appendChild(script);
+        });
+  </script>
+
+  <script>
+      // Fade in on load
+      const content = document.querySelector('.content');
+      content.classList.add('page-fade');
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          content.classList.remove('page-fade');
+          content.classList.add('page-fade-in');
+        }, 10);
+      });
+
+      // Fade out on navigation for all internal links
+      document.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href');
+        if (
+          href &&
+          !href.startsWith('http') &&
+          !href.startsWith('mailto:') &&
+          !href.startsWith('#') &&
+          !link.hasAttribute('target')
+        ) {
+          link.addEventListener('click', function(e) {
+            // Only fade if not a sidebar link
+            // (Sidebar links are outside .content, so always fade .content)
+            e.preventDefault();
+            content.classList.remove('page-fade-in');
+            content.classList.add('page-fade');
+            setTimeout(() => {
+              window.location.href = href;
+            }, 180); // match the CSS transition duration
+          });
+        }
+      });
+    </script>
+</body>
+</html>

@@ -12,6 +12,10 @@ const lgbtqProfileSchema = new mongoose.Schema(
       ref: "FormCycle",
       required: true,
     },
+    // Demographic fields
+    lastname: String,
+    firstname: String,
+    middlename: String,
     sexAssignedAtBirth: {
       type: String,
       enum: ["Male", "Female"],
@@ -19,10 +23,21 @@ const lgbtqProfileSchema = new mongoose.Schema(
     },
     lgbtqClassification: {
       type: String,
-      enum: ["Lesbian", "Gay", "Bisexual", "Queer", "Intersex", "Asexual"],
+      enum: [
+        "Lesbian",
+        "Gay",
+        "Bisexual",
+        "Queer",
+        "Intersex",
+        "Asexual",
+        "Transgender",
+      ],
       required: true,
     },
-    idImage: String,
+    idImageFront: { type: String }, // Front of ID
+    idImageBack: { type: String },  // Back of ID
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

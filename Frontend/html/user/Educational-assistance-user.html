@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK-INSIGHT</title>
+  <link rel="stylesheet" href="../../css/Educational-assistance-user.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+      <!-- Navbar -->
+    <div class="navbar">
+    <div class="navbar-left">
+      <a href="./index.html">
+        <img src="../../assets/logo.png" alt="Logo" class="logo"/>
+      </a>
+      <a href="./index.html" class="title">SK-PBW</a>
+    </div>
+    <div class="navbar-center">
+      <!-- Desktop Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
+    </div>
+      <div class="navbar-right">
+        <span class="navbar-hamburger" id="navbarHamburger">
+          <i class="fa-solid fa-bars"></i>
+        </span>
+      <a href="./announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+      <a href="../user/userProfile.html"><i class="fa-solid fa-user bell"></i></a>
+      </div>
+    </div>
+    <div class="navbar-mobile-menu" id="navbarMobileMenu">
+      <!-- Mobile Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
+    </div>
+
+<div class="container">
+  <!-- Intro Card -->
+  <div class="card intro">
+    <h2>Educational Assistance Application</h2>
+    <p><strong>TO THE RESPONDENT:</strong></p>
+    <p>We are currently conducting an Educational Assistance Application for every college student. Please read the questions carefully and answer them accurately.</p>
+    <p><strong>REST ASSURED THAT ALL INFORMATION GATHERED FROM THIS STUDY WILL BE TREATED WITH UTMOST CONFIDENTIALITY.</strong></p>
+  </div>
+
+  <!-- Individual Cards for Each Field -->
+  <form id="educationalAssistanceForm">
+  <div class="card">
+    <label for="surname">Last Name:</label>
+    <input type="text" id="surname" name="surname" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="middleName">Middle Name:</label>
+    <input type="text" id="middleName" name="middleName" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="suffix">Suffix (if applicable):</label>
+    <input type="text" id="suffix" name="suffix" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="birthday">Birthday:</label>
+    <input type="date" id="birthday" class="birthday-input" name="birthday" required>
+  </div>
+
+  <div class="card">
+    <label for="placeOfBirth">Place of Birth:</label>
+    <input type="text" id="placeOfBirth" name="placeOfBirth" placeholder="Your Answer">
+  </div>
+  
+  <div class="card">
+    <label for="age">Age:</label>
+    <input type="number" id="age" class="age-input" name="age" placeholder="Your Answer" readonly>
+  </div>
+
+  <div class="card">
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required>
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <label for="civilstatus">Civil Status:</label>
+    <select id="civilstatus" name="civilstatus" required>
+      <option value="">Select Civil Status</option>
+      <option value="Single">Single</option>
+      <option value="Live-in">Live-in</option>
+      <option value="Married">Married</option>
+      <option value="Unknown">Unknown</option>
+      <option value="Separated">Separated</option>
+      <option value="Annulled">Annulled</option>
+      <option value="Divorced">Divorced</option>
+      <option value="Widowed">Widowed</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <label for="religion">Religion:</label>
+    <input type="text" id="religion" name="religion" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="email">E-mail Address:</label>
+    <input type="text" id="email" name="email" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="contact">Contact Number:</label>
+    <input type="text" id="contact" name="contact" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="schoolname">Name of School:</label>
+    <input type="text" id="schoolname" name="schoolname" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="schooladdress">School Address:</label>
+    <input type="text" id="schooladdress" name="schooladdress" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="year">Year:</label>
+    <select class="year" id="year" name="year" required>
+      <option value="">Select Classification</option>
+      <option value="Grade 11">Grade 11</option>
+      <option value="Grade 12">Grade 12</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <label for="benefittype">Types of Benefiting as Applicant:</label>
+    <input type="text" id="benefittype" name="benefittype" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="fathername">Father's Name:</label>
+    <input type="text" id="fathername" name="fathername" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="fathercontact">Father's Contact Number:</label>
+    <input type="text" id="fathercontact" name="fathercontact" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="mothername">Mother's Name:</label>
+    <input type="text" id="mothername" name="mothername" placeholder="Your Answer">
+  </div>
+
+  <div class="card">
+    <label for="mothercontact">Mother's Contact Number:</label>
+    <input type="text" id="mothercontact" name="mothercontact" placeholder="Your Answer">
+  </div>
+
+  <!-- Siblings Section -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Names of Brother/s and Sister/s</h3>
+      <button type="button" id="addSiblingBtn">+ Add Sibling</button>
+    </div>
+
+    <table id="siblingsTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Age</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="siblingsTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="expense-header">
+      <button type="button" id="addExpenseBtn">+ Add Expense</button>
+    </div>
+
+    <table id="expensesTable">
+      <thead>
+        <tr>
+          <th>Fees and Other Expenses to be Incurred</th>
+          <th>Expected Cost</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="expensesTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>III. Requirements</h3>
+    
+    <table class="requirements-table">
+      <thead>
+        <tr>
+          <th>Documents</th>
+          <th>View</th>
+          <th>Delete</th>
+          <th>Upload</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>School ID(Front)</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewFront"></i></td>
+          <td><i class="fa-solid fa-trash delete-icon" id="deleteFront"></i></td>
+          <td>
+            <label for="frontImage" class="upload-plus" id="frontLabel">
+              <i class="fa-solid fa-plus"></i>
+            </label>
+            <input type="file" id="frontImage" name="frontImage" accept="image/*" required>
+            <span class="file-name" id="frontFileName"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>School ID(Back)</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewBack"></i></td>
+          <td><i class="fa-solid fa-trash delete-icon" id="deleteBack"></i></td>
+          <td>
+            <label for="backImage" class="upload-plus" id="backLabel">
+              <i class="fa-solid fa-plus"></i>
+            </label>
+            <input type="file" id="backImage" name="backImage" accept="image/*" required>
+            <span class="file-name" id="backFileName"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Certificate of Enrollment</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewCOE"></i></td>
+          <td><i class="fa-solid fa-trash delete-icon" id="deleteCOE"></i></td>
+          <td>
+            <label for="coeImage" class="upload-plus" id="coeLabel">
+              <i class="fa-solid fa-plus"></i>
+            </label>
+            <input type="file" id="coeImage" name="coeImage" accept="image/*" required>
+            <span class="file-name" id="coeFileName"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Parent's voter's certificate</td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewVoter"></i></td>
+          <td><i class="fa-solid fa-trash delete-icon" id="deleteVoter"></i></td>
+          <td>
+            <label for="voter" class="upload-plus" id="voterLabel">
+              <i class="fa-solid fa-plus"></i>
+            </label>
+            <input type="file" id="voter" name="voter" accept="image/*" required>
+            <span class="file-name" id="voterFileName"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="submit-btn-container">
+    <button type="submit" class="submit-btn">Submit</button>
+  </div>
+</form>
+</div>
+
+<div id="imagePreviewModal">
+  <button id="closePreviewBtn" class="close-preview-btn">&times;</button>
+  <img id="previewImg" src="" alt="Preview">
+</div>
+      <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <h3>SK-INSIGHT</h3>
+          <p>Empowering the youth through data-driven governance.</p>
+        </div>
+
+        <div class="footer-middle">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Things About US</a></li>
+            <li><a href="#">Things About SK</a></li>
+            <li><a href="#">Things About SK-INSIGHT</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-right">
+          <h4>Follow Us</h4>
+          <ul>
+            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="footer-bottom">
+        <p>© 2025 SK-INSIGHT. All rights reserved.</p>
+      </div>
+    </footer>
+  <script src="../../js/educ-user.js"></script>
+</body>
+</html>

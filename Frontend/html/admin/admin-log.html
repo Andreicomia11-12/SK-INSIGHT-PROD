@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../css/admin-log.css" />
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="sign">
+      <!-- Left Side -->
+      <div class="left-side">
+        <div class="container1">
+          <div class="img1">
+            <img src="../../assets/logo.png" alt="logo" class="logo" />
+          </div>
+          <div class="title1">
+            <h2>SANGGUNIANG KABATAAN</h2>
+          </div>
+          <div class="title2">
+            <h1>BARANGAY</h1>
+            <h1>PUTING BATO WEST</h1>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="right-side">
+        <div class="container">
+          <h1 class="text-center text-xl font-bold">Log In</h1>
+          <form id="loginForm">
+            <!-- Username -->
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              required
+              class="border bg-gray-100 border-black rounded px-3 py-2 w-full mb-3 focus:outline-none focus:border-blue-500"
+            />
+
+            <!-- Password with eye icon -->
+            <div class="relative mb-3">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+                class="border bg-gray-100 border-black rounded px-3 py-2 w-full focus:outline-none focus:border-blue-500 pr-10"
+                id="passwordField"
+              />
+              <span
+                id="togglePassword"
+                class="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="button flex justify-center">
+              <button
+                type="submit"
+                class="bg-blue-900 text-white py-2 px-6 rounded hover:bg-blue-800"
+              >
+                Log in
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../js/admin-log.js"></script>
+  </body>
+</html>

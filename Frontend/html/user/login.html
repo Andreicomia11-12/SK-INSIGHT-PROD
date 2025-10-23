@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../css/login.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="sign">
+      <div class="left-side">
+        <div class="container1">
+          <div class="img1">
+            <img src="../../assets/logo.png" alt="logo" class="logo" />
+          </div>
+          <div>
+            <h2 class="sk">SANGGUNIANG KABATAAN</h2>
+          </div>
+          <div>
+            <h1 class="sk1">BARANGAY</h1>
+            <h1 class="sk1">PUTING BATO WEST</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="container">
+          <h1 class="text-center text-xl font-bold mb-6">Sign In</h1>
+          <form id="loginForm">
+            <!-- Username with user icon -->
+            <div class="relative mb-4">
+              <span
+                class="absolute inset-y-0 left-3 flex items-center text-gray-500"
+              >
+                <i class="fa-solid fa-user"></i>
+              </span>
+              <input
+                type="text"
+                name="email"
+                placeholder="Email"
+                required
+                class="border bg-gray-100 border-gray-300 rounded px-3 py-2 w-full pl-10 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <!-- Password with padlock icon and eye toggle -->
+            <div class="relative mb-4">
+              <span
+                class="absolute inset-y-0 left-3 flex items-center text-gray-500"
+              >
+                <i class="fa-solid fa-lock"></i>
+              </span>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+                id="passwordField"
+                class="border bg-gray-100 border-gray-300 rounded px-3 py-2 w-full pl-10 pr-10 focus:outline-none focus:border-blue-500"
+              />
+              <span
+                id="togglePassword"
+                class="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500"
+              >
+                <i class="fa-solid fa-eye-slash"></i>
+              </span>
+            </div>
+
+            <!-- Remember me and Forgot password -->
+            <div class="flex justify-between items-center mb-6">
+              <!-- <label class="flex items-center text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  name="rememberMe"
+                  class="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                Remember me
+              </label> -->
+              <a
+                href="./forgot1.html"
+                class="text-blue-500 text-sm hover:text-blue-700"
+                >Forgot password</a
+              >
+            </div>
+
+            <!-- Sign in button -->
+            <div class="mb-6">
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-colors"
+              >
+                Sign in
+              </button>
+            </div>
+
+            <!-- Sign up link -->
+            <div class="text-center text-sm text-gray-700">
+              I don't have an account?
+              <a
+                href="/Frontend/html/user/signup.html"
+                class="text-blue-600 hover:text-blue-800 font-medium"
+                >Sign Up</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../js/login.js" defer></script>
+  </body>
+</html>

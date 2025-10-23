@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../css/signup.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="sign">
+        <div class="left-side">
+            <div class="container1">
+                <div class="img1">
+                    <img src="../../assets/logo.png" alt="logo" class="logo">
+                </div>
+                <div class="title1">
+                    <h2>SANGGUNIANG KABATAAN</h2>
+                </div>
+                <div class="title2">
+                    <h1>BARANGAY</h1>
+                    <h1>PUTING BATO WEST</h1>
+                </div>
+            </div>
+        </div>
+    
+        <div class="right-side">
+            <div class="container">
+                <h1 class="text-center text-xl font-bold mb-6">Sign Up</h1>
+                <form id="signupForm">
+
+                    <!-- Username with user icon -->
+                    <div class="relative mb-4">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" name="username" placeholder="Username" required
+                            class="border bg-gray-100 border-gray-300 rounded px-3 py-2 w-full pl-10 focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <!-- Email with envelope icon -->
+                    <div class="relative mb-4">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        <input type="email" name="email" placeholder="Email" required
+                            class="border bg-gray-100 border-gray-300 rounded px-3 py-2 w-full pl-10 focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <!-- Password with padlock icon and eye toggle -->
+                    <div class="relative mb-4">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" name="password" placeholder="Password" required
+                            id="passwordField"
+                            class="border bg-gray-100 border-gray-300 rounded px-3 py-2 w-full pl-10 pr-10 focus:outline-none focus:border-blue-500">
+                        <span id="togglePassword" 
+                            class="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </span>
+                    </div>
+
+                    <!-- Birthday with calendar icon -->
+                    <div class="relative mb-4">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                            <i class="fa-solid fa-calendar"></i>
+                        </span>
+                        <input type="text" id="birthday" name="birthday" placeholder="YYYY-MM-DD" required
+                            class="border bg-gray-100 border-gray-300 rounded px-3 py-2 w-full pl-10 focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <!-- ID Image with file icon -->
+                    <div class="relative mb-6">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                            <i class="fa-solid fa-file-image"></i>
+                        </span>
+                        <input type="file" id="idImage" name="idImage" required
+                            class="border bg-gray-100 border-gray-300 rounded px-3 py-2 w-full pl-10 focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <!-- Sign up button -->
+                    <div class="mb-6">
+                        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-colors">
+                            Confirm
+                        </button>
+                    </div>
+
+                    <!-- Sign in link -->
+                    <div class="text-center text-sm text-gray-700">
+                        Already have an account? 
+                        <a href="/Frontend/html/user/login.html" class="text-blue-600 hover:text-blue-800 font-medium">Sign In</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/signup.js" defer></script>
+</body>
+</html>

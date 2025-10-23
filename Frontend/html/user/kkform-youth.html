@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KK Profiling - Youth & Voting</title>
+  <link rel="stylesheet" href="../../css/kkform.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-left">
+      <a href="./index.html">
+        <img src="../../assets/logo.png" alt="Logo" class="logo"/>
+      </a>
+      <a href="./index.html" class="title">SK-PBW</a>
+    </div>
+    <div class="navbar-center">
+      <!-- Desktop Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
+    </div>
+    <div class="navbar-right">
+      <span class="navbar-hamburger" id="navbarHamburger">
+        <i class="fa-solid fa-bars"></i>
+      </span>
+      <a class="notif" href="../user/announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+      <a href="../user/userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
+    </div>
+  </div>
+  <div class="kk-container">
+    <div class="kk-card kk-intro">
+      <h2>KK Profiling</h2>
+      <p><strong>Step 3 of 3: Youth & Voting Information</strong></p>
+    </div>
+    <form id="youthForm" enctype="multipart/form-data">
+      <div class="kk-card">
+        <label class="kk-label" for="youthAgeGroup">Youth Age Group:</label>
+        <select class="kk-input" id="youthAgeGroup" name="youthAgeGroup" required>
+          <option value="">Select Age Group</option>
+          <option value="Child Youth">Child Youth</option>
+          <option value="Core Youth">Core Youth</option>
+          <option value="Young Youth">Young Youth</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="youthClassification">Youth Classification</label>
+        <select id="youthClassification" name="youthClassification" class="kk-input">
+          <option value="">Select classification</option>
+          <option value="In School Youth">In School Youth</option>
+          <option value="Out of School Youth">Out-of-School Youth</option>
+          <option value="Working Youth">Working Youth</option>
+          <option value="Youth with Specific Needs">Youth with Specific Needs</option>
+        </select>
+
+        <div id="specificNeedsGroup" style="display: none; margin-top: 12px;">
+          <label for="specificNeedType">If Youth with Specific Needs, specify:</label>
+          <select id="specificNeedType" name="specificNeedType" class="kk-input">
+            <option value="">Select Specific Need</option>
+            <option value="Person w/Disability">Person w/Disability</option>
+            <option value="Children in Conflict w/Law">Children in Conflict w/Law</option>
+            <option value="Indigenous People">Indigenous People</option>
+          </select>
+        </div>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="educationalBackground">Educational Background:</label>
+        <select class="kk-input" id="educationalBackground" name="educationalBackground" required>
+          <option value="">Select Educational Background</option>
+          <option value="Elementary Undergraduate">Elementary Undergraduate</option>
+          <option value="Elementary Graduate">Elementary Graduate</option>
+          <option value="High School Undergraduate">High School Undergraduate</option>
+          <option value="High School Graduate">High School Graduate</option>
+          <option value="Vocational Graduate">Vocational Graduate</option>
+          <option value="College Undergraduate">College Undergraduate</option>
+          <option value="College Graduate">College Graduate</option>
+          <option value="Masters Level">Masters Level</option>
+          <option value="Masters Graduate">Masters Graduate</option>
+          <option value="Doctorate Level">Doctorate Level</option>
+          <option value="Doctorate Graduate">Doctorate Graduate</option>
+        </select>
+      </div>
+
+      <div class="kk-card">
+        <label class="kk-label" for="workStatus">Work Status:</label>
+        <select class="kk-input" id="workStatus" name="workStatus" required>
+          <option value="">Select Work Status</option>
+          <option value="Employed">Employed</option>
+          <option value="Unemployed">Unemployed</option>
+          <option value="Self-Employed">Self-Employed</option>
+          <option value="Currently looking for a Job">Currently looking for a Job</option>
+          <option value="Not interested in looking for a Job">Not interested in looking for a Job</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="registeredSKVoter">Registered SK Voter:</label>
+        <select class="kk-input" id="registeredSKVoter" name="registeredSKVoter" required>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="registeredNationalVoter">Registered National Voter:</label>
+        <select class="kk-input" id="registeredNationalVoter" name="registeredNationalVoter" required>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="votedLastSKElection">Voted in Last SK Election:</label>
+        <select class="kk-input" id="votedLastSKElection" name="votedLastSKElection" required>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="attendedKKAssembly">Attended KK Assembly:</label>
+        <select class="kk-input" id="attendedKKAssembly" name="attendedKKAssembly" required>
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+
+        <!-- These two groups are now inside the same kk-card container -->
+        <div id="attendanceCountGroup" style="display: none; margin-top: 12px;">
+          <label class="kk-label" for="attendanceCount">How many times?</label>
+          <select class="kk-input" id="attendanceCount" name="attendanceCount">
+            <option value="">Select</option>
+            <option value="1-2 times">1-2 times</option>
+            <option value="3-4 times">3-4 times</option>
+            <option value="5 and above">5 and above</option>
+          </select>
+        </div>
+        <div id="reasonGroup" style="display: none; margin-top: 12px;">
+          <label class="kk-label" for="reasonDidNotAttend">Why didn't you attend?</label>
+          <select class="kk-input" id="reasonDidNotAttend" name="reasonDidNotAttend">
+            <option value="">Select</option>
+            <option value="There was no KK Assembly">There was no KK Assembly</option>
+            <option value="Not interested">Not interested</option>
+          </select>
+        </div>
+      </div>
+      <!-- Side-by-side image upload containers -->
+      <div class="kk-upload-row">
+        <div class="kk-card kk-upload-col">
+          <label class="kk-label">Profile Image (ID):</label>
+          <button type="button" id="customUploadBtn" class="kk-upload-btn"><i class="fa-solid fa-plus"></i> Upload Image</button>
+          <div id="profileImagePreview" class="kk-upload-preview"></div>
+          <input type="file" id="profileImage" accept="image/*" style="display:none;">
+        </div>
+        <div class="kk-card kk-upload-col">
+          <label class="kk-label">Signature Image:</label>
+          <button type="button" id="customSignatureBtn" class="kk-upload-btn"><i class="fa-solid fa-plus"></i> Upload Signature</button>
+          <div id="signatureImagePreview" class="kk-upload-preview"></div>
+          <input type="file" id="signatureImage" accept="image/*" style="display:none;">
+        </div>
+      </div>
+
+      <div class="kk-btn-group">
+        <button type="button" id="previousBtn" class="kk-btn" onclick="window.location.href='kkform-address.html'">Previous</button>
+        <button type="submit" class="kk-btn kk-submit-btn">Finish</button>
+      </div>
+    </form>
+  </div>
+  <div class="navbar-mobile-menu" id="navbarMobileMenu">
+    <!-- Mobile Navbar -->
+    <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+    <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+    <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
+  </div>
+
+        <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <h3>SK-INSIGHT</h3>
+          <p>Empowering the youth through data-driven governance.</p>
+        </div>
+
+        <div class="footer-middle">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Things About US</a></li>
+            <li><a href="#">Things About SK</a></li>
+            <li><a href="#">Things About SK-INSIGHT</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-right">
+          <h4>Follow Us</h4>
+          <ul>
+            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="footer-bottom">
+        <p>© 2025 SK-INSIGHT. All rights reserved.</p>
+      </div>
+    </footer>
+  <script src="../../js/kkform-youth.js"></script>
+</body>
+</html>

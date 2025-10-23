@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KK Profiling - Personal Info</title>
+  <link rel="stylesheet" href="../../css/kkform.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-left">
+      <a href="./index.html">
+        <img src="../../assets/logo.png" alt="Logo" class="logo"/>
+      </a>
+      <a href="./index.html" class="title">SK-PBW</a>
+    </div>
+    <div class="navbar-center">
+      <!-- Desktop Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnDesktop" class="prof">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnDesktop" class="prof">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnDesktop" class="prof">Educational Assistance</a>
+    </div>
+    <div class="navbar-right">
+      <span class="navbar-hamburger" id="navbarHamburger">
+        <i class="fa-solid fa-bars"></i>
+      </span>
+      <a class="notif" href="../user/announcement.html"><i class="fa-solid fa-bell bell"></i></a>
+      <a href="../user/userProfile.html"><i class="fa-solid fa-user bell" style="color: #fff;"></i></a>
+    </div>
+  </div>
+  <div class="navbar-mobile-menu" id="navbarMobileMenu">
+      <!-- Mobile Navbar -->
+      <a href="./kkform-personal.html" id="kkProfileNavBtnMobile" class="nav-btn">KK Profile</a>
+      <a href="./lgbtqform.html" id="lgbtqProfileNavBtnMobile" class="nav-btn">LGBTQ+ Profile</a>
+      <a href="./Educational-assistance-user.html" id="educAssistanceNavBtnMobile" class="nav-btn">Educational Assistance</a>
+    </div>
+  <div class="kk-container">
+<div class="card intro">
+      <p style="font-weight: bold; text-align: left; margin-bottom: 18px;">TO THE RESPONDENT:</p>
+      <p style="text-align: center; margin-bottom: 10px;">Good day!</p>
+      <p style="text-align: center; margin-bottom: 10px;">
+        We are currently conducting a study that focuses on assessing the demographic information of the Katipunan ng Kabataan. We would like to ask your participation by taking your time to answer this questionnaire. Please read the questions carefully and answer them accurately.
+      </p>
+      <p style="font-weight: bold; text-align: left; margin-top: 18px;">
+        REST ASSURED THAT ALL INFORMATION GATHERED FROM THIS STUDY WILL BE TREATED WITH UTMOST CONFIDENTIALITY.
+      </p>
+    </div>
+    <form id="personalForm">
+      <div class="kk-card"><label class="kk-label" for="lastname">Last Name:</label><input class="kk-input" type="text" id="lastname" name="lastname" required></div>
+      <div class="kk-card"><label class="kk-label" for="firstname">First Name:</label><input class="kk-input" type="text" id="firstname" name="firstname" required></div>
+      <div class="kk-card"><label class="kk-label" for="middlename">Middle Name:</label><input class="kk-input" type="text" id="middlename" name="middlename" required></div>
+      <div class="kk-card"><label class="kk-label" for="suffix">Suffix (if any):</label><input class="kk-input" type="text" id="suffix" name="suffix"></div>
+      <div class="kk-card">
+        <label class="kk-label" for="gender">Gender:</label>
+        <select class="kk-input" id="gender" name="gender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="birthday">Birthday:</label>
+        <input class="kk-input" type="date" id="birthday" name="birthday" required>
+      </div>
+      <div class="kk-card">
+        <label class="kk-label" for="age">Age:</label>
+        <input class="kk-input" type="number" id="age" name="age" readonly>
+      </div>
+      <div class="kk-btn-group">
+        <button type="submit" class="kk-btn kk-next-btn">Next</button>
+      </div>
+    </form>
+  </div>
+
+
+        <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <h3>SK-INSIGHT</h3>
+          <p>Empowering the youth through data-driven governance.</p>
+        </div>
+
+        <div class="footer-middle">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Things About US</a></li>
+            <li><a href="#">Things About SK</a></li>
+            <li><a href="#">Things About SK-INSIGHT</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-right">
+          <h4>Follow Us</h4>
+          <ul>
+            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/pbwsk" target="_blank">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="footer-bottom">
+        <p>© 2025 SK-INSIGHT. All rights reserved.</p>
+      </div>
+    </footer>
+  <script src="../../js/kkform-personal.js"></script>
+</body>
+</html>

@@ -1,0 +1,768 @@
+AGE,CIVIL_STATUS,YOUTH_CLASSIFICATION,YOUTH_AGE_GROUP,EDUCATIONAL_BACKGROUND,WORK_STATUS
+24,Single,Working Youth,Core Youth,College Graduate,Employed
+25,Married,Working Youth,Young Adult,College Graduate,Employed
+22,Married,Working Youth,Core Youth,High School Graduate,Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,YSN,Core Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+25,Single,Out of School Youth,Young Adult,College Graduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+30,Single,Working Youth,Young Adult,College Graduate,Employed
+29,Married,In School Youth,Young Adult,College Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+24,Single,Out of School Youth,Core Youth,College Graduate,Employed
+25,Single,Out of School Youth,Young Adult,High School Graduate,Currently Looking For A Job
+24,Single,In School Youth,Core Youth,College Undergraduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Employed
+22,Single,Out of School Youth,Young Adult,High School Undergraduate,Currently Looking For A Job
+17,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+18,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+22,Single,Working Youth,Core Youth,College Graduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Not Interested In Looking For A Job
+22,Married,Working Youth,Core Youth,College Undergraduate,Employed
+29,Single,Working Youth,Young Adult,College Undergraduate,Employed
+25,Single,Out of School Youth,Young Adult,College Undergraduate,Currently Looking For A Job
+24,Married,Out of School Youth,Core Youth,High School Graduate,Unemployed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+19,Single,Working Youth,Core Youth,High School Graduate,Employed
+23,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+28,Married,Out of School Youth,Young Adult,Elementary Graduate,Unemployed
+23,Married,Out of School Youth,Core Youth,High School Graduate,Unemployed
+25,Single,Working Youth,Young Adult,College Graduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+30,Single,Working Youth,Young Adult,College Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+21,Married,Out of School Youth,Core Youth,Vocational Graduate,Unemployed
+23,Single,Working Youth,Young Adult,College Graduate,Currently Looking For A Job
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Undergraduate,Unemployed
+28,Single,Out of School Youth,Young Adult,High School Graduate,Currently Looking For A Job
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+26,Single,Out of School Youth,Young Adult,Masters Graduate,Currently Looking For A Job
+15,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+24,Single,Working Youth,Core Youth,Masters Graduate,Employed
+22,Single,Out of School Youth,Core Youth,High School Graduate,Self-Employed
+22,Single,Out of School Youth,Core Youth,High School Undergraduate,Employed
+21,Married,Out of School Youth,Core Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,Working Youth,Core Youth,High School Graduate,Employed
+30,Single,YSN,Young Adult,Nan,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+22,Single,Working Youth,Core Youth,College Graduate,Employed
+27,Single,Working Youth,Young Adult,College Graduate,Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+28,Single,Working Youth,Young Adult,College Graduate,Currently Looking For A Job
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+26,Married,Working Youth,Young Adult,College Undergraduate,Employed
+20,Single,Working Youth,Core Youth,High School Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+30,Single,Working Youth,Young Adult,College Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+25,Live-In,YSN,Young Adult,Elementary Undergraduate,Not Interested In Looking For A Job
+30,Live-In,YSN,Young Adult,Elementary Undergraduate,Self-Employed
+25,Live-In,Working Youth,Young Adult,Elementary Undergraduate,Self-Employed
+25,Live-In,Out of School Youth,Young Adult,Elementary Undergraduate,Currently Looking For A Job
+26,Live-In,Working Youth,Young Adult,Elementary Undergraduate,Currently Looking For A Job
+20,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+29,Single,Working Youth,Young Adult,High School Graduate,Self-Employed
+29,Single,Working Youth,Young Adult,High School Graduate,Currently Looking For A Job
+23,Live-In,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+26,Single,Working Youth,Young Adult,College Graduate,Employed
+20,Married,Out of School Youth,Core Youth,College Undergraduate,Unemployed
+28,Single,Working Youth,Young Adult,College Graduate,Self-Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,Working Youth,Core Youth,High School Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,High School Graduate,Employed
+29,Single,Working Youth,Young Adult,High School Graduate,Employed
+23,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+27,Single,Out of School Youth,Young Adult,High School Graduate,Unemployed
+25,Married,Out of School Youth,Young Adult,High School Graduate,Employed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+26,Single,Working Youth,Young Adult,High School Graduate,Employed
+30,Live-In,Working Youth,Young Adult,College Undergraduate,Employed
+21,Single,Working Youth,Core Youth,College Undergraduate,Employed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+30,Married,Working Youth,Young Adult,High School Graduate,Employed
+26,Single,Working Youth,Young Adult,Vocational Graduate,Unemployed
+16,Single,In School Youth,Child Youth,Elementary Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+20,Married,Out of School Youth,Core Youth,High School Graduate,Unemployed
+23,Single,Working Youth,Core Youth,High School Graduate,Employed
+18,Single,Working Youth,Core Youth,High School Graduate,Employed
+16,Single,In School Youth,Child Youth,Elementary Graduate,Unemployed
+15,Single,In School Youth,Child Youth,Elementary Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+28,Married,Working Youth,Young Adult,College Graduate,Employed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+27,Single,Out of School Youth,Young Adult,College Undergraduate,Unemployed
+26,Married,Out of School Youth,Young Adult,High School Undergraduate,Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Employed
+25,Single,Out of School Youth,Young Adult,College Undergraduate,Unemployed
+23,Single,Working Youth,Core Youth,High School Graduate,Employed
+22,Single,Out of School Youth,Core Youth,College Undergraduate,Self-Employed
+25,Married,Out of School Youth,Core Youth,High School Graduate,Self-Employed
+23,Single,Working Youth,Core Youth,College Undergraduate,Self-Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+24,Single,Working Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+23,Single,In School Youth,Core Youth,Vocational Graduate,Employed
+15,Single,Out of School Youth,Child Youth,Elementary Graduate,Unemployed
+28,Single,Working Youth,Young Adult,Vocational Graduate,Self-Employed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High  School Undergraduate,Unemployed
+22,Single,In School Youth,Core Youth,College Graduate,Currently Looking For A Job
+19,Single,Out of School Youth,Core Youth,High School Udergraduate,Self-Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Currently Looking For A Job
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+28,Single,Working Youth,Young Adult,High School Graduate,Employed
+23,Single,Out of School Youth,Core Youth,College Undergraduate,Unemployed
+29,Married,Out of School Youth,Young Adult,High School Graduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergrade,Unemployed
+25,Single,Working Youth,Young Adult,College Undergrade,Employed
+28,Single,Working Youth,Young Adult,High School Graduate,Unemployed
+23,Live-In,Working Youth,Core Youth,High School Graduate,Employed
+24,Live-In,Working Youth,Core Youth,High School Graduate,Employed
+19,Single,Out of School Youth,Core Youth,Elementary Undergraduate,Unemployed
+21,Single,Out of School Youth,Core Youth,Elementary Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+28,Live-In,Working Youth,Young Adult,High School Graduate,Unemployed
+26,Single,Working Youth,Young Adult,High School Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+30,Live-In,Working Youth,Young Adult,High School Graduate,Currently Looking For A Job
+28,Married,Working Youth,Young Adult,College Graduate,Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,High School Graduate,Employed
+27,Married,Working Youth,Young Adult,High School Graduate,Employed
+26,Single,Working Youth,Young Adult,High School Graduate,Employed
+28,Married,Working Youth,Young Adult,Masters Level,Employed
+23,Single,Out of School Youth,Core Youth,College Graduate,Currently Looking For A Job
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,Out of School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+23,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+28,Married,Working Youth,Young Adult,College Undergraduate,Employed
+30,Married,Working Youth,Young Adult,College Undergraduate,Employed
+24,Single,Working Youth,Core Youth,High School Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+20,Single,Out of School Youth,Core Youth,Vocational Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+30,Married,Working Youth,Young Adult,College Graduate,Employed
+23,Single,Working Youth,Core Youth,College Graduate,Employed
+28,Married,Out of School Youth,Young Adult,High School Graduate,Unemployed
+22,Single,Working Youth,Core Youth,High School Graduate,Employed
+20,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+24,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+30,Married,Working Youth,Young Adult,Masters Graduate,Employed
+28,Single,Working Youth,Young Adult,College Graduate,Employed
+23,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+18,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Undergraduate,Unemployed
+30,Single,Out of School Youth,Young Adult,Elementary Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Employed
+30,Single,Working Youth,Young Adult,College Graduate,Employed
+25,Single,In School Youth,Young Adult,College Undergraduate,Unemployed
+20,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+27,Single,Out of School Youth,Young Adult,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+29,Married,Out of School Youth,Young Adult,Elementary Graduate,Unemployed
+24,Single,Out of School Youth,Core Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+28,Married,Working Youth,Young Adult,College Graduate,Self-Employed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+25,Single,Working Youth,Young Adult,Elementary Graduate,Employed
+27,Single,Working Youth,Young Adult,High School Graduate,Employed
+28,Live-In,Working Youth,Young Adult,High School Graduate,Employed
+21,Live-In,Working Youth,Core Youth,Elementary Graduate,Employed
+18,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+21,Single,Out of School Youth,Core Youth,High School Graduate,Employed
+29,Married,Working Youth,Young Adult,High School Graduate,Employed
+17,Single,Out of School Youth,Child Youth,Elementary Undergraduate,Unemployed
+29,Live-In,Out of School Youth,Young Adult,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+25,Married,Out of School Youth,Young Adult,High School Graduate,Currently Looking For A Job
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+26,Married,Out of School Youth,Young Adult,College Graduate,Unemployed
+24,Single,Working Youth,Core Youth,College Graduate,Employed
+27,Single,Working Youth,Young Adult,Masters Level,Employed
+24,Single,Working Youth,Core Youth,High School Graduate,Self-Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Self-Employed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+29,Married,Working Youth,Young Adult,Elementary Undergraduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,High School Graduate,Employed
+23,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+22,Single,Out of School Youth,Core Youth,College Graduate,Currently Looking For A Job
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+22,Single,Out of School Youth,Core Youth,College Graduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,College Graduate,Employed
+26,Married,Working Youth,Young Adult,High School Graduate,Self-Employed
+21,Single,Out of School Youth,Core Youth,College Undergraduate,Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Employed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Employed
+28,Single,In School Youth,Young Adult,College Undergraduate,Unemployed
+30,Married,Working Youth,Young Adult,College Graduate,Employed
+18,Single,In School Youth,Core Youth,Vocational Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Self-Employed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Undergraduate,Unemployeed
+18,Single,In School Youth,Core Youth,High Schoiol Graduate,Unemployed
+23,Married,Working Youth,Core Youth,High School Graduate,Employed
+24,Married,Out of School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,Out of School Youth,Child Youth,High School Undergraduate,Unemployed
+21,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+20,Single,Working Youth,Core Youth,Elementary Undergraduate,Employed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+22,Single,Working Youth,Core Youth,Elementary Graduate,Employed
+28,Live-In,Out of School Youth,Young Adult,High School Graduate,Unemployed
+20,Single,Working Youth,Core Youth,High School Graduate,Employed
+27,Live-In,Working Youth,Young Adult,High School Graduate,Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+19,Live-In,Out of School Youth,Core Youth,High School Graduate,Unemployed
+23,Single,Out of School Youth,Core Youth,High School Undergraduate,Self-Employed
+20,Single,In School Youth,Core Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+21,Single,Working Youth,Core Youth,College Undergraduate,Employed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+26,Married,Working Youth,Young Adult,Elementary Undergraduate,Employed
+25,Married,Out of School Youth,Young Adult,High School Graduate,Unemployed
+23,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+20,Married,Out of School Youth,Core Youth,College Undergraduate,Unemployed
+29,Single,Out of School Youth,Young Adult,College Undergraduate,Employed
+28,Single,Out of School Youth,Young Adult,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Not Interested In Looking Job
+30,Married,Working Youth,Young Adult,High School Graduate,Employed
+25,Single,Out of School Youth,Young Adult,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+22,Single,Working Youth,Core Youth,College Undergraduate,Currently Looking For A Job
+24,Single,Out of School Youth,Core Youth,College Graduate,Currently Looking For A Job
+15,Single,In School Youth,Child Youth,High School Undergraduate,Not Interested In Looking Job
+23,Live-In,Working Youth,Core Youth,High School Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+24,Married,Working Youth,Core Youth,High School Graduate,Employed
+28,Single,Working Youth,Young Adult,College Graduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+23,Single,Working Youth,Core Youth,High School Graduate,Employed
+24,Single,Out of School Youth,Core Youth,College Graduate,Unemployed
+28,Married,Working Youth,Young Adult,High School Graduate,Employed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+27,Married,Working Youth,Young Adult,College Graduate,Employed
+26,Single,Working Youth,Young Adult,College Graduate,Unemployed
+28,Single,Working Youth,Young Adult,College Graduate,Employed
+29,Live-In,Working Youth,Young Adult,College Graduate,Employed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+22,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+24,Single,Working Youth,Core Youth,Vocational Graduate,Currently Looking For A Job
+25,Single,Working Youth,Core Youth,High School Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,Out of School Youth,Young Adult,College Graduate,Currently Looking For A Job
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,Out of School Youth,Core Youth,High School Graduate,Employed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+27,Married,Working Youth,Young Adult,Masters Level,Self-Employed
+25,Married,Working Youth,Young Adult,Vocational Graduate,Employed
+18,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+26,Married,Out of School Youth,Young Adult,High School Graduate,Currently Looking For A Job
+21,Single,Out of School Youth,Core Youth,College Undergraduate,Employed
+17,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,Vocational Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+24,Single,Working Youth,Core Youth,College Graduate,Employed
+27,Single,Working Youth,Young Adult,College Graduate,Employed
+18,Single,Out of School Youth,Core Youth,College Undergaduate,Unemployed
+15,Single,YSN,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+24,Single,Working Youth,Core Youth,College Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+23,Married,Working Youth,Core Youth,High School Graduate,Self-Employed
+24,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+23,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High  School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High  School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High  School Graduate,Unemployed
+25,Single,Working Youth,Young Adult,College Graduate,Employed
+20,Single,Out of School Youth,Core Youth,College Undergaduate,Unemployed
+25,Single,Working Youth,Young Adult,College Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High  School Graduate,Unemployed
+18,Single,Working Youth,Core Youth,College Undergaduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Not Interested In Looking Job
+20,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+22,Live-In,Working Youth,Core Youth,High School Graduate,Employed
+30,Married,Working Youth,Young Adult,College Undergaduate,Employed
+24,Single,Out of School Youth,Core Youth,Vocational Graduate,Unemployed
+26,Single,Out of School Youth,Young Adult,High School Graduate,Unemployed
+21,Single,Out of School Youth,Core Youth,College Undergaduate,Unemployed
+27,Single,Working Youth,Young Adult,College Graduate,Employed
+29,Single,Working Youth,Young Adult,College Graduate,Employed
+27,Single,Working Youth,Young Adult,High School Graduate,Self-Employed
+25,Live-In,Working Youth,Young Adult,Vocational Graduate,Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+23,Single,Working Youth,Core Youth,High Schol Graduate,Employed
+26,Single,Working Youth,Young Adult,College Graduate,Employed
+21,Single,In School Youth,Core Youth,College Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+30,Married,Out of School Youth,Young Adult,Vocational Graduate,Employed
+27,Single,Out of School Youth,Young Adult,College Graduate,Employed
+20,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+30,Live-In,Working Youth,Young Adult,High School Undergraduate,Employed
+17,Single,In School Youth,Core Youth,High School Undergraduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+19,Single,Out of School Youth,Core Youth,Vocational Graduate,Currently Looking For Job
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+22,Live-In,Working Youth,Core Youth,Vocational Graduate,Employed
+19,Single,Working Youth,Core Youth,Vocational Graduate,Employed
+25,Single,Working Youth,Young Adult,Vocational Graduate,Employed
+21,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+25,Single,Working Youth,Young Adult,College Graduate,Employed
+20,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+24,Single,Working Youth,Core Youth,College Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+27,Married,Working Youth,Young Adult,College Graduate,Employed
+21,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergaduate,Unemployed
+30,Married,Working Youth,Young Adult,College Graduate,Employed
+23,Single,Working Youth,Core Youth,High School Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+21,Single,Working Youth,Core Youth,College Undergraduate,Employed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Core Youth,Highschool Undergraduate,Unemployed
+22,Single,Working Youth,Core Youth,Vocational Graduate,Self-Employed
+29,Married,-,Young Adult,College Graduate,Currently Looking For A Job
+30,Married,Out of School Youth,Young Adult,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Undergraduate,Unemployed
+20,Single,In School Youth,Core Youth,High School Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,High School Undergraduate,Employed
+20,Single,In School Youth,Core Youth,College Undergraduate,Employed
+26,Single,Working Youth,Young Adult,High School Undergraduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+22,Single,Working Youth,Core Youth,High School Graduate,Employed
+29,Single,Out of School Youth,Young Adult,Elementary Graduate,Currently Looking For A Job
+22,Single,Working Youth,Core Youth,College Graduate,Employed
+23,Single,Working Youth,Core Youth,High School Graduate,Self-Employed
+30,Single,Out of School Youth,Young Adult,High School Graduate,Self-Employed
+23,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+20,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+25,Single,Working Youth,Core Youth,High School Graduate,Employed
+26,Married,Working Youth,Young Adult,College Undergraduate,Employed
+30,Married,Working Youth,Young Adult,High School Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+23,Single,Working Youth,Core Youth,College Graduate,Employed
+20,Single,In School Youth,Core Youth,College Undergraduate,Employed
+20,Single,Out of School Youth,Core Youth,High School Graduate,Employed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Unemployed
+30,Single,Working Youth,Young Adult,High School Graduate,Employed
+20,Single,Working Youth,Core Youth,High School Graduate,Employed
+27,Single,Working Youth,Young Adult,High School Graduate,Employed
+24,Single,Working Youth,Core Youth,High School Graduate,Employed
+25,Single,Out of School Youth,Young Adult,College Graduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,College Graduate,Currently Looking For A Job
+28,Single,Working Youth,Young Adult,College Graduate,Employed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,Out of School Youth,Core Youth,College Graduate,Unemployed
+29,Single,Out of School Youth,Young Adult,High School Graduate,Unemployed
+19,Single,Out of School Youth,Core Youth,High School Graduate,Employed
+19,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+23,Single,Working Youth,Core Youth,High School Graduate,Employed
+20,Single,Working Youth,Core Youth,High School Graduate,Employed
+24,Married,Working Youth,Core Youth,High School Graduate,Employed
+22,Single,Working Youth,Core Youth,High School Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+30,Married,Working Youth,Young Adult,High School Graduate,Employed
+27,Married,Working Youth,Young Adult,College Undergraduate,Employed
+29,Married,Working Youth,Young Adult,Vocational Graduate,Employed
+26,Single,Out of School Youth,Young Adult,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Employed
+25,Married,Working Youth,Young Adult,College Undergraduate,Employed
+23,Married,Working Youth,Core Youth,College Graduate,Employed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+21,Single,In School Youth,Core Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+24,Single,In School Youth,Core Youth,College Undergraduate,Self-Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,Elementary Graduate,Unemployed
+21,Single,Out of School Youth,Core Youth,College Undergraduate,Unemployed
+30,Single,Out of School Youth,Young Adult,Elementary Graduate,Unemployed
+27,Married,Out of School Youth,Young Adult,Vocational Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+20,Single,Out of School Youth,Core Youth,Elementary Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Not Interested In Looking For A Job
+26,Live-In,Working Youth,Young Adult,Elementary Undergraduate,Self-Employed
+23,Single,Working Youth,Core Youth,High School Graduate,Employed
+26,Single,Working Youth,Young Adult,Nan,Employed
+24,Single,Working Youth,Core Youth,Vocational Graduate,Self-Employed
+19,Single,Working Youth,Core Youth,High School Graduate,Self-Employed
+27,Live-In,Working Youth,Young Adult,High School Graduate,Self-Employed
+22,Single,Working Youth,Core Youth,High School Graduate,Employed
+27,Married,YSN,Young Adult,High School Graduate,Unemployed
+23,Separated,Working Youth,Core Youth,High School Graduate,Employed
+22,Single,In School Youth,Core Youth,College Undergraduate,U
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+25,Single,Working Youth,Young Adult,High School Graduate,Employed
+29,Married,Out of School Youth,Young Adult,High School Graduate,Not Interested In Looking For A Job
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+20,Single,Working Youth,Core Youth,High School Graduate,Employed
+30,Single,Working Youth,Young Adult,High School Undergraduate,Self-Employed
+19,Single,Working Youth,Core Youth,High School Graduate,Employed
+30,Married,Working Youth,Young Adult,Vocational Graduate,Employed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+20,Married,Out of School Youth,Core Youth,High School Graduate,Not Interested In Looking For A Job
+25,Single,Working Youth,Young Adult,College Undergraduate,Employed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+23,Single,Working Youth,Core Youth,College Graduate,Employed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,Working Youth,Core Youth,College Graduate,Employed
+21,Single,Working Youth,Core Youth,High School Graduate,Employed
+15,Single,In School Youth,Child Youth,Elementary Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+24,Single,Working Youth,Core Youth,High School Graduate,Employed
+15,Single,In School Youth,Child Youth,Elementary Graduate,Unemployed
+19,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+25,Single,Out of School Youth,Young Adult,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+25,Married,Out of School Youth,Young Adult,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,Elementary Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+22,Single,Working Youth,Core Youth,Vocational Graduate,Employed
+19,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+20,Single,Working Youth,Core Youth,High School Graduate,Employed
+18,Single,Out of School Youth,Core Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+20,Single,Out of School Youth,Core Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,College Graduate,Employed
+25,Single,Working Youth,Young Adult,College Undergraduate,Employed
+23,Single,Working Youth,Core Youth,College Graduate,Self-Employed
+15,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+28,Married,Working Youth,Young Adult,High School Graduate,Self-Employed
+28,Married,Working Youth,Young Adult,High School Graduate,Employed
+29,Married,Working Youth,Young Adult,High School Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+30,Single,Out of School Youth,Young Adult,College Graduate,Unemployed
+22,Single,Out of School Youth,Core Youth,Vocational Graduate,Unemployed
+27,Single,Working Youth,Young Adult,College Graduate,Employed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+24,Single,Working Youth,Core Youth,College Graduate,Employed
+29,Single,Working Youth,Young Adult,High School Graduate,Employed
+20,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+28,Single,Out of School Youth,Young Adult,Elementary Graduate,Employed
+23,Single,Working Youth,Core Youth,College Graduate,Employed
+20,Single,Out of School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+23,Single,Working Youth,Core Youth,College Graduate,Self-Employed
+23,Single,Working Youth,Core Youth,College Graduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,Out of School Youth,Core Youth,Vocational Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+23,Live-In,Out of School Youth,Core Youth,College Graduate,Currently Looking For A Job
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+23,Single,Working Youth,Core Youth,College Graduate,Self-Employed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+30,Married,Working Youth,Young Adult,High School Graduate,Self-Employed
+20,Single,Working Youth,Core Youth,High School Graduate,Self-Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+20,Single,Working Youth,Core Youth,College Undergraduate,Employed
+25,Single,Working Youth,Young Adult,College Graduate,Employed
+28,Single,Working Youth,Young Adult,College Graduate,Employed
+27,Live-In,Working Youth,Young Adult,College Graduate,Currently Looking For A Job
+30,Live-In,Working Youth,Young Adult,High School Graduate,Employed
+28,Single,Out of School Youth,Young Adult,High School Graduate,Unemployed
+25,Single,Working Youth,Young Adult,High School Graduate,Self-Employed
+15,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,In School Youth,Young Adult,College Undergraduate,Unemployed
+21,Live-In,Out of School Youth,Core Youth,High School Graduate,Unemployed
+18,Single,Working Youth,Core Youth,High School Graduate,Employed
+27,Single,Working Youth,Young Adult,College Graduate,Employed
+24,Married,Out of School Youth,Core Youth,College Graduate,Currently Looking For A Job
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+25,Single,Out of School Youth,Young Adult,High School Graduate,Currently Looking For A Job
+21,Single,Working Youth,Core Youth,High School Graduate,Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Child Youth,College Undergraduate,Unemployed
+19,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+24,Single,Working Youth,Core Youth,Vocational Graduate,Employed
+21,Single,Out of School Youth,Core Youth,Vocational Graduate,Currently Looking For A Job
+30,Married,Out of School Youth,Young Adult,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,Elementary Graduate,Unemployed
+22,Single,Working Youth,Core Youth,College Graduate,Employed
+21,Single,Working Youth,Core Youth,College Undergraduate,Employed
+22,Single,Working Youth,Core Youth,College Graduate,Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+28,Single,Working Youth,Young Adult,Vocational Graduate,Employed
+25,Single,Working Youth,Young Adult,College Undergraduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High Shool Graduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+23,Single,Working Youth,Core Youth,College Graduate,Nan
+18,Single,In School Youth,Core Youth,High School Undergraduate,Unemployed
+23,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+20,Single,Out of School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+20,Single,Out of School Youth,Core Youth,Elementary Undergraduate,Self-Employed
+25,Single,YSN,Young Adult,Elementary Undergraduate,Self-Employed
+17,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,Out of School Youth,Core Youth,College Undergraduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+19,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+28,Single,Working Youth,Young Adult,College Undergraduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+27,Single,Working Youth,Young Adult,High School Graduate,Employed
+24,Single,Working Youth,Core Youth,High School Graduate,Employed
+30,Married,Working Youth,Young Adult,Vocational Graduate,Self-Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Not Interested In Looking For A Job
+30,Married,Working Youth,Young Adult,College Undergraduate,Employed
+22,Single,In School Youth,Core Youth,Vocational Graduate,Self-Employed
+18,Single,In School Youth,Core Youth,Vocational Graduate,Unemployed
+24,Single,Working Youth,Core Youth,High School Graduate,Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Self-Employed
+21,Single,Working Youth,Core Youth,High School Graduate,Employed
+29,Married,Working Youth,Young Adult,College Graduate,Employed
+27,Married,Working Youth,Young Adult,High School Graduate,Employed
+23,Single,Working Youth,Core Youth,College Graduate,Employed
+24,Live In,Working Youth,Core Youth,College Graduate,Currently Looking For A Job
+23,Single,Out of School Youth,Core Youth,College Graduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Live In,Working Youth,Young Adult,College Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+23,Single,In School Youth,Core Youth,College Graduate,Employed
+24,Single,In School Youth,Core Youth,College Graduate,Unemployed
+28,Single,In School Youth,Young Adult,College Graduate,Employed
+29,Single,Working Youth,Young Adult,High School Graduate,Employed
+25,Single,Working Youth,Young Adult,High School Graduate,Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,Out of School Youth,Child Youth,Elementary Undergraduate,Not Interested In Looking For A Job
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+23,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,Working Youth,Core Youth,College Graduate,Employed
+25,Married,Working Youth,Young Adult,College Graduate,Employed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+28,Single,Working Youth,Young Adult,Vocational Graduate,Currently Looking For A Job
+23,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+17,Single,Out of School Youth,Child Youth,High School Graduate,Not Interested In Looking For A Job
+19,Single,Working Youth,Core Youth,Vocational Graduate,Self-Employed
+27,Single,Working Youth,Young Adult,Elementary Graduate,Self-Employed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+26,Single,Working Youth,Young Adult,College Graduate,Employed
+28,Married,Working Youth,Young Adult,College Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Not Interested In Looking For A Job
+25,Single,In School Youth,Young Adult,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+25,Single,Out of School Youth,Young Adult,High School Graduate,Unemployed
+28,Live-In,Working Youth,Young Adult,Vocational Graduate,Self-Employed
+23,Single,Working Youth,Core Youth,College Undergraduate,Self-Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+16,Single,Out of School Youth,Child Youth,High School Undergraduate,Unemployed
+20,Live-In,In School Youth,Core Youth,College Undergraduate,Unemployed
+29,Single,Working Youth,Young Adult,College Graduate,Employed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+16,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+22,Single,Working Youth,Core Youth,College Graduate,Currently Looking For A Job
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+25,Married,Working Youth,Young Adult,College Graduate,Employed
+28,Married,Working Youth,Young Adult,College Graduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+26,Married,Out of School Youth,Young Adult,College Graduate,Unemployed
+30,Married,Working Youth,Young Adult,College Graduate,Employed
+28,Married,Working Youth,Young Adult,College Graduate,Self-Employed
+22,Single,Out of School Youth,Core Youth,College Graduate,Unemployed
+28,Married,Working Youth,Young Adult,College Graduate,Employed
+27,Single,Working Youth,Young Adult,College Graduate,Employed
+27,Live-In,Working Youth,Young Adult,College Graduate,Employed
+23,Live-In,Working Youth,Core Youth,College Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,Working Youth,Young Adult,College Graduate,Currently Looking For A Job
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+21,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+25,Single,Working Youth,Core Youth,High School Graduate,Employed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+29,Live-In,Out of School Youth,Young Adult,Elementary Undergraduate,Unemployed
+27,Single,Working Youth,Young Adult,College Undergraduate,Employed
+15,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed
+26,Live-In,Out of School Youth,Young Adult,High School Graduate,Unemployed
+22,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+29,Married,Working Youth,Young Adult,College Graduate,Employed
+27,Single,Working Youth,Young Adult,College Graduate,Self-Employed
+21,Single,Working Youth,Core Youth,High School Graduate,Employed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+27,Married,Out of School Youth,Young Adult,High School Undergraduate,Unemployed
+23,Single,In School Youth,Core Youth,College Undergraduate,Currently Looking For A Job
+22,Single,In School Youth,Core Youth,College Undergraduate,Employed
+15,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+18,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,Working Youth,Core Youth,College Undergraduate,Unemployed
+18,Single,Out of School Youth,Core Youth,High School Undergraduate,Unemployed
+20,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+24,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+15,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+19,Single,In School Youth,Core Youth,College Undergraduate,Unemployed
+20,Single,In School Youth,Core Youth,Vocational Graduate,Currently Looking For A Job
+24,Single,Out of School Youth,Core Youth,High School Graduate,Self-Employed
+25,Single,Working Youth,Young Adult,High School Graduate,Employed
+24,Single,Working Youth,Core Youth,College Graduate,Employed
+22,Single,YSN,Core Youth,College Undergraduate,Unemployed
+17,Single,In School Youth,Child Youth,High School Graduate,Unemployed
+18,Single,In School Youth,Core Youth,High School Graduate,Unemployed

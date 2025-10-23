@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(to bottom, #0A2C59 30%, #ffffff 30%);
     min-height: 100vh;
     padding: 20px;
@@ -13,42 +13,56 @@ body {
     align-items: center;
 }
 
+.sign {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
 .container1 {
     text-align: center;
     margin-top: 20px;
+    width: auto; /* remove any width restriction */
 }
 
 .logo {
-    width: 80px;
+    width: 30vw;
+    max-width: 150px;
     height: auto;
-    margin-bottom: 10px;
-    margin-left: 35%;
+    margin: 0 auto 10px auto;
 }
 
 .title1 {
-    font-size: 20px;
+    font-size: clamp(10px, 1.8vw, 16px);
     color: #ffffff;
     letter-spacing: 1px;
     margin-top: 10px;
+    line-height: 1.2;
+    word-wrap: break-word;
+    text-align: center;
 }
 
 .title2 h1 {
-    font-size: 20px;
+    font-size: clamp(10px, 1.8vw, 16px);
     color: #ffffff;
-    margin: 5px 0;
+    margin: 3px 0;
+    line-height: 1.2;
+    word-wrap: break-word;
+    text-align: center;
 }
 
 .container {
-    width: 100%;
+    width: 50%;
     max-width: 400px;
     padding: 20px;
     background-color: white;
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    margin-top: 50px;
+    margin: 50px auto 0 auto;
 }
 
-.acc{
+.acc {
     margin-top: 10%;
     text-align: center;
 }
@@ -56,10 +70,10 @@ body {
 /* Tablet adjustments */
 @media (min-width: 768px) {
     .logo {
-        width: 100px;
+        width: 150px;
     }
 
-    .title1 {
+    .title1 h2 {
         font-size: 20px;
     }
 
@@ -68,7 +82,7 @@ body {
     }
 
     .container {
-        padding: 30px;
+        padding: 40px;
     }
 }
 
@@ -82,31 +96,53 @@ body {
         padding: 0;
     }
 
+    .sign {
+        flex-direction: row;
+        height: 100vh;
+    }
+
     .container1 {
         margin-top: -10%;
-        width: 50%;
+        width: auto; /* Remove width: 50%; */
         text-align: center;
     }
 
-    .logo {
-        width: 120px;
-        margin: 0 auto 20px auto;
-        display: block;
+    .left-side, .right-side {
+        width: 50%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .title1 {
-        font-size: 40px;
+    .left-side {
+        background-color: #0A2C59;
         color: white;
+        flex-direction: column;
+        text-align: center;
     }
 
-    .title2 h1 {
-        font-size: 40px;
-        color: white;
+    .right-side {
+        background-color: white;
     }
 
     .container {
-        width: 100%;
+        margin: 10%;
         max-width: 400px;
         padding: 40px;
+    }
+
+    .logo {
+        width: 180px;
+        margin: 0 auto 20px auto;
+    }
+
+    .title1 h2 {
+        font-size: 30px;
+        min-width: 400px; 
+    }
+
+    .title2 h1 {
+        font-size: 30px;
     }
 }

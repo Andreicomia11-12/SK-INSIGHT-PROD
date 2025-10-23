@@ -1,0 +1,486 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #F5F7FA;
+    overflow: hidden;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #0A2C59; 
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+}
+
+.logos{
+    display: flex;
+    align-items: center;   
+    gap: 10px;               
+}
+
+.title-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; 
+    line-height: 1.2; 
+}
+
+.admin{
+    font-size: small;
+    color: #FED600;
+}
+
+.logo{
+    width: 20vw;
+    max-width: 100px;
+    height: auto;
+    margin-top: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 5px 0;
+    transition: background 0.3s;
+}
+
+.menu{
+    margin-top: 20px;
+}
+
+.dashh{
+    background-color: #07B0F2;
+    border-radius: 5px;
+}
+
+.dash{
+    margin-left: 10px;
+}
+
+.educ{
+    margin-left: 5px;
+    font-size: 15.2px;
+}
+
+.dashs{
+    margin-left: 3px;
+}
+
+.dashb{
+    margin-left: 10px;
+}
+
+.Kk{
+    margin-left: 5px;
+}
+
+.kk{
+    margin-left: 13px;
+}
+
+.log{
+    margin-top: 90%;
+}
+
+.content{
+    margin-left: 250px;
+    padding: 10px;
+}
+
+.page-header{
+  margin-top: 1.5%;
+}
+
+.tit{
+  color: #0A2C59;
+  margin-top: -2%;
+  margin-left: 1.5%;
+}
+
+.subtitle{
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 25px;
+  margin-left: 1.5%;
+}
+
+.parent {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+}
+
+.title{
+    padding: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 350px; 
+}
+
+.cycle {
+  font-size: 20px;
+}
+
+.filter-rows {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 349px;
+}
+.cycle-select {
+  padding: 3px;
+  width: 80px;
+  font-size: 14px;
+  border: solid rgba(0, 0, 0, 0.418) 0.5px;
+  border-radius: 3px;
+}
+
+.year{
+  font-size: 20px;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+.filt{
+  padding: 3px;
+  width: 70px;
+}
+
+.buts {
+  display: flex;
+  justify-content: space-between; /* pushes left & right apart */
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.fil {
+  flex: 1; /* keeps search aligned left */
+}
+
+.search-container{
+    width: 40%;
+    margin-bottom: 2%;
+}
+
+/* --- KK Profiling Search Bar Styles --- */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 260px;
+  margin-bottom: 10px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 42%;
+  transform: translateY(-50%);
+  color: #0A2C59;
+  font-size: 1.1rem;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 7px;
+  font-size: 1rem;
+  background: #fff;
+  color: #222;
+  transition: border 0.2s;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 0.6rem;
+}
+
+.search-input:focus {
+  border-color: #0A2C59;
+  background: #f4f6fa;
+}
+
+.tables {
+  margin: 24px 0 0 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(10,44,89,0.07);
+  padding: 18px 18px 8px 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tables table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  background: #fff;
+  table-layout: fixed;
+}
+
+.tables thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fff;
+}
+
+.tables tbody {
+  display: block;
+  height: 380px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.tables thead, .tables tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tables tbody td, .tables thead th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tables tbody::-webkit-scrollbar {
+  width: 8px;
+  background: #f4f6f8;
+  border-radius: 6px;
+}
+.tables tbody::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 6px;
+}
+
+.tables thead th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f4f6f8;
+  font-weight: 600;
+  color: #222;
+  border-bottom: 2px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.tables tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.tables tbody tr:nth-child(even) {
+  background: #fafbfd;
+}
+
+.tables tbody tr {
+  background: #f7f8fa;
+  transition: background 0.18s;
+}
+
+.tables tbody tr:hover {
+  background: #e1e8ff;
+}
+
+/* --- Page Header and Subtitle --- */
+.page-header h1 {
+  color: #0A2C59;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Responsive Content Padding --- */
+.content {
+  margin-left: 250px;
+  padding: 20px;
+}
+.content-container {
+  margin: 20px;
+}
+
+.account-cards {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0 0 1%;
+}
+.account-card {
+  display: flex;
+  align-items: center;
+  background: #D1E1F5;
+  color: #fff;
+  border-radius: 8px;
+  padding: 18px 32px;
+  min-width: 220px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.account-card i {
+  font-size: 2.5rem;
+  margin-right: 18px;
+  opacity: 0.7;
+}
+.account-count {
+  font-size: 2.2rem;
+  font-weight: bold;
+  line-height: 1;
+}
+.account-label {
+  font-size: 1rem;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+.account-card.blue {
+  background: #07B0F2;
+}
+
+.tables th, .tables td {
+  text-align: left;
+  vertical-align: middle;
+  padding: 10px 12px;
+}
+
+.tables th:last-child, .tables td:last-child {
+  text-align: center;
+  width: 10%;
+}
+
+.tables th, .tables td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Match KK Profiling column widths and alignment */
+.tables th:nth-child(1), .tables td:nth-child(1) { width: 10%; text-align: center; }
+.tables th:nth-child(2), .tables td:nth-child(2) { width: 25%; text-align: center;}
+.tables th:nth-child(3), .tables td:nth-child(3) { width: 30%; }
+.tables th:nth-child(4), .tables td:nth-child(4) { width: 15%; text-align: center; }
+.tables th:nth-child(5), .tables td:nth-child(5) { width: 20%; text-align: center; }
+
+.view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #0A2C59;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.view-btn:hover {
+  background: #08305e;
+}
+
+/* Modal Styles */
+.user-modal-popup {
+  border-radius: 15px;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.user-modal-content {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.user-info-group {
+  display: flex;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.user-info-group label {
+  width: 100px;
+  color: #0A2C59;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-info-group span {
+  flex: 1;
+  color: #333;
+  font-size: 14px;
+}
+
+.user-modal-close {
+  color: #0A2C59 !important;
+  font-size: 20px !important;
+}
+
+.swal2-title {
+  border-bottom: 2px solid #0A2C59;
+}
+
+/* Hover effect for close button */
+.user-modal-close:hover {
+  color: #08305e !important;
+}
+
+/* Add some animation */
+.swal2-show {
+  animation: modalFadeIn 0.3s !important;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+
+
+
+
