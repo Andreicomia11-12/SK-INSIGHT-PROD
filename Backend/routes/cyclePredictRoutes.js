@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { predictCycle } = require('../controllers/cyclePredictController');
+const ctrl = require("../controllers/cyclePredictController");
 
-router.post('/', predictCycle);
+router.post("/", ctrl.getOrCreatePrediction);
 
 module.exports = router;

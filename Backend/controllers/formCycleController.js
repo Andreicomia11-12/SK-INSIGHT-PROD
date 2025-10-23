@@ -66,3 +66,51 @@ exports.getFormStatus = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch form status" });
   }
 };
+
+// Get latest KK Profiling cycle
+exports.getLatestKkCycle = async (req, res) => {
+  try {
+    const cycle = await FormCycle.findOne({ formName: "KK Profiling" }).sort({ year: -1, cycleNumber: -1 });
+    if (!cycle) return res.status(404).json({ error: "No KK Profiling cycle found" });
+    res.json({
+      _id: cycle._id,
+      year: cycle.year,
+      cycleNumber: cycle.cycleNumber,
+      isOpen: cycle.isOpen
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch latest KK cycle" });
+  }
+};
+
+// Get latest LGBTQ Profiling cycle
+exports.getLatestLgbtqCycle = async (req, res) => {
+  try {
+    const cycle = await FormCycle.findOne({ formName: "LGBTQIA+ Profiling" }).sort({ year: -1, cycleNumber: -1 });
+    if (!cycle) return res.status(404).json({ error: "No LGBTQ Profiling cycle found" });
+    res.json({
+      _id: cycle._id,
+      year: cycle.year,
+      cycleNumber: cycle.cycleNumber,
+      isOpen: cycle.isOpen
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch latest LGBTQ cycle" });
+  }
+};
+
+// Get latest Educational Assistance cycle
+exports.getLatestEducCycle = async (req, res) => {
+  try {
+    const cycle = await FormCycle.findOne({ formName: "Educational Assistance" }).sort({ year: -1, cycleNumber: -1 });
+    if (!cycle) return res.status(404).json({ error: "No Educational Assistance cycle found" });
+    res.json({
+      _id: cycle._id,
+      year: cycle.year,
+      cycleNumber: cycle.cycleNumber,
+      isOpen: cycle.isOpen
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch latest Educational Assistance cycle" });
+  }
+};

@@ -192,9 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchDashboardSummaries();
 });
 
-// --- Prediction chart now fetches filtered data ---
-
-
 // --- Civil status donut already uses year/cycle ---
 function renderCivilStatusDonutFromAPI(year, cycle) {
   const civilStatusCategories = [

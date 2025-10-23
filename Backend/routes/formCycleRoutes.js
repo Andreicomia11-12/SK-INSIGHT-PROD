@@ -74,7 +74,10 @@ router.put("/toggle", protect, authorizeRoles("admin"), async (req, res) => {
     res.status(500).json({ error: "Failed to toggle form cycle" });
   }
 });
-
+// Add this route
+router.get('/latest-kk', ctrl.getLatestKkCycle);
+router.get('/latest-lgbtq', ctrl.getLatestLgbtqCycle);
+router.get('/latest-educ', ctrl.getLatestEducCycle);
 router.get("/kk", protect, authorizeRoles("admin"), ctrl.getKkCycles);
 router.get("/lgbtq", protect, authorizeRoles("admin"), ctrl.getLgbtqCycles);
 router.get("/educ", protect, authorizeRoles("admin"), ctrl.getEducCycles);
