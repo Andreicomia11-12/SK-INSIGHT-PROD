@@ -87,7 +87,24 @@ if (birthdayInput && data.birthday) {
     document.getElementById('contact').value = data.contactNumber || '';
     document.getElementById('schoolname').value = data.school || '';
     document.getElementById('schooladdress').value = data.schoolAddress || '';
-    document.getElementById('year').value = data.year || '';
+    // Display academic level stored in DB
+    const academicEl = document.getElementById('academicLevel');
+    if (academicEl) academicEl.value = data.academicLevel || '';
+    // Ensure year options match academic level (Junior High -> Grade 7-10)
+    const yearEl = document.getElementById('year');
+    if (yearEl) {
+      const lvl = (data.academicLevel || '').toString().toLowerCase();
+      let options = [];
+      if (lvl.includes('junior')) {
+        options = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
+      } else if (lvl.includes('senior')) {
+        options = ['Grade 11', 'Grade 12'];
+      } else {
+        options = ['Grade 11', 'Grade 12'];
+      }
+      yearEl.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
+      yearEl.value = data.year || '';
+    }
     document.getElementById('benefittype').value = data.typeOfBenefit || '';
     document.getElementById('fathername').value = data.fatherName || '';
     document.getElementById('fathercontact').value = data.fatherPhone || '';
@@ -117,7 +134,7 @@ if (birthdayInput && data.birthday) {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${expense.item || ''}</td>
-          <td>${expense.expectedCost || ''}</td>
+          <td>${formatCurrency(expense.expectedCost)}</td>
         `;
         expensesBody.appendChild(row);
       });
@@ -549,7 +566,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${expense.item || ''}</td>
-          <td>${expense.expectedCost || ''}</td>
+          <td>${formatCurrency(expense.expectedCost)}</td>
         `;
         expensesBody.appendChild(row);
       });
@@ -572,6 +589,20 @@ document.addEventListener('DOMContentLoaded', async function () {
         column.title = fileName; // Show full name on hover
       }
     });
+
+    // Hide voter certificate display for Senior High applicants (hide whole row if present)
+    try {
+      const lvl = (data.academicLevel || '').toString().toLowerCase();
+      const hideVoter = /senior/i.test(lvl);
+      const voterColumn = document.getElementById('voterUploadColumn');
+      const viewVoterBtn = document.getElementById('viewVoter');
+      if (voterColumn) {
+        voterColumn.style.display = hideVoter ? 'none' : '';
+        const tr = voterColumn.closest && voterColumn.closest('tr');
+        if (tr) tr.style.display = hideVoter ? 'none' : '';
+      }
+      if (viewVoterBtn) viewVoterBtn.style.display = hideVoter ? 'none' : '';
+    } catch (e) { /* ignore */ }
 
     // Add preview logic for images
     const viewFront = document.getElementById('viewFront');
@@ -620,6 +651,15 @@ function truncateFileName(fileName, maxLength = 6) {
     return fileName;
   }
   return fileName.substring(0, maxLength) + '...';
+}
+
+// Format number as Philippine peso with two decimal places
+function formatCurrency(amount) {
+  if (amount === undefined || amount === null || amount === '') return '';
+  const num = Number(amount);
+  if (Number.isNaN(num)) return '';
+  // Use toLocaleString to add thousand separators and fixed two decimals
+  return '₱' + num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 // Helper function to show image preview in a modal

@@ -77,11 +77,46 @@ document.addEventListener('DOMContentLoaded', function () {
   // detect mobile layout for siblings/expenses rendering (mutable so we can respond to resize)
   let isMobile = window.innerWidth <= 768;
 
+  // Year options for academic levels
+  const JHS_YEARS = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
+  const SHS_YEARS = ['Grade 11', 'Grade 12'];
+
+  function populateYearOptions(level, selectedYear) {
+    const yearEl = document.getElementById('year');
+    const yearWrapper = document.getElementById('yearWrapper');
+    if (!yearEl) return;
+    let options = [];
+    const lvl = (level || '').toString().toLowerCase();
+    if (lvl.includes('senior')) {
+      options = SHS_YEARS.slice();
+    } else if (lvl.includes('junior')) {
+      options = JHS_YEARS.slice();
+    } else if (lvl.includes('college')) {
+      options = ['1st year', '2nd year', '3rd year', '4th year', '5th year', '6th year'];
+    } else {
+      options = [].concat(SHS_YEARS, ['1st year','2nd year','3rd year','4th year']);
+    }
+
+    // ensure selectedYear is present and selected only if it belongs to options
+    if (selectedYear && !options.includes(selectedYear)) options.unshift(selectedYear);
+
+    yearEl.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
+    if (selectedYear) yearEl.value = selectedYear;
+    if (yearWrapper) yearWrapper.style.display = (level ? '' : 'none');
+    return options;
+  }
+
+  // expose helper globally so other scopes/listeners can call it
+  try { window.populateYearOptions = populateYearOptions; } catch (e) { /* ignore in restricted contexts */ }
+
   // image state
   const frontState = { base64: null, removed: false };
   const backState = { base64: null, removed: false };
   const coeState = { base64: null, removed: false };
   const voterState = { base64: null, removed: false };
+
+  // track current application fetched from server (id + status)
+  let currentApplication = { id: null, status: null };
 
   // inputs
   const frontInput = document.getElementById('frontImage');
@@ -125,9 +160,16 @@ document.addEventListener('DOMContentLoaded', function () {
       state.base64 = null;
       if (inputEl) {
         try { inputEl.value = ''; } catch (e) {}
-        // show upload label again if present (e.g., frontLabel)
-        const label = document.getElementById(`${inputEl.id}Label`);
+        // show upload label again if present (try common id or label[for=...])
+        let label = document.getElementById(`${inputEl.id}Label`);
+        if (!label) label = document.querySelector(`label[for="${inputEl.id}"]`);
+        if (!label) {
+          // some templates use shorter ids like 'frontLabel'
+          const short = inputEl.id.replace(/Image$/, '');
+          label = document.getElementById(`${short}Label`) || document.getElementById(short + 'Label');
+        }
         if (label) label.style.display = 'inline-flex';
+        try { if (inputEl && inputEl.id === 'voter') sessionStorage.removeItem('educ_voter_filename'); } catch (e) {}
       }
       if (fileNameElId) {
         showFileName(fileNameElId, '');
@@ -213,7 +255,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const costVal = e.cost || e.expectedCost || '';
         card.innerHTML = `
           <div class="expense-field"><label>Description</label><input type="text" class="exp-desc" value="${descVal}"></div>
-          <div class="expense-field"><label>Expected Cost</label><input type="number" class="exp-cost" value="${costVal}" min="0" step="0.01"></div>
+          <div class="expense-field"><label>Expected Cost</label>
+            <div class="expense-cost-wrapper">
+              <span class="peso-prefix">₱</span>
+              <input type="number" class="exp-cost" value="${costVal}" min="0" step="0.01">
+              <span class="peso-suffix">.00</span>
+            </div>
+          </div>
           <div><button type="button" class="remove-exp">Remove</button></div>
         `;
         expensesTableBody.appendChild(card);
@@ -224,7 +272,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const costVal = e.cost || e.expectedCost || '';
         tr.innerHTML = `
           <td><input type="text" class="exp-desc" value="${descVal}"></td>
-          <td><input type="number" class="exp-cost" value="${costVal}" min="0" step="0.01"></td>
+          <td>
+            <div class="expense-cost-wrapper">
+              <span class="peso-prefix">₱</span>
+              <input type="number" class="exp-cost" value="${costVal}" min="0" step="0.01">
+              <span class="peso-suffix">.00</span>
+            </div>
+          </td>
           <td><button type="button" class="remove-exp">Remove</button></td>
         `;
         expensesTableBody.appendChild(tr);
@@ -232,6 +286,21 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // Basic styles for expense-cost wrapper (added via JS to avoid editing CSS files)
+  (function injectExpenseCostStyles() {
+    if (document.getElementById('edit-edu-expense-cost-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'edit-edu-expense-cost-styles';
+    style.textContent = `
+      .expense-cost-wrapper{display:inline-flex;align-items:center;gap:6px}
+      .expense-cost-wrapper .peso-prefix{font-weight:600}
+      .expense-cost-wrapper .peso-suffix{color:#666}
+      .expense-cost-wrapper input.exp-cost{width:120px}
+      @media(max-width:480px){ .expense-cost-wrapper input.exp-cost{width:100px} }
+    `;
+    document.head.appendChild(style);
+  })();
 
   if (addSiblingBtn) addSiblingBtn.addEventListener('click', () => {
     // preserve existing siblings, then append a blank one
@@ -346,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!f) return;
     if (!validateImageFile(f)) { Swal.fire({ icon: 'error', title: 'Invalid file', text: 'Only PNG and JPEG allowed.' }); voterInput.value = ''; return; }
     const fr = new FileReader();
-    fr.onload = () => { voterState.base64 = fr.result; voterState.removed = false; showFileName('voterFileName', f.name); };
+    fr.onload = () => { voterState.base64 = fr.result; voterState.removed = false; showFileName('voterFileName', f.name); try { sessionStorage.setItem('educ_voter_filename', f.name); } catch(e) {} };
     fr.readAsDataURL(f);
     fr.onloadend = () => {
       const label = document.getElementById('voterLabel');
@@ -363,6 +432,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!res.ok) return;
       const data = await res.json();
 
+      // remember current application id/status for submit logic
+      try { currentApplication.id = data._id || null; currentApplication.status = data.status || null; } catch (e) { /* ignore */ }
+
       setIfExists('surname', data.surname || data.lastname || '');
       setIfExists('firstName', data.firstname || data.firstName || '');
       setIfExists('middleName', data.middlename || data.middleName || '');
@@ -378,7 +450,10 @@ document.addEventListener('DOMContentLoaded', function () {
       setIfExists('contact', data.contact || '');
       setIfExists('schoolname', data.school || data.schoolname || '');
       setIfExists('schooladdress', data.schooladdress || '');
-      setIfExists('year', data.year || '');
+      // Display academic level if present
+      if (data.academicLevel) setIfExists('academicLevel', data.academicLevel);
+      // Populate year options based on academic level and restore saved year when possible
+      try { populateYearOptions(data.academicLevel || '', data.year || ''); } catch (e) { /* ignore */ }
       setIfExists('benefittype', data.benefittype || data.typeOfBenefit || '');
       setIfExists('fathername', data.fathername || '');
       setIfExists('fathercontact', data.fathercontact || '');
@@ -481,6 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
           try { fname = voterUrl ? decodeURIComponent((new URL(voterUrl)).pathname.split('/').pop() || '') : 'Current image'; } catch (e) { fname = 'Current image'; }
           if (!fname) fname = 'Current image';
           showFileName('voterFileName', fname);
+          try { sessionStorage.setItem('educ_voter_filename', fname); } catch (e) { /* ignore */ }
         }
       }
 
@@ -497,6 +573,66 @@ document.addEventListener('DOMContentLoaded', function () {
       const voterLabel = document.getElementById('voterLabel');
       const voterFN = document.getElementById('voterFileName');
       if (voterState.base64) { if (voterLabel) voterLabel.style.display = 'none'; if (voterFN) voterFN.style.display = 'inline-block'; }
+      try {
+        const storedVoter = sessionStorage.getItem('educ_voter_filename');
+        if (!voterState.base64 && storedVoter) {
+          if (voterLabel) voterLabel.style.display = 'none';
+          showFileName('voterFileName', storedVoter);
+          if (voterFN) voterFN.style.display = 'inline-block';
+        }
+      } catch (e) { /* ignore sessionStorage errors */ }
+
+      // Hide voter row if academic level is Senior High
+      function updateVoterRowVisibility(level) {
+        try {
+          const lvl = (level || document.getElementById('academicLevel')?.value || '').toString().toLowerCase();
+          const hide = /senior/i.test(lvl);
+          const voterInputEl = document.getElementById('voter');
+          const voterLabelEl = document.getElementById('voterLabel');
+          const voterFileNameEl = document.getElementById('voterFileName');
+          const voterUploadColumn = document.getElementById('voterUploadColumn');
+
+          // Determine if we already have a file displayed (base64 or stored filename or visible filename element)
+          let hasDisplayedVoter = false;
+          try {
+            const stored = sessionStorage.getItem('educ_voter_filename');
+            if (voterState.base64) hasDisplayedVoter = true;
+            else if (stored) hasDisplayedVoter = true;
+            else if (voterFileNameEl && voterFileNameEl.textContent && voterFileNameEl.style.display !== 'none') hasDisplayedVoter = true;
+          } catch (e) { /* ignore sessionStorage errors */ }
+
+          // If Senior High, hide the whole row/input elements regardless
+          if (hide) {
+            [voterInputEl, voterLabelEl, voterFileNameEl, voterUploadColumn].forEach(el => { if (el) el.style.display = 'none'; });
+            const tr1 = voterInputEl && voterInputEl.closest ? voterInputEl.closest('tr') : null;
+            const tr2 = voterUploadColumn && voterUploadColumn.closest ? voterUploadColumn.closest('tr') : null;
+            const tr = tr1 || tr2;
+            if (tr) tr.style.display = 'none';
+            if (voterInputEl) voterInputEl.required = false;
+            return;
+          }
+
+          // Not Senior High: show the row but decide whether to show the upload label.
+          // Show voter input and upload column by default
+          if (voterInputEl) voterInputEl.style.display = '';
+          if (voterUploadColumn) voterUploadColumn.style.display = '';
+          if (voterFileNameEl && hasDisplayedVoter) {
+            // hide the upload label if a filename is displayed
+            if (voterLabelEl) voterLabelEl.style.display = 'none';
+            voterFileNameEl.style.display = 'inline-block';
+          } else {
+            // no file displayed: ensure upload label is visible and filename hidden
+            if (voterLabelEl) voterLabelEl.style.display = '';
+            if (voterFileNameEl) voterFileNameEl.style.display = 'none';
+          }
+
+          // Ensure enclosing row visible
+          const tr1 = voterInputEl && voterInputEl.closest ? voterInputEl.closest('tr') : null;
+          const tr2 = voterUploadColumn && voterUploadColumn.closest ? voterUploadColumn.closest('tr') : null;
+          const tr = tr1 || tr2;
+          if (tr) tr.style.display = '';
+        } catch (e) { /* ignore */ }
+      }
 
       // siblings (array of { name, gender, age })
       try {
@@ -509,6 +645,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const expenses = Array.isArray(data.expenses) ? data.expenses : (data.expenses ? JSON.parse(data.expenses) : []);
         renderExpenses(expenses || []);
       } catch (e) { renderExpenses([]); }
+
+      // Apply voter row visibility based on academic level from DB
+      try { updateVoterRowVisibility(data.academicLevel || ''); } catch (e) { /* ignore */ }
 
     } catch (e) {
       console.warn('populate educational failed', e);
@@ -525,7 +664,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!confirmed || !confirmed.isConfirmed) return;
     } catch (e) { console.warn('Swal failed, proceeding'); }
 
-    try { Swal.fire({ title: 'Saving...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), showConfirmButton: false }); } catch (e) {}
+    // NOTE: Do not show the 'Saving...' loading modal until validation passes
 
     // gather payload
     const payload = {
@@ -543,6 +682,7 @@ document.addEventListener('DOMContentLoaded', function () {
       contact: (document.getElementById('contact') || {}).value || '',
       schoolname: (document.getElementById('schoolname') || {}).value || '',
       schooladdress: (document.getElementById('schooladdress') || {}).value || '',
+      academicLevel: (document.getElementById('academicLevel') || {}).value || '',
       year: (document.getElementById('year') || {}).value || '',
       benefittype: (document.getElementById('benefittype') || {}).value || '',
       fathername: (document.getElementById('fathername') || {}).value || '',
@@ -550,6 +690,47 @@ document.addEventListener('DOMContentLoaded', function () {
       mothername: (document.getElementById('mothername') || {}).value || '',
       mothercontact: (document.getElementById('mothercontact') || {}).value || ''
     };
+
+    // Validation: if academic level is Junior High, require all documents (front/back/coe/voter)
+    try {
+      const lvl = (payload.academicLevel || '').toString().toLowerCase();
+      const isJHS = /junior/i.test(lvl);
+      if (isJHS) {
+        const hasUploaded = (state, inputEl, fileNameElId) => {
+          try {
+            if (state && state.removed) return false;
+            if (state && state.base64) return true;
+            if (inputEl && inputEl.files && inputEl.files.length) return true;
+            if (fileNameElId) {
+              const fnEl = document.getElementById(fileNameElId);
+              if (fnEl && fnEl.textContent && fnEl.style.display !== 'none') return true;
+            }
+            return false;
+          } catch (e) { return false; }
+        };
+
+        const missing = [];
+        if (!hasUploaded(frontState, frontInput, 'frontFileName')) missing.push('School ID (Front)');
+        if (!hasUploaded(backState, backInput, 'backFileName')) missing.push('School ID (Back)');
+        if (!hasUploaded(coeState, coeInput, 'coeFileName')) missing.push('Certificate of Enrollment');
+        if (!hasUploaded(voterState, voterInput, 'voterFileName')) missing.push("Parent's Voter's Certificate");
+
+        if (missing.length) {
+          try { Swal.close(); } catch (e) {}
+          await Swal.fire({
+            icon: 'warning',
+            title: 'Missing required documents',
+            html: `For Junior High School the following documents are required:<br><ul style="text-align:left;">${missing.map(m=>`<li>${m}</li>`).join('')}</ul>`,
+            confirmButtonText: 'OK',
+            allowOutsideClick: true,
+            allowEscapeKey: true,
+            showCancelButton: false,
+            confirmButtonColor: '#0A2C59'
+          });
+          return;
+        }
+      }
+    } catch (e) { /* ignore validation errors */ }
 
     try {
       // collect siblings and expenses from table
@@ -592,6 +773,7 @@ document.addEventListener('DOMContentLoaded', function () {
         contactNumber: payload.contact ? (isNaN(Number(payload.contact)) ? payload.contact : Number(payload.contact)) : undefined,
         school: payload.schoolname,
         schoolAddress: payload.schooladdress,
+        academicLevel: payload.academicLevel,
         year: payload.year,
         typeOfBenefit: payload.benefittype,
         fatherName: payload.fathername,
@@ -601,6 +783,9 @@ document.addEventListener('DOMContentLoaded', function () {
         siblings: normalizeSiblings(siblings),
         expenses: normalizeExpenses(expenses),
       };
+
+      // Show 'Saving...' modal after validation and before network calls
+      try { Swal.fire({ title: 'Saving...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), showConfirmButton: false }); } catch (e) {}
 
       if (needFormData) {
         const fd = new FormData();
@@ -623,19 +808,28 @@ document.addEventListener('DOMContentLoaded', function () {
         if (hasNewCOE) fd.append('coeImage', base64ToFile(coeState.base64, 'coe.png'));
         if (hasNewVoter) fd.append('voter', base64ToFile(voterState.base64, 'voter.png'));
 
-        const res = await fetch('http://localhost:5000/api/educational-assistance/me', { method: 'PUT', headers: { Authorization: `Bearer ${token}` }, body: fd });
+        // If editing a previously rejected application, call resubmit endpoint
+        const isRejected = currentApplication.status === 'rejected' && currentApplication.id;
+        const url = isRejected ? `http://localhost:5000/api/educational-assistance/me/resubmit/${currentApplication.id}` : 'http://localhost:5000/api/educational-assistance/me';
+        const method = isRejected ? 'POST' : 'PUT';
+        const res = await fetch(url, { method, headers: { Authorization: `Bearer ${token}` }, body: fd });
         const txt = await res.text();
         if (!res.ok) throw new Error(txt || 'Update failed');
         try { Swal.close(); } catch (e) {}
+        try { sessionStorage.removeItem('educ_voter_filename'); } catch (e) {}
         await Swal.fire({ icon: 'success', title: 'Saved', text: 'Application updated.' });
         window.location.href = 'educConfirmation.html';
         return;
       } else {
-        // JSON PUT - send normalized payload
-        const jsonRes = await fetch('http://localhost:5000/api/educational-assistance/me', { method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(normalized) });
+        // JSON PUT or resubmit (if rejected) - send normalized payload
+        const isRejected = currentApplication.status === 'rejected' && currentApplication.id;
+        const url = isRejected ? `http://localhost:5000/api/educational-assistance/me/resubmit/${currentApplication.id}` : 'http://localhost:5000/api/educational-assistance/me';
+        const method = isRejected ? 'POST' : 'PUT';
+        const jsonRes = await fetch(url, { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(normalized) });
         const j = await jsonRes.json().catch(()=>null);
         if (!jsonRes.ok) throw new Error((j && j.error) || 'Update failed');
         try { Swal.close(); } catch (e) {}
+        try { sessionStorage.removeItem('educ_voter_filename'); } catch (e) {}
         await Swal.fire({ icon: 'success', title: 'Saved', text: 'Application updated.' });
         window.location.href = 'educConfirmation.html';
         return;
@@ -650,16 +844,64 @@ document.addEventListener('DOMContentLoaded', function () {
   populate();
 });
 
+// Attach academic level change listener to update voter row visibility dynamically
 document.addEventListener('DOMContentLoaded', function () {
-  // ✅ Attach KK Profiling nav
-  const kkProfileNavBtn = document.getElementById('kkProfileNavBtn');
-  if (kkProfileNavBtn) kkProfileNavBtn.addEventListener('click', handleKKProfileNavClick);
+  const academicEl = document.getElementById('academicLevel');
+  if (academicEl) {
+    academicEl.addEventListener('change', function () {
+      try {
+        const lvl = academicEl.value || '';
+        // update year options and get available options
+        let options = [];
+        try { options = (window.populateYearOptions ? window.populateYearOptions(lvl, '') : populateYearOptions(lvl, '')) || []; } catch (e) { options = []; }
+        // set year to a sensible default if current value is empty or not in options
+        try {
+          const yearEl = document.getElementById('year');
+          if (yearEl) {
+            const cur = (yearEl.value || '').toString();
+            if (!cur || !options.includes(cur)) {
+              yearEl.value = options && options.length ? options[0] : '';
+            }
+          }
+        } catch (e) { /* ignore */ }
 
-  const kkProfileNavBtnDesktop = document.getElementById('kkProfileNavBtnDesktop');
-  if (kkProfileNavBtnDesktop) kkProfileNavBtnDesktop.addEventListener('click', handleKKProfileNavClick);
-
-  const kkProfileNavBtnMobile = document.getElementById('kkProfileNavBtnMobile');
-  if (kkProfileNavBtnMobile) kkProfileNavBtnMobile.addEventListener('click', handleKKProfileNavClick);
+        // toggle voter upload visibility for Senior High (respect any existing displayed filename)
+        try {
+          const voterInputEl = document.getElementById('voter');
+          const voterLabelEl = document.getElementById('voterLabel');
+          const voterFileNameEl = document.getElementById('voterFileName');
+          const voterUploadColumn = document.getElementById('voterUploadColumn');
+          const hide = /senior/i.test((lvl||'').toString().toLowerCase());
+          // determine if filename is present (from state or sessionStorage)
+          let hasDisplayedVoter = false;
+          try { if (voterState.base64) hasDisplayedVoter = true; else if (sessionStorage.getItem('educ_voter_filename')) hasDisplayedVoter = true; else if (voterFileNameEl && voterFileNameEl.textContent && voterFileNameEl.style.display !== 'none') hasDisplayedVoter = true; } catch (e) {}
+          if (hide) {
+            [voterInputEl, voterLabelEl, voterFileNameEl, voterUploadColumn].forEach(el => { if (el) el.style.display = 'none'; });
+            const tr1 = voterInputEl && voterInputEl.closest ? voterInputEl.closest('tr') : null;
+            const tr2 = voterUploadColumn && voterUploadColumn.closest ? voterUploadColumn.closest('tr') : null;
+            const tr = tr1 || tr2;
+            if (tr) tr.style.display = 'none';
+            if (voterInputEl) voterInputEl.required = false;
+          } else {
+            if (voterInputEl) voterInputEl.style.display = '';
+            if (voterUploadColumn) voterUploadColumn.style.display = '';
+            if (hasDisplayedVoter) {
+              if (voterLabelEl) voterLabelEl.style.display = 'none';
+              if (voterFileNameEl) voterFileNameEl.style.display = 'inline-block';
+            } else {
+              if (voterLabelEl) voterLabelEl.style.display = '';
+              if (voterFileNameEl) voterFileNameEl.style.display = 'none';
+            }
+            const tr1 = voterInputEl && voterInputEl.closest ? voterInputEl.closest('tr') : null;
+            const tr2 = voterUploadColumn && voterUploadColumn.closest ? voterUploadColumn.closest('tr') : null;
+            const tr = tr1 || tr2;
+            if (tr) tr.style.display = '';
+          }
+        } catch (e) { /* ignore */ }
+      } catch (e) { /* ignore */ }
+    });
+    }
+  });
 
   // ✅ Attach LGBTQ nav
   const lgbtqProfileNavBtnDesktop = document.getElementById('lgbtqProfileNavBtnDesktop');
@@ -674,7 +916,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const educAssistanceNavBtnMobile = document.getElementById('educAssistanceNavBtnMobile');
   if (educAssistanceNavBtnMobile) educAssistanceNavBtnMobile.addEventListener('click', handleEducAssistanceNavClick);
-});
 
 // KK Profile Navigation
 function handleKKProfileNavClick(event) {

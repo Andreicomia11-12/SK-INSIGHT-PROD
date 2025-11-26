@@ -6,6 +6,7 @@
     <title>EDUCATIONAL ASSISTANCE — Resubmit</title>
     <link rel="icon" href="/Frontend/assets/logo.png" type="image/x-icon">
   <link rel="stylesheet" href="/Frontend/css/Educational-assistance-user.css" />
+  <link rel="stylesheet" href="/Frontend/css/swal-custom.css">
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -78,7 +79,7 @@
 
   <div class="card">
     <label class="label"  for="birthday">Birthday:</label>
-    <input type="date" id="birthday" class="birthday-input" name="birthday" required>
+    <input type="date" id="birthday" class="birthday-input" name="birthday" readonly>
   </div>
 
   <div class="card">
@@ -260,8 +261,8 @@
         </tr>
         <tr>
           <td>Certificate of Enrollment</td>
-          <td><i class="fa-solid fa-eye view-icon" id="viewCOE"></i></td>
-          <td><i class="fa-solid fa-trash delete-icon" id="deleteCOE"></i></td>
+          <td><i class="fa-solid fa-eye view-icon" id="viewCoe"></i></td>
+          <td><i class="fa-solid fa-trash delete-icon" id="deleteCoe"></i></td>
           <td>
             <label for="coeImage" class="upload-plus" id="coeLabel">
               <i class="fa-solid fa-plus"></i>
@@ -335,5 +336,7 @@
   <script src="/Frontend/js/editEducRejected.js"></script>
   <!-- optional: include index.js if you need the shared navbar handlers available -->
   <script src="/Frontend/js/index.js" defer></script>
+  <script src="/Frontend/js/check-rejected.js" defer></script>
+  <script src="/Frontend/js/educ-reapply-handler.js" defer></script>
 </body>
 </html>

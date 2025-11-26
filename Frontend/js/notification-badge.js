@@ -37,11 +37,7 @@
     (list||[]).forEach(a => {
       const isActive = (a.isActive === undefined) ? true : Boolean(a.isActive);
       if (!isActive) return;
-      // Determine expiration based on eventDate primarily, fall back to expiresAt
-      const eventTime = a.eventDate ? Date.parse(a.eventDate) : NaN;
-      if (!isNaN(eventTime) && eventTime < now) return;
-      const expireTime = a.expiresAt ? Date.parse(a.expiresAt) : NaN;
-      if (!isNaN(expireTime) && expireTime < now) return;
+      if (a.expiresAt) { const exp = Date.parse(a.expiresAt); if (!isNaN(exp) && exp < now) return; }
       if (!userId) count++; else if (!isViewedByUser(a, userId)) count++;
     });
     return count;
@@ -60,7 +56,56 @@
     const tabBadges = Array.from(document.querySelectorAll('.tab-notif-badge'));
     if (navbarBadges.length === 0 && tabBadges.length === 0) return;
     if (!token) { navbarBadges.forEach(el=>setBadgeElement(el,0)); tabBadges.forEach(el=>setBadgeElement(el,0)); return; }
+    // Prefer counting unread announcements from the rendered DOM (table rows or cards).
+    // Allocate counts to the active tab category so reading an item in "Overdue/Expired"
+    // decreases the expired count (not the general count).
+    let domGeneral = 0, domPersonal = 0, domExpired = 0;
+    try {
+      const activeTabBtn = document.querySelector('.tab-btn.active');
+      const activeTab = activeTabBtn ? activeTabBtn.dataset.tab : null; // 'general', 'foryou', 'expired'
 
+      // Table rows and cards that are currently visible on the page will reflect the active tab.
+      const tableUnread = document.querySelectorAll('.announcement-table tbody tr.announcement-notread');
+      const cardUnread = document.querySelectorAll('.announcement-cards .announcement-card.announcement-notread');
+      const visibleUnreadCount = (tableUnread ? tableUnread.length : 0) + (cardUnread ? cardUnread.length : 0);
+
+      if (activeTab === 'foryou' || activeTab === 'personal') {
+        domPersonal = visibleUnreadCount;
+      } else if (activeTab === 'expired' || activeTab === 'overdue') {
+        domExpired = visibleUnreadCount;
+      } else {
+        // default to general
+        domGeneral = visibleUnreadCount;
+      }
+    } catch (e) {
+      console.warn('DOM-based badge count failed', e);
+    }
+
+    // If we found any DOM-based announcements, use them. Otherwise, fall back to fetching.
+    if (domGeneral > 0 || domPersonal > 0 || domExpired > 0) {
+      // Bell/navbar badge should only count General + Personal (for-you), not Expired/Overdue
+      const navbarTotal = domGeneral + domPersonal;
+      navbarBadges.forEach(el => setBadgeElement(el, navbarTotal, { display: 'flex' }));
+      ['badge-general','notif-general'].forEach(id => setBadgeElement(document.getElementById(id), domGeneral, { display: 'inline-block' }));
+      ['badge-foryou','notif-foryou'].forEach(id => setBadgeElement(document.getElementById(id), domPersonal, { display: 'inline-block' }));
+      // If there are any tab badge elements that indicate expired/overdue, try common ids
+      ['badge-expired','notif-expired','badge-overdue','notif-overdue'].forEach(id => setBadgeElement(document.getElementById(id), domExpired, { display: 'inline-block' }));
+
+      // fallback for other tab-badges based on data-tab
+      tabBadges.forEach(el => {
+        if (!el.id || !['badge-general','notif-general','badge-foryou','notif-foryou','badge-expired','notif-expired','badge-overdue','notif-overdue'].includes(el.id)){
+          const parent = el.closest('[data-tab]');
+          const tabName = parent ? parent.getAttribute('data-tab') : null;
+          if (tabName === 'general') setBadgeElement(el, domGeneral, { display: 'inline-block' });
+          else if (tabName === 'foryou' || tabName === 'personal') setBadgeElement(el, domPersonal, { display: 'inline-block' });
+          else if (tabName === 'expired' || tabName === 'overdue') setBadgeElement(el, domExpired, { display: 'inline-block' });
+          else setBadgeElement(el, (domGeneral+domPersonal+domExpired), { display: 'inline-block' });
+        }
+      });
+      return;
+    }
+
+    // No DOM announcements found: fallback to previous network-based computation
     const user = await fetchCurrentUser(token);
     const userId = user && (user._id || user.id) ? (user._id || user.id) : null;
     let generalList=[], personalList=[];

@@ -434,81 +434,55 @@ document.addEventListener('DOMContentLoaded', function () {
   attachEducHandler(document.getElementById('educAssistanceNavBtnMobile'));
 
   // Embed educRejected helper so pages without separate script still have access
-  (function () {
-    async function getJsonSafe(res) { try { return await res.json(); } catch (e) { return null; } }
+  // Replace previous educational-assistance attach logic with a single reliable handler
+(function attachEducReapplyHandler() {
+  const desktopBtn = document.getElementById('educAssistanceNavBtnDesktop');
+  const mobileBtn = document.getElementById('educAssistanceNavBtnMobile');
 
-    async function checkAndPromptEducReapply(opts = {}) {
-      const {
-        event,
-        redirectUrl = 'Educational-assistance-user.html',
-        draftKeys = ['educDraft','educationalDraft','educAssistanceDraft'],
-        formName = 'Educational Assistance',
-        apiBase = 'http://localhost:5000'
-      } = opts || {};
+  async function onEducClick(e) {
+    e.preventDefault();
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+    // If not logged in, delegate to existing handler (which will show login)
+    if (!token) return handleEducAssistanceNavClick(e);
 
-      if (event && typeof event.preventDefault === 'function') event.preventDefault();
-
-      const token = opts.token || sessionStorage.getItem('token') || localStorage.getItem('token');
-      if (!token) {
-        return { redirected: false, isRejected: false, hasProfile: false, isFormOpen: false };
-      }
-
-      try {
-        const cycleUrl = `${apiBase}/api/formcycle/status?formName=${encodeURIComponent(formName)}`;
-        const profileUrl = `${apiBase}/api/educational-assistance/me`;
-        const [cycleRes, profileRes] = await Promise.all([
-          fetch(cycleUrl, { headers: { Authorization: `Bearer ${token}` } }),
-          fetch(profileUrl, { headers: { Authorization: `Bearer ${token}` } })
-        ]);
-
-        const cycleData = await getJsonSafe(cycleRes);
-        const profileData = await getJsonSafe(profileRes) || {};
-        const latestCycle = Array.isArray(cycleData) ? cycleData[cycleData.length - 1] : cycleData;
-        const isFormOpen = latestCycle?.isOpen ?? false;
-        const hasProfile = Boolean(profileData && (profileData._id || profileData.id));
-
-        const statusVal = (profileData && (profileData.status || profileData.decision || profileData.adminDecision || profileData.result)) || '';
-        const isRejected = Boolean(
-          (profileData && (profileData.rejected === true || profileData.isRejected === true)) ||
-          (typeof statusVal === 'string' && /reject|denied|denied_by_admin|rejected/i.test(statusVal))
-        );
-        const isApproved = Boolean(
-          (profileData && (profileData.status === 'approved' || profileData.approved === true)) ||
-          (typeof statusVal === 'string' && /approve|approved/i.test(statusVal))
-        );
-
-        if (isFormOpen && (!hasProfile || isRejected)) {
-          if (isRejected) {
-            await Swal.fire({ icon: 'warning', title: 'Previous Application Rejected', text: 'Your previous application was rejected. You will be redirected to the form to submit a new application.' });
-            try { draftKeys.forEach(k => sessionStorage.removeItem(k)); } catch (e) {}
-            window.location.href = redirectUrl;
-            return { redirected: true, isRejected, hasProfile, isFormOpen };
-          } else {
-            const text = `You don't have a profile yet. Please fill out the form to create one.`;
-            const result = await Swal.fire({ icon: 'info', title: 'No profile found', text, showCancelButton: true, confirmButtonText: 'Go to form', cancelButtonText: 'No' });
-            if (result && result.isConfirmed) {
-              try { draftKeys.forEach(k => sessionStorage.removeItem(k)); } catch (e) {}
-              window.location.href = redirectUrl;
-              return { redirected: true, isRejected, hasProfile, isFormOpen };
-            }
+    // Try check-rejected first
+    try {
+      const res = await fetch('http://localhost:5000/api/educational-assistance/check-rejected', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const json = await res.json().catch(() => ({}));
+        if (json && json.rejected && json.applicationId) {
+          const reason = json.rejectionReason || 'No reason provided';
+          const result = await Swal.fire({
+            icon: 'warning',
+            title: 'Application Rejected',
+            html: `<p>Your Educational Assistance application was rejected.</p><p><strong>Reason:</strong> ${reason}</p><p>Do you want to edit and resubmit?</p>`,
+            showCancelButton: true,
+            confirmButtonText: 'Edit & Resubmit',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#07B0F2',
+            cancelButtonColor: '#0A2C59'
+          });
+          if (result.isConfirmed) {
+            // Redirect to resubmit page with id
+            window.location.href = `/Frontend/html/user/confirmation/html/editEducRejected.html?id=${json.applicationId}`;
+            return;
           }
+          // user cancelled; do nothing
+          return;
         }
-
-        if (!isFormOpen && hasProfile && isApproved) {
-          const res2 = await Swal.fire({ icon: 'info', title: `The ${formName} is currently closed`, text: `Your application has been approved. Do you want to view your response?`, showCancelButton: true, confirmButtonText: 'Yes, view my response', cancelButtonText: 'No' });
-          if (res2 && res2.isConfirmed) {
-            window.location.href = `./confirmation/html/educConfirmation.html`;
-            return { redirected: true, isRejected, hasProfile, isFormOpen };
-          }
-        }
-
-        return { redirected: false, isRejected, hasProfile, isFormOpen };
-      } catch (err) {
-        console.error('checkAndPromptEducReapply error', err);
-        return { redirected: false, isRejected: false, hasProfile: false, isFormOpen: false };
       }
+    } catch (err) {
+      console.debug('check-rejected failed', err);
+      // fallthrough to normal behavior
     }
 
-    window.checkAndPromptEducReapply = checkAndPromptEducReapply;
-  })();
+    // If not rejected or check failed, proceed with normal flow
+    handleEducAssistanceNavClick(e);
+  }
+
+  if (desktopBtn) desktopBtn.addEventListener('click', onEducClick);
+  if (mobileBtn) mobileBtn.addEventListener('click', onEducClick);
+})();
 });

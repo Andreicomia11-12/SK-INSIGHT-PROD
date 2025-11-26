@@ -1,0 +1,44 @@
+.swal-custom-popup {
+  padding: 1.25rem; /* outer spacing around popup */
+}
+
+.swal-custom-html {
+  /* center the whole block */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* horizontal center */
+  text-align: center;
+  padding: 0 0.5rem; /* horizontal padding */
+}
+
+.swal-custom-html p {
+  margin: 0 0 0.5rem;
+  font-weight: 400;
+}
+
+/* keep the list itself left-aligned but centered within the popup */
+.swal-custom-html ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block; /* allows the ul to be centered by the parent */
+  text-align: left;      /* keep items left-aligned inside the centered box */
+}
+
+.swal-custom-html li {
+  display: grid;
+  grid-template-columns: 1.2em auto; /* marker column + content */
+  gap: 0.5rem; /* horizontal gap between marker and text */
+  align-items: center; /* vertically center marker and text */
+  margin-bottom: 6px;
+}
+
+.swal-custom-html li::before {
+  content: '•';
+  color: #555;
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-block;
+  width: 1.2em;
+  text-align: center;
+}

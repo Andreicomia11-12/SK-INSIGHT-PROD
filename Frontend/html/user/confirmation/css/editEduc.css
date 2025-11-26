@@ -125,12 +125,16 @@ body {
   margin-right: 10px;
 }
 
-.label {
+.label, .labels {
     display: block;
     font-weight: 600;
     margin-bottom: 10px;
     font-size: 1rem;
     color: #143d77;
+}
+
+.labels{
+  margin-top: 5%;
 }
 
 .allow{

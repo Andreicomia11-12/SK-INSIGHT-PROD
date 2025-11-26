@@ -204,9 +204,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       displayAnnouncements = pinnedFY.concat(unpinnedFY);
     }
 
-    const limitedAnnouncements = displayAnnouncements.slice(0, 8);
+    const itemsToShow = displayAnnouncements; // show all announcements
 
-    limitedAnnouncements.forEach(a => {
+    itemsToShow.forEach(a => {
       let status, dateCol;
       if (currentTab === 'foryou') {
         status = "No Expiry";
@@ -255,9 +255,10 @@ if (currentTab === 'foryou') {
       tableBody.appendChild(tr);
     });
 
-    for (let i = limitedAnnouncements.length; i < 8; i++) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = ``;
+    // If there are no announcements to show, render a friendly placeholder row
+    if (!itemsToShow || itemsToShow.length === 0) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="4" style="text-align:center; padding:16px;">No announcements found.</td>`;
       tableBody.appendChild(tr);
     }
     // make sure the table is visible (in case a previous code path hid it)
@@ -306,9 +307,9 @@ if (currentTab === 'foryou') {
       displayAnnouncements = pinnedFY.concat(unpinnedFY);
     }
 
-    const limitedAnnouncements = displayAnnouncements.slice(0, 8);
+    const itemsToShow = displayAnnouncements; // show all announcements
 
-    limitedAnnouncements.forEach(a => {
+    itemsToShow.forEach(a => {
       let status, dateCol;
       if (currentTab === 'foryou') {
         status = "No Expiry";
@@ -382,6 +383,11 @@ if (currentTab === 'foryou') {
 
       cardsContainer.appendChild(card);
     });
+
+    // If there are no cards to show, render a placeholder message
+    if (!itemsToShow || itemsToShow.length === 0) {
+      cardsContainer.innerHTML = '<div class="no-announcements" style="padding:16px; text-align:center;">No announcements found.</div>';
+    }
 
     // show cards and hide the table using the "hidden" class
     cardsContainer.style.display = 'block';
@@ -922,18 +928,74 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const announcementTableBody = document.querySelector(".announcement-table tbody");
+  // Inject a small CSS block to make the announcement table body scrollable
+  // while keeping the header visible. This avoids fragile inline styles
+  // and ensures consistent behavior even after the table is re-rendered.
+  if (!document.getElementById('announcement-table-scroll-style')) {
+    const style = document.createElement('style');
+    style.id = 'announcement-table-scroll-style';
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(`
+      /* Make thead fixed and tbody scrollable */
+      .announcement-table { width: 100%; border-collapse: collapse; }
+      .announcement-table thead, .announcement-table tbody { display: block; }
+      .announcement-table thead tr { display: table; width: 100%; table-layout: fixed; }
+      .announcement-table tbody { display: block; width: 100%; overflow-y: auto; }
+      .announcement-table tbody tr { display: table; width: 100%; table-layout: fixed; }
+      .announcement-table th, .announcement-table td { box-sizing: border-box; }
+    `));
+    document.head.appendChild(style);
+  }
 
-  if (announcementTableBody) {
-    const rows = announcementTableBody.querySelectorAll("tr");
-    if (rows.length <= 5) {
-      // If there are 5 or fewer announcements, remove scrolling
-      announcementTableBody.style.display = 'block';
-      announcementTableBody.style.overflowY = "visible";
-    } else {
-      // If there are more than 5 announcements, enable scrolling
-      announcementTableBody.style.maxHeight = "400px"; // Adjust height as needed
-      announcementTableBody.style.overflowY = "auto";
+  const tableEl = document.querySelector('.announcement-table');
+  if (!tableEl) return;
+  const announcementTableBody = tableEl.querySelector('tbody');
+  const cardsContainerEl = document.querySelector('.announcement-cards');
+  const containerEl = tableEl.parentElement || document.querySelector('.announcements-container') || null;
+
+  // Compute a reasonable max height for the tbody based on viewport height.
+  // Keep a sensible default (400px) but allow smaller viewports to reduce overflow.
+  function recomputeMaxHeight() {
+    if (!announcementTableBody) return;
+    const defaultMax = 400; // fallback default
+    // Use about 45% of the viewport height but clamp between 200 and defaultMax
+    const computed = Math.max(200, Math.min(defaultMax, Math.floor(window.innerHeight * 0.45)));
+    announcementTableBody.style.maxHeight = computed + 'px';
+    // Let the browser control overflow; CSS already sets overflow-y: auto on tbody
+    announcementTableBody.style.overflowY = 'auto';
+    // Also make the cards container scrollable when in card view
+    try {
+      if (cardsContainerEl) {
+        cardsContainerEl.style.maxHeight = computed + 'px';
+        cardsContainerEl.style.overflowY = 'auto';
+      }
+      // As a secondary safeguard, allow the parent container to scroll if present
+      if (containerEl) {
+        containerEl.style.overflowY = 'auto';
+        // don't force maxHeight on the container unless it's smaller than computed
+        if (!containerEl.style.maxHeight) containerEl.style.maxHeight = (computed + 80) + 'px';
+      }
+    } catch (e) {
+      // ignore styling errors
     }
+  }
+
+  // Initial compute and keep it responsive
+  recomputeMaxHeight();
+  window.addEventListener('resize', recomputeMaxHeight);
+
+  // If the table gets re-rendered, ensure the style is maintained.
+  // Use a MutationObserver to watch for tbody content changes and reapply height.
+  try {
+    const mo = new MutationObserver(() => {
+      recomputeMaxHeight();
+    });
+    mo.observe(announcementTableBody, { childList: true, subtree: false });
+    if (cardsContainerEl) {
+      try { mo.observe(cardsContainerEl, { childList: true, subtree: true }); } catch (e) { /* ignore */ }
+    }
+  } catch (e) {
+    // If MutationObserver isn't available, it's acceptable — resize handler will handle most cases.
+    console.warn('MutationObserver not available for announcement table scroll handling', e);
   }
 });

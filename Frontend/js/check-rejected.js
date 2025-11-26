@@ -26,9 +26,14 @@
 
       console.debug('checkRejected: calling API', `${API_BASE}/api/educational-assistance/check-rejected`);
 
+      // NOTE: avoid using `credentials: 'include'` here because the backend
+      // currently responds with a wildcard Access-Control-Allow-Origin which
+      // is incompatible with credentialed requests. If you need to send cookies
+      // or use credentialed requests, update the server CORS config to set
+      // `Access-Control-Allow-Origin` to the exact request origin and
+      // `Access-Control-Allow-Credentials: true`.
       const resp = await fetch(`${API_BASE}/api/educational-assistance/check-rejected`, {
         method: 'GET',
-        credentials: 'include',
         headers
       });
 
@@ -79,9 +84,10 @@
             width: 700,
           }).then((result) => {
             if (result.isConfirmed) {
+              // Redirect to the resubmit editor used elsewhere in the app
               const target = data.applicationId
-                ? `/Frontend/html/user/update-rejected.html?id=${data.applicationId}`
-                : '/Frontend/html/user/update-rejected.html';
+                ? `/Frontend/html/user/confirmation/html/editEducRejected.html?id=${data.applicationId}`
+                : '/Frontend/html/user/confirmation/html/editEducRejected.html';
               console.debug('checkRejected(debug): redirecting to', target);
               window.location.href = target;
             }
@@ -96,9 +102,10 @@
             cancelButtonText: 'Dismiss',
           }).then((result) => {
             if (result.isConfirmed) {
+              // Redirect to the resubmit editor used elsewhere in the app
               const target = data.applicationId
-                ? `/Frontend/html/user/update-rejected.html?id=${data.applicationId}`
-                : '/Frontend/html/user/update-rejected.html';
+                ? `/Frontend/html/user/confirmation/html/editEducRejected.html?id=${data.applicationId}`
+                : '/Frontend/html/user/confirmation/html/editEducRejected.html';
               console.debug('checkRejected: redirecting to', target);
               window.location.href = target;
             }
@@ -137,10 +144,13 @@
     const mobile = document.getElementById('educAssistanceNavBtnMobile');
 
     if (desktop) desktop.addEventListener('click', function (e) {
+      // Prevent other click handlers from also running (avoids duplicate modals)
+      try { e.stopImmediatePropagation(); } catch (err) {}
       e.preventDefault();
       checkRejectedAndRedirect();
     });
     if (mobile) mobile.addEventListener('click', function (e) {
+      try { e.stopImmediatePropagation(); } catch (err) {}
       e.preventDefault();
       checkRejectedAndRedirect();
     });

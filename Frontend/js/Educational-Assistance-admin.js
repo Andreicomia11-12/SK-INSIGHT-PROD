@@ -558,7 +558,7 @@ let applicants = [];
                 ${(freshApp.expenses || []).map(exp => `
                   <tr>
                     <td>${exp.item}</td>
-                    <td>₱${exp.expectedCost.toLocaleString()}</td>
+                    <td>₱${(Number(exp.expectedCost) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   </tr>
                 `).join("") || '<tr><td colspan="2">No expenses listed</td></tr>'}
               </tbody>

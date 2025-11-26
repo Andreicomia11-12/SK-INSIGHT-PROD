@@ -842,10 +842,44 @@ if (form && savedFormData) {
     // Populate year options using saved academic level, but only restore year when valid
     populateYearOptions(savedAcademic, savedYear);
 
+    // Toggle requirements visibility based on academic level (Senior High => hide voter certificate)
+    function updateRequirementsVisibility(level) {
+      try {
+        const lvl = (level || '').toString().toLowerCase();
+        const hideVoter = /senior/i.test(lvl);
+        const voterInput = document.getElementById('voter');
+        const voterLabel = document.getElementById('voterLabel');
+        const viewVoter = document.getElementById('viewVoter');
+        const deleteVoter = document.getElementById('deleteVoter');
+
+        const display = hideVoter ? 'none' : '';
+        if (voterInput) {
+          voterInput.style.display = display;
+          // remove required if hiding
+          if (hideVoter) voterInput.required = false;
+        }
+        if (voterLabel) voterLabel.style.display = display;
+        if (viewVoter) viewVoter.style.display = display;
+        if (deleteVoter) deleteVoter.style.display = display;
+
+        // Also hide the whole table row if present (cover both form and confirmation layouts)
+        try {
+          const rowEl = (voterInput && voterInput.closest) ? voterInput.closest('tr') : null;
+          const alt = document.getElementById('voterUploadColumn') ? document.getElementById('voterUploadColumn').closest('tr') : null;
+          const tr = rowEl || alt;
+          if (tr) tr.style.display = display;
+        } catch (e) { /* ignore */ }
+      } catch (e) {
+        // fail silently
+      }
+    }
+
     // apply initial visibility based on savedAcademic
     if (savedAcademic) {
       academicLevelEl.value = savedAcademic;
       yearWrapper.style.display = '';
+      // apply requirements visibility for restored selection
+      updateRequirementsVisibility(savedAcademic);
     }
 
     // When the user changes academic level, repopulate year options and clear invalid year
@@ -854,6 +888,8 @@ if (form && savedFormData) {
       populateYearOptions(lvl, ""); // don't force previous year
       // show year area when a known level chosen
       yearWrapper.style.display = lvl ? '' : 'none';
+      // update requirements (voter certificate) visibility when level changes
+      updateRequirementsVisibility(lvl);
       // clear stored year if it's not valid for new level
       try {
         const currentYear = yearEl.value;
@@ -867,6 +903,11 @@ if (form && savedFormData) {
         }
       } catch (e) { /* ignore */ }
     });
+    // Make academic and year readonly/disabled so user cannot change classification
+    try {
+      academicLevelEl.disabled = true;
+      if (yearEl) yearEl.disabled = true;
+    } catch (e) { /* ignore */ }
   } else {
     if (savedYear && yearEl) { yearEl.value = savedYear; }
   }

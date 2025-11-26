@@ -213,59 +213,9 @@ function handleLGBTQProfileNavClick(event) {
 }
 
 // Educational Assistance Navigation
-async function handleEducAssistanceNavClick(event) {
+function handleEducAssistanceNavClick(event) {
   event.preventDefault();
   const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-  if (!token) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'You need to log in first',
-      text: 'Please log in to access Educational Assistance.',
-      confirmButtonText: 'OK'
-    }).then(() => {
-      window.location.href = '/Frontend/html/user/login.html';
-    });
-    return;
-  }
-
-  // Check if the user's latest application was rejected
-  try {
-    const checkRes = await fetch('http://localhost:5000/api/educational-assistance/check-rejected', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (checkRes.ok) {
-      const checkData = await checkRes.json();
-      if (checkData.rejected && checkData.applicationId) {
-        // Prompt user to edit/resubmit
-        const result = await Swal.fire({
-          icon: 'error',
-          title: 'Application Rejected',
-          html: `
-            <div>
-              <p>Your Educational Assistance application was rejected.</p>
-              <p>Reason: <b>${checkData.rejectionReason || "No reason provided"}</b></p>
-              <p>You may edit and resubmit your application.</p>
-            </div>
-          `,
-          showCancelButton: true,
-          confirmButtonText: "Edit & Resubmit",
-          cancelButtonText: "Cancel",
-          confirmButtonColor: "#07B0F2",
-          cancelButtonColor: "#0A2C59"
-        });
-        if (result.isConfirmed) {
-          window.location.href = `/Frontend/html/user/confirmation/html/editEducRejected.html?id=${checkData.applicationId}`;
-          return;
-        }
-        // If cancelled, do nothing
-        return;
-      }
-    }
-  } catch (err) {
-    console.error('Error checking rejected application:', err);
-    // fallback to normal flow
-  }
-
   Promise.all([
     fetch('http://localhost:5000/api/formcycle/status?formName=Educational%20Assistance', {
       headers: { Authorization: `Bearer ${token}` }
@@ -280,19 +230,9 @@ async function handleEducAssistanceNavClick(event) {
     const latestCycle = Array.isArray(cycleData) ? cycleData[cycleData.length - 1] : cycleData;
     const formName = latestCycle?.formName || "Educational Assistance";
     const isFormOpen = latestCycle?.isOpen ?? false;
-    // consider a profile 'present' but also check for explicit rejection markers
     const hasProfile = profileData && profileData._id ? true : false;
-    const statusVal = (profileData && (profileData.status || profileData.decision || profileData.adminDecision || profileData.result)) || '';
-    const isRejected = Boolean(
-      (profileData && (profileData.rejected === true || profileData.isRejected === true)) ||
-      (typeof statusVal === 'string' && /reject|denied|denied_by_admin|rejected/i.test(statusVal))
-    );
-    const isApproved = Boolean(
-      (profileData && (profileData.status === 'approved' || profileData.approved === true)) ||
-      (typeof statusVal === 'string' && /approve|approved/i.test(statusVal))
-    );
     // CASE 1: Form closed, user already has profile
-    if (!isFormOpen && hasProfile && isApproved) {
+    if (!isFormOpen && hasProfile) {
       Swal.fire({
         icon: "info",
         title: `The ${formName} is currently closed`,
@@ -305,9 +245,8 @@ async function handleEducAssistanceNavClick(event) {
       });
       return;
     }
-    // CASE 2: Form closed, user has NO profile OR their previous application was rejected
-    if (!isFormOpen && (!hasProfile || isRejected)) {
-      // When the form is closed and there is no profile or it was rejected, inform the user they cannot submit now.
+    // CASE 2: Form closed, user has NO profile
+    if (!isFormOpen && !hasProfile) {
       Swal.fire({
         icon: "warning",
         title: `The ${formName} form is currently closed`,
@@ -317,7 +256,7 @@ async function handleEducAssistanceNavClick(event) {
       return;
     }
     // CASE 3: Form open, user already has a profile
-    if (isFormOpen && hasProfile && isApproved) {
+    if (isFormOpen && hasProfile) {
       Swal.fire({
         title: `You already applied for ${formName}`,
         text: "Do you want to view your response?",
@@ -330,45 +269,42 @@ async function handleEducAssistanceNavClick(event) {
       });
       return;
     }
-    // CASE 4: Form open, no profile OR profile exists but was rejected → prompt to reapply
-    if (isFormOpen && (!hasProfile || isRejected)) {
-      if (isRejected) {
-        // When their previous application was rejected, inform and immediately redirect to the form to reapply
-        Swal.fire({ icon: 'warning', title: 'Previous Application Rejected', text: 'Your previous application was rejected. You will be redirected to the resubmission page.' }).then(() => {
-          try { sessionStorage.removeItem('educDraft'); sessionStorage.removeItem('educationalDraft'); sessionStorage.removeItem('educAssistanceDraft'); } catch (e) {}
-          window.location.href = "/Frontend/html/user/confirmation/html/editEducRejected.html";
-        });
-      } else {
-        const message = `You don't have a profile yet. Please fill out the form to create one.`;
-        Swal.fire({
-          icon: "info",
-          title: 'No profile found',
-          text: message,
-          showCancelButton: true,
-          confirmButtonText: "Go to form",
-          cancelButtonText: "No",
-        }).then(result => {
-          if (result.isConfirmed) {
-            try { sessionStorage.removeItem('educDraft'); sessionStorage.removeItem('educationalDraft'); sessionStorage.removeItem('educAssistanceDraft'); } catch (e) {}
-            window.location.href = "/Frontend/html/user/Educational-assistance-user.html";
-          }
-        });
-      }
+    // CASE 4: Form open, no profile → Show SweetAlert and go to form
+    if (isFormOpen && !hasProfile) {
+      Swal.fire({
+        icon: "info",
+        title: `No profile found`,
+        text: `You don't have a profile yet. Please fill out the form to create one.`,
+        showCancelButton: true, // Show the "No" button
+        confirmButtonText: "Go to form", // Text for the "Go to Form" button
+        cancelButtonText: "No", // Text for the "No" button
+      }).then(result => {
+        if (result.isConfirmed) {
+          // Redirect to the form page when "Go to Form" is clicked
+          window.location.href = "/Frontend/html/user/Educational-assistance-user.html";
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+        }
+      });
       return;
     }
   })
-  .catch(() => window.location.href = "/Frontend/html/user/Educational-assistance-user.html");
+  .catch(() => window.location.href = "../../Educational-assistance-user.html");
 }
 
 // ✅ Attach event listeners properly
-  const kkProfileNavBtn = document.querySelector('.navbar-center a[href="./kkform-personal.html"]');
-  const kkProfileNavBtnMobile = document.getElementById('kkProfileNavBtnMobile');
+  const kkProfileNavBtn = document.getElementById('kkProfileNavBtnDesktop') 
+  || document.querySelector('.navbar-center a[href="./kkform-personal.html"]')
+  || document.querySelector('.navbar-center a[href*="kkform-personal"]')
+  || document.querySelector('.navbar-center a[data-nav="kkProfile"]')
+  || document.querySelector('.navbar-center a'); // last-resort candidate
 
-  if (kkProfileNavBtn) {
-    kkProfileNavBtn.addEventListener('click', handleKKProfileNavClick);
-  } else {
-    console.warn("⚠️ Desktop KK Profile button NOT found");
-  }
+if (kkProfileNavBtn && kkProfileNavBtn.matches && kkProfileNavBtn.matches('a')) {
+  kkProfileNavBtn.addEventListener('click', handleKKProfileNavClick);
+} else {
+  // helpful debug for dev — will show what anchors exist so you can adjust selector
+  console.warn("⚠️ Desktop KK Profile button NOT found. Candidate anchors on page:");
+  document.querySelectorAll('.navbar-center a').forEach(a => console.warn('anchor:', a.getAttribute('href'), a.id, a.className, a.textContent.trim()));
+}
 
   if (kkProfileNavBtnMobile) {
     kkProfileNavBtnMobile.addEventListener('click', handleKKProfileNavClick);

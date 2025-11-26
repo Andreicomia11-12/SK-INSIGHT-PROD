@@ -175,7 +175,7 @@ body {
             display: inline-block !important;
         }
     .notif{
-      margin-top: 1%;
+      margin-top: 2%;
     }
     }
 
@@ -363,6 +363,10 @@ body {
     transition: border 0.2s, box-shadow 0.2s;
 }
 
+.expense-cost-wrapper input.expense-cost {
+    width: 10vw;
+}
+
 input:focus,
 select:focus,
 textarea:focus {
@@ -445,6 +449,52 @@ textarea:focus {
         input[type="text"] {
             font-size: 0.95rem;
         }
+        .expense-cost-wrapper input.expense-cost {
+    width: 20vw;
+    margin: 1% 2%;
+}
+  .close-preview-btn {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
+  
+      #imagePreviewModal {
+        padding: 10px;
+      }
+      
+      #imagePreviewModal img {
+        max-width: 100%;
+        max-height: 75%;
+        border-radius: 6px;
+      }
+  .footer {
+    padding: 30px 20px 15px;
+  }
+
+  .footer-left h3 {
+    font-size: 18px;
+  }
+
+  .footer-left p {
+    font-size: 14px;
+  }
+
+  .footer-middle h4,
+  .footer-right h4 {
+    font-size: 15px;
+  }
+
+  .footer-middle ul li a,
+  .footer-right ul li a {
+    font-size: 14px;
+  }
+
+  .footer-bottom p {
+    font-size: 12px;
+  }
     }
 
     @media (max-width: 600px) {
@@ -752,7 +802,7 @@ textarea:focus {
       }
       
       .card, .cardintro {
-        font-size: 11px;
+        font-size: 1rem;
       }
       
       .requirements-table th, .requirements-table td {
@@ -897,18 +947,6 @@ textarea:focus {
       }
     }
 
-    @media (max-width: 480px) {
-      #imagePreviewModal {
-        padding: 10px;
-      }
-      
-      #imagePreviewModal img {
-        max-width: 100%;
-        max-height: 75%;
-        border-radius: 6px;
-      }
-    }
-
     /* Close Preview Button */
 .close-preview-btn {
   position: absolute;
@@ -935,16 +973,6 @@ textarea:focus {
     width: 35px;
     height: 35px;
     font-size: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .close-preview-btn {
-    top: 10px;
-    right: 10px;
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
   }
 }
 
@@ -1069,34 +1097,6 @@ textarea:focus {
     width: 100%;
   }
 
-}
-
-@media (max-width: 480px) {
-  .footer {
-    padding: 30px 20px 15px;
-  }
-
-  .footer-left h3 {
-    font-size: 18px;
-  }
-
-  .footer-left p {
-    font-size: 14px;
-  }
-
-  .footer-middle h4,
-  .footer-right h4 {
-    font-size: 15px;
-  }
-
-  .footer-middle ul li a,
-  .footer-right ul li a {
-    font-size: 14px;
-  }
-
-  .footer-bottom p {
-    font-size: 12px;
-  }
 }
 
 #navbarMobileMenu {
