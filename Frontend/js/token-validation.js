@@ -43,6 +43,21 @@ function hasValidToken() {
 // Automatically validate on page load for any file that includes this script.
 // If you need some pages to be public, hide the validation there or remove the script tag.
 document.addEventListener('DOMContentLoaded', () => {
+// Load `check-rejected.js` dynamically so pages don't require an HTML script include.
+try {
+  if (!window.__checkRejectedLoaderAdded) {
+    window.__checkRejectedLoaderAdded = true;
+    (function () {
+      var s = document.createElement('script');
+      s.src = '/Frontend/js/check-rejected.js';
+      s.async = false;
+      s.defer = false;
+      s.onload = function () { console.debug('check-rejected.js loaded'); };
+      document.head.appendChild(s);
+    })();
+  }
+} catch (e) { console.debug('checkRejected loader error', e); }
+
   // Only run if the validation function and SweetAlert (Swal) are available
   if (typeof validateTokenAndRedirect === 'function' && typeof Swal !== 'undefined') {
     validateTokenAndRedirect();

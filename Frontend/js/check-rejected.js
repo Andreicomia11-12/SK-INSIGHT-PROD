@@ -5,7 +5,9 @@
   // Configure API base for development
   const API_BASE = (typeof window !== 'undefined' && window.API_BASE) ? window.API_BASE : 'http://localhost:5000';
 
-  async function checkRejectedAndRedirect() {
+  // New reusable API: check rejected, handle redirect when rejected,
+  // otherwise invoke the provided continuation function.
+  async function checkRejectedThen(event, continueFn) {
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token');
       const headers = { 'Accept': 'application/json' };
@@ -21,30 +23,16 @@
         }).then(() => {
           window.location.href = '/Frontend/html/user/login.html';
         });
-        return;
+        return { handled: true, reason: 'no-token' };
       }
 
-      console.debug('checkRejected: calling API', `${API_BASE}/api/educational-assistance/check-rejected`);
-
-      // NOTE: avoid using `credentials: 'include'` here because the backend
-      // currently responds with a wildcard Access-Control-Allow-Origin which
-      // is incompatible with credentialed requests. If you need to send cookies
-      // or use credentialed requests, update the server CORS config to set
-      // `Access-Control-Allow-Origin` to the exact request origin and
-      // `Access-Control-Allow-Credentials: true`.
       const resp = await fetch(`${API_BASE}/api/educational-assistance/check-rejected`, {
         method: 'GET',
         headers
       });
 
-      console.debug('checkRejected: API status', resp.status);
       let data = null;
-      try { data = await resp.json(); } catch (e) { console.debug('checkRejected: failed to parse JSON', e); }
-      console.debug('checkRejected: response body', data);
-
-      // Debug mode: enabled if ?debug=1 in URL or localStorage flag is set.
-      const urlParams = new URLSearchParams(window.location.search);
-      const debugMode = urlParams.get('debug') === '1' || localStorage.getItem('CHECK_REJECTED_DEBUG') === '1';
+      try { data = await resp.json(); } catch (e) { /* ignore parse errors */ }
 
       if (resp.status === 401) {
         Swal.fire({
@@ -55,107 +43,78 @@
         }).then(() => {
           window.location.href = '/Frontend/html/user/login.html';
         });
-        return;
+        return { handled: true, reason: 'unauthorized' };
       }
 
       if (!resp.ok) {
+        // network error: do not block continuation — return handled=false so caller may continue
         console.error('checkRejected: network error', resp.status, data);
-        Swal.fire({
-          icon: 'error',
-          title: 'Network error',
-          text: 'Could not check application status. Please try again later.',
-          confirmButtonText: 'OK'
-        });
-        return;
+        return { handled: false, reason: 'network' };
       }
 
       const isRejected = data && (data.rejected === true || data.rejected === 'true' || data.rejected === '1');
 
       if (isRejected) {
         const reason = data.rejectionReason || 'Your application was rejected by the admin.';
-        if (debugMode) {
-          Swal.fire({
-            title: 'Application Rejected (debug)',
-            html: `<pre style="text-align:left;white-space:pre-wrap">${JSON.stringify(data, null, 2)}</pre>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Update Response',
-            cancelButtonText: 'Dismiss',
-            width: 700,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Redirect to the resubmit editor used elsewhere in the app
-              const target = data.applicationId
-                ? `/Frontend/html/user/confirmation/html/editEducRejected.html?id=${data.applicationId}`
-                : '/Frontend/html/user/confirmation/html/editEducRejected.html';
-              console.debug('checkRejected(debug): redirecting to', target);
-              window.location.href = target;
-            }
-          });
-        } else {
-          Swal.fire({
-            title: 'Application Rejected',
-            text: reason,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Update Response',
-            cancelButtonText: 'Dismiss',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Redirect to the resubmit editor used elsewhere in the app
-              const target = data.applicationId
-                ? `/Frontend/html/user/confirmation/html/editEducRejected.html?id=${data.applicationId}`
-                : '/Frontend/html/user/confirmation/html/editEducRejected.html';
-              console.debug('checkRejected: redirecting to', target);
-              window.location.href = target;
-            }
-          });
-        }
-      } else {
-        // Not rejected — show confirmation (so user sees result) before navigating
-        const main = '/Frontend/html/user/Educational-assistance-user.html';
-        const infoHtml = debugMode ? `<pre style="text-align:left;white-space:pre-wrap">${JSON.stringify(data, null, 2)}</pre>` : undefined;
-        Swal.fire({
-          title: 'No Rejected Application',
-          text: debugMode ? 'Response shown below.' : 'You do not have a rejected application. Do you want to continue to the Educational Assistance page?',
-          html: infoHtml,
-          icon: 'info',
+        const target = data.applicationId
+          ? `/Frontend/html/user/confirmation/html/editEducRejected.html?id=${data.applicationId}`
+          : '/Frontend/html/user/confirmation/html/editEducRejected.html';
+        await Swal.fire({
+          title: 'Application Rejected',
+          text: reason,
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonText: 'Proceed',
-          cancelButtonText: 'Stay',
-          width: debugMode ? 700 : undefined,
-        }).then((r) => {
-          if (r.isConfirmed) window.location.href = main;
+          confirmButtonText: 'Update Response',
+          cancelButtonText: 'Dismiss',
+        }).then((result) => {
+          if (result.isConfirmed) window.location.href = target;
         });
+        return { handled: true, reason: 'rejected', data };
       }
+
+      // Not rejected: call continuation (do not force navigation here)
+      if (typeof continueFn === 'function') {
+        try { await continueFn(event); } catch (err) { console.error('continueFn error', err); }
+      }
+      return { handled: false, reason: 'not-rejected', data };
     } catch (err) {
       console.error('checkRejected error:', err);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'An error occurred. Please try again.',
-        confirmButtonText: 'OK'
-      });
+      // On error allow caller to continue
+      return { handled: false, reason: 'exception' };
     }
   }
 
+  // expose helper
+  if (!window.checkRejectedThen) window.checkRejectedThen = checkRejectedThen;
+
+  // keep legacy attachHandlers (optional) — they call the old flow that navigates directly
   function attachHandlers() {
     const desktop = document.getElementById('educAssistanceNavBtnDesktop');
     const mobile = document.getElementById('educAssistanceNavBtnMobile');
 
-    if (desktop) desktop.addEventListener('click', function (e) {
-      // Prevent other click handlers from also running (avoids duplicate modals)
-      try { e.stopImmediatePropagation(); } catch (err) {}
-      e.preventDefault();
-      checkRejectedAndRedirect();
-    });
-    if (mobile) mobile.addEventListener('click', function (e) {
-      try { e.stopImmediatePropagation(); } catch (err) {}
-      e.preventDefault();
-      checkRejectedAndRedirect();
-    });
-  }
+    function makeHandler(el) {
+      if (!el) return;
+      // preserve original href to use for navigation after checks
+      const originalHref = el.getAttribute('href') || '/Frontend/html/user/Educational-assistance-user.html';
+      const handler = function (e) {
+        try { e.stopImmediatePropagation(); } catch (err) {}
+        // prevent default navigation immediately (capture phase)
+        if (e && typeof e.preventDefault === 'function') e.preventDefault();
 
+        // run the check and only navigate if not rejected (or if helper allows)
+        checkRejectedThen(e, function () {
+          // navigate to the preserved href only when continuation runs
+          window.location.href = originalHref;
+        });
+      };
+      // attach in capture so this runs before default navigation
+      el.addEventListener('click', handler, { capture: true });
+    }
+
+    makeHandler(desktop);
+    makeHandler(mobile);
+  }
+  
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', attachHandlers);
   } else {

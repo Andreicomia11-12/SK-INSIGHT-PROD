@@ -202,11 +202,19 @@ body {
 .prof {
     color: #ffffff;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 1rem;
     padding: 8px 12px;
     font-weight: bold;
     border-radius: 8px;
     transition: background 0.2s, color 0.2s;
+}
+
+.prof:hover {
+    /* background: #1e4e9e; */
+    color: #fff;
+    cursor: pointer;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(10,44,89,0.12);
 }
 
 .navbar-right {

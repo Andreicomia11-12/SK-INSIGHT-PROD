@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function () {
     handleEducAssistanceNavClick(e);
   }
 
-  if (desktopBtn) desktopBtn.addEventListener('click', onEducClick);
-  if (mobileBtn) mobileBtn.addEventListener('click', onEducClick);
+  if (desktopBtn) desktopBtn.addEventListener('click', onEducClick, { capture: true });
+  if (mobileBtn) mobileBtn.addEventListener('click', onEducClick, { capture: true });
 })();
-});
+})();

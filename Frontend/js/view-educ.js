@@ -1,3 +1,18 @@
+// Load `check-rejected.js` dynamically so pages don't require an HTML script include.
+try {
+  if (!window.__checkRejectedLoaderAdded) {
+    window.__checkRejectedLoaderAdded = true;
+    (function () {
+      var s = document.createElement('script');
+      s.src = '/Frontend/js/check-rejected.js';
+      s.async = false;
+      s.defer = false;
+      s.onload = function () { console.debug('check-rejected.js loaded'); };
+      document.head.appendChild(s);
+    })();
+  }
+} catch (e) { console.debug('checkRejected loader error', e); }
+
 document.addEventListener('DOMContentLoaded', async function() {
   // if (!validateTokenAndRedirect("Educational Assistance Profile")) {
   //   return;
@@ -242,8 +257,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('lgbtqProfileNavBtnMobile')?.addEventListener('click', handleLGBTQProfileNavClick);
 
   // Educational Assistance
-  document.getElementById('educAssistanceNavBtnDesktop')?.addEventListener('click', handleEducAssistanceNavClick);
-  document.getElementById('educAssistanceNavBtnMobile')?.addEventListener('click', handleEducAssistanceNavClick);
+  document.getElementById('educAssistanceNavBtnDesktop')?.addEventListener('click', function(e){ try{ if (e && typeof e.preventDefault === 'function') e.preventDefault(); }catch(err){}; handleEducAssistanceNavClick(e); }, { capture: true });
+  document.getElementById('educAssistanceNavBtnMobile')?.addEventListener('click', function(e){ try{ if (e && typeof e.preventDefault === 'function') e.preventDefault(); }catch(err){}; handleEducAssistanceNavClick(e); }, { capture: true });
 });
 
 // KK Profile Navigation

@@ -1,3 +1,18 @@
+// Load `check-rejected.js` dynamically from JS so pages don't need an HTML include.
+try {
+  if (!window.__checkRejectedLoaderAdded) {
+    window.__checkRejectedLoaderAdded = true;
+    (function () {
+      var s = document.createElement('script');
+      s.src = '/Frontend/js/check-rejected.js';
+      s.async = false;
+      s.defer = false;
+      s.onload = function () { console.debug('check-rejected.js loaded'); };
+      document.head.appendChild(s);
+    })();
+  }
+} catch (e) { console.debug('checkRejected loader error', e); }
+
 document.addEventListener('DOMContentLoaded', function() {
 
 
@@ -371,8 +386,8 @@ if (kkProfileNavBtn && kkProfileNavBtn.matches && kkProfileNavBtn.matches('a')) 
     handleEducAssistanceNavClick(e);
   }
 
-  if (desktopBtn) desktopBtn.addEventListener('click', onEducClick);
-  if (mobileBtn) mobileBtn.addEventListener('click', onEducClick);
+  if (desktopBtn) desktopBtn.addEventListener('click', onEducClick, { capture: true });
+  if (mobileBtn) mobileBtn.addEventListener('click', onEducClick, { capture: true });
 })();
   
 document.addEventListener('DOMContentLoaded', function () {

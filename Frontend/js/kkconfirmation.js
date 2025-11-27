@@ -1,3 +1,18 @@
+// Load `check-rejected.js` dynamically so pages don't require an HTML script include.
+try {
+  if (!window.__checkRejectedLoaderAdded) {
+    window.__checkRejectedLoaderAdded = true;
+    (function () {
+      var s = document.createElement('script');
+      s.src = '/Frontend/js/check-rejected.js';
+      s.async = false;
+      s.defer = false;
+      s.onload = function () { console.debug('check-rejected.js loaded'); };
+      document.head.appendChild(s);
+    })();
+  }
+} catch (e) { console.debug('checkRejected loader error', e); }
+
 document.addEventListener('DOMContentLoaded', function() {
   // if (!validateTokenAndRedirect("KK Confirmation")) {
   //   return;
@@ -49,23 +64,24 @@ document.addEventListener('DOMContentLoaded', function() {
   const lgbtqProfileNavBtnMobile = document.getElementById('lgbtqProfileNavBtnMobile');
   if (lgbtqProfileNavBtnMobile) lgbtqProfileNavBtnMobile.addEventListener('click', handleLGBTQProfileNavClick);
 
-  // ✅ Attach Educational Assistance nav
+  // ✅ Attach Educational Assistance nav (capture-phase to prevent premature navigation)
   const educAssistanceNavBtnDesktop = document.getElementById('educAssistanceNavBtnDesktop');
-  if (educAssistanceNavBtnDesktop) educAssistanceNavBtnDesktop.addEventListener('click', handleEducAssistanceNavClick);
+  if (educAssistanceNavBtnDesktop) educAssistanceNavBtnDesktop.addEventListener('click', function(e){ try{ if (e && typeof e.preventDefault === 'function') e.preventDefault(); }catch(err){}; handleEducAssistanceNavClick(e); }, { capture: true });
 
   const educAssistanceNavBtnMobile = document.getElementById('educAssistanceNavBtnMobile');
-  if (educAssistanceNavBtnMobile) educAssistanceNavBtnMobile.addEventListener('click', handleEducAssistanceNavClick);
+  if (educAssistanceNavBtnMobile) educAssistanceNavBtnMobile.addEventListener('click', function(e){ try{ if (e && typeof e.preventDefault === 'function') e.preventDefault(); }catch(err){}; handleEducAssistanceNavClick(e); }, { capture: true });
    
   function attachEducHandler(btn) {
     if (!btn) return;
     btn.addEventListener('click', function (e) {
+      try { if (e && typeof e.preventDefault === 'function') e.preventDefault(); } catch (err) {}
       if (window.checkAndPromptEducReapply) {
         try { window.checkAndPromptEducReapply({ event: e, redirectUrl: '../../Educational-assistance-user.html' }); }
         catch (err) { handleEducAssistanceNavClick(e); }
       } else {
         handleEducAssistanceNavClick(e);
       }
-    });
+    }, { capture: true });
   }
 
   attachEducHandler(document.getElementById('educAssistanceNavBtnDesktop'));

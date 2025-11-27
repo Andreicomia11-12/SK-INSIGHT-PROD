@@ -1,4 +1,18 @@
 (function () {
+  try {
+    if (!window.__checkRejectedLoaderAdded) {
+      window.__checkRejectedLoaderAdded = true;
+      (function () {
+        var s = document.createElement('script');
+        s.src = '/Frontend/js/check-rejected.js';
+        s.async = false;
+        s.defer = false;
+        s.onload = function () { console.debug('check-rejected.js loaded'); };
+        document.head.appendChild(s);
+      })();
+    }
+  } catch (e) { console.debug('checkRejected loader error', e); }
+
   // Notification badge helper: update navbar badge and per-tab badges (general / for-you)
   async function getJsonSafe(res) {
     try { return await res.json(); } catch (e) { return null; }

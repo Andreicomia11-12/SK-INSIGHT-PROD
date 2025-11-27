@@ -1,5 +1,20 @@
 import { setupVerifyEmail } from './verify-email.js';
 
+// Load `check-rejected.js` dynamically from JS so pages don't need an HTML include.
+try {
+  if (!window.__checkRejectedLoaderAdded) {
+    window.__checkRejectedLoaderAdded = true;
+    (function () {
+      var s = document.createElement('script');
+      s.src = '/Frontend/js/check-rejected.js';
+      s.async = false;
+      s.defer = false;
+      s.onload = function () { console.debug('check-rejected.js loaded'); };
+      document.head.appendChild(s);
+    })();
+  }
+} catch (e) { console.debug('checkRejected loader error', e); }
+
 // Token validation helper function
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -1648,21 +1663,22 @@ if (logoutBtn) {
   document.getElementById('lgbtqProfileNavBtnDesktop')?.addEventListener('click', handleLGBTQProfileNavClick);
   document.getElementById('lgbtqProfileNavBtnMobile')?.addEventListener('click', handleLGBTQProfileNavClick);
 
-  // Educational Assistance
-  document.getElementById('educAssistanceNavBtnDesktop')?.addEventListener('click', handleEducAssistanceNavClick);
-  document.getElementById('educAssistanceNavBtnMobile')?.addEventListener('click', handleEducAssistanceNavClick);
+  // Educational Assistance - attach in capture phase so we can prevent navigation immediately
+  document.getElementById('educAssistanceNavBtnDesktop')?.addEventListener('click', function(e){ try{ if (e && typeof e.preventDefault === 'function') e.preventDefault(); }catch(err){}; handleEducAssistanceNavClick(e); }, { capture: true });
+  document.getElementById('educAssistanceNavBtnMobile')?.addEventListener('click', function(e){ try{ if (e && typeof e.preventDefault === 'function') e.preventDefault(); }catch(err){}; handleEducAssistanceNavClick(e); }, { capture: true });
 
     // Educational Assistance - prefer reusable helper when available
   function attachEducHandler(btn) {
     if (!btn) return;
     btn.addEventListener('click', function (e) {
+      try { if (e && typeof e.preventDefault === 'function') e.preventDefault(); } catch (err) {}
       if (window.checkAndPromptEducReapply) {
         try { window.checkAndPromptEducReapply({ event: e, redirectUrl: 'Educational-assistance-user.html' }); }
         catch (err) { handleEducAssistanceNavClick(e); }
       } else {
         handleEducAssistanceNavClick(e);
       }
-    });
+    }, { capture: true });
   }
 
   attachEducHandler(document.getElementById('educAssistanceNavBtnDesktop'));

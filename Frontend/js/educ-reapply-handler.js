@@ -1,4 +1,19 @@
 // Shared handler to check "rejected" status and redirect to edit/resubmit flow
+// Load `check-rejected.js` dynamically so pages don't require an HTML script include.
+try {
+  if (!window.__checkRejectedLoaderAdded) {
+    window.__checkRejectedLoaderAdded = true;
+    (function () {
+      var s = document.createElement('script');
+      s.src = '/Frontend/js/check-rejected.js';
+      s.async = false;
+      s.defer = false;
+      s.onload = function () { console.debug('check-rejected.js loaded'); };
+      document.head.appendChild(s);
+    })();
+  }
+} catch (e) { console.debug('checkRejected loader error', e); }
+
 (function attachEducReapplyHandler(){
   async function onEducClick(e) {
     try { e.preventDefault(); } catch(e) {}

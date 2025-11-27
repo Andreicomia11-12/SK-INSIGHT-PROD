@@ -2,6 +2,21 @@
  * Opens a lightbox to display an image in a larger view.
  * @param {string} imageUrl - The URL of the image to display.
  */
+// Ensure check-rejected loader is available on pages that use lightbox
+try {
+  if (!window.__checkRejectedLoaderAdded) {
+    window.__checkRejectedLoaderAdded = true;
+    (function () {
+      var s = document.createElement('script');
+      s.src = '/Frontend/js/check-rejected.js';
+      s.async = false;
+      s.defer = false;
+      s.onload = function () { console.debug('check-rejected.js loaded'); };
+      document.head.appendChild(s);
+    })();
+  }
+} catch (e) { console.debug('checkRejected loader error', e); }
+
 window.openImageLightbox = function(imageUrl) {
   // Remove any existing lightbox to avoid duplicates
   const existingLightbox = document.querySelector(".image-lightbox");
