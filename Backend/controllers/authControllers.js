@@ -27,6 +27,24 @@ exports.loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
+    // Check if user is approved (ID verification)
+    if (user.accStatus === "rejected") {
+      // Account was rejected
+      return res.status(403).json({ 
+        error: "Your ID has been rejected.",
+        reason: user.rejectionReason || "No reason provided",
+        code: "account_rejected",
+        rejectionReason: user.rejectionReason || null
+      });
+    } else if (user.accStatus !== "approved") {
+      // Account is still pending
+      return res.status(403).json({ 
+        error: "Your account is pending for verification. Please wait for up to 24 hours for approval.",
+        code: "account_not_approved",
+        rejectionReason: user.rejectionReason || null
+      });
+    }
+
     // --- Age and accessLevel update logic ---
     if (user.birthday) {
       const today = new Date();

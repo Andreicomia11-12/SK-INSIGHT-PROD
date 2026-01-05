@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: "user" },
 
   isVerified: { type: Boolean, default: false },
+  accStatus: { type: String, enum: ["pending", "rejected", "approved"], default: "pending" },
+  rejectionReason: { type: String, trim: true },
+  verificationTimeoutEmailSent: { type: Boolean, default: false },
+  approvalRequestedAt: { type: Date, default: null },
 
   birthday: { type: Date, required: true },
   accessLevel: { type: String, enum: ["full", "limited"], default: "limited" },

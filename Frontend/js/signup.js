@@ -7,14 +7,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Stepper logic
     const step1 = document.getElementById('signupStep1');
     const step2 = document.getElementById('signupStep2');
+    const step3 = document.getElementById('signupStep3');
     const step1Indicator = document.getElementById('step1-indicator');
     const step2Indicator = document.getElementById('step2-indicator');
+    const step3Indicator = document.getElementById('step3-indicator');
     const nextBtn = document.getElementById('nextStep');
+    const nextBtn2 = document.getElementById('nextStep2');
     const prevBtn = document.getElementById('prevStep');
+    const prevBtn3 = document.getElementById('prevStep3');
     const passwordField = document.getElementById('passwordField');
     const confirmPasswordField = document.getElementById('confirmPasswordField');
     const togglePassword = document.getElementById('togglePassword');
     const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+    // ID Upload elements
+    const idImageInput = document.getElementById('idImageInput');
+    const idImagePreview = document.getElementById('idImagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeImageBtn = document.getElementById('removeImage');
+    let selectedIdFile = null;
 
     // Birthday selects
     const yearSelect = document.getElementById('birthdayYear');
@@ -257,21 +268,36 @@ document.addEventListener('DOMContentLoaded', () => {
     function goToStep1() {
       step1.classList.add('active');
       step2.classList.remove('active');
+      step3.classList.remove('active');
       step1Indicator.classList.add('active');
       step2Indicator.classList.remove('active');
+      step3Indicator.classList.remove('active');
       loadStep1FromSession();
       step1.elements['firstName'].focus();
-      sessionStorage.setItem('signupStep2Active', 'false');
+      sessionStorage.setItem('signupCurrentStep', '1');
     }
 
     function goToStep2() {
       step1.classList.remove('active');
       step2.classList.add('active');
+      step3.classList.remove('active');
       step1Indicator.classList.remove('active');
       step2Indicator.classList.add('active');
+      step3Indicator.classList.remove('active');
       loadStep2FromSession();
       step2.elements['username'].focus();
-      sessionStorage.setItem('signupStep2Active', 'true');
+      sessionStorage.setItem('signupCurrentStep', '2');
+    }
+
+    function goToStep3() {
+      step1.classList.remove('active');
+      step2.classList.remove('active');
+      step3.classList.add('active');
+      step1Indicator.classList.remove('active');
+      step2Indicator.classList.remove('active');
+      step3Indicator.classList.add('active');
+      step3.elements['idImageInput'].focus();
+      sessionStorage.setItem('signupCurrentStep', '3');
     }
 
     // Next button
@@ -290,11 +316,47 @@ document.addEventListener('DOMContentLoaded', () => {
       goToStep2();
     });
 
+    // Next button 2 (Step 2 -> Step 3)
+    nextBtn2.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Validate Step 2
+      if (!step2.elements['username'].value.trim() ||
+          !step2.elements['email'].value.trim() ||
+          !step2.elements['password'].value ||
+          !step2.elements['confirmPassword'].value) {
+        Swal.fire({ icon: 'error', title: 'Missing Fields', text: 'Please fill all required fields.' });
+        return;
+      }
+      if (step2.elements['password'].value !== step2.elements['confirmPassword'].value) {
+        Swal.fire({ icon: 'error', title: 'Password Mismatch', text: 'Passwords do not match.' });
+        return;
+      }
+      // Strong password requirement
+      const pwd = step2.elements['password'].value || '';
+      const strongPw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      if (!strongPw.test(pwd)) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Weak password',
+          html: 'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character.'
+        });
+        return;
+      }
+      saveStep2ToSession();
+      goToStep3();
+    });
+
     // Previous button
     prevBtn.addEventListener('click', (e) => {
       e.preventDefault();
       saveStep2ToSession();
       goToStep1();
+    });
+
+    // Previous button 3 (Step 3 -> Step 2)
+    prevBtn3.addEventListener('click', (e) => {
+      e.preventDefault();
+      goToStep2();
     });
 
     // Password toggle
@@ -396,43 +458,88 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     // On page load, restore step and values
-    if (sessionStorage.getItem('signupStep2Active') === 'true') {
+    const currentStep = sessionStorage.getItem('signupCurrentStep') || '1';
+    if (currentStep === '3') {
+      goToStep3();
+    } else if (currentStep === '2') {
       goToStep2();
     } else {
       goToStep1();
     }
 
-    // Final submit
-    step2.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      // Validate Step 2
-      if (!step2.elements['username'].value.trim() ||
-          !step2.elements['email'].value.trim() ||
-          !step2.elements['password'].value ||
-          !step2.elements['confirmPassword'].value) {
-        Swal.fire({ icon: 'error', title: 'Missing Fields', text: 'Please fill all required fields.' });
-        return;
-      }
-      if (step2.elements['password'].value !== step2.elements['confirmPassword'].value) {
-        Swal.fire({ icon: 'error', title: 'Password Mismatch', text: 'Passwords do not match.' });
-        return;
-      }
-      // Strong password requirement: min 8 chars, at least one uppercase, one number, one special char
-      try {
-        const pwd = step2.elements['password'].value || '';
-        const strongPw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-        if (!strongPw.test(pwd)) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Weak password',
-            html: 'Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character.'
-          });
+    // ===== ID IMAGE UPLOAD HANDLERS =====
+    // Handle file input change
+    idImageInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          Swal.fire({ icon: 'error', title: 'Invalid File', text: 'Please select an image file.' });
+          idImageInput.value = '';
+          selectedIdFile = null;
+          idImagePreview.style.display = 'none';
           return;
         }
-      } catch (e) { /* ignore and proceed */ }
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          Swal.fire({ icon: 'error', title: 'File Too Large', text: 'Please select an image smaller than 5MB.' });
+          idImageInput.value = '';
+          selectedIdFile = null;
+          idImagePreview.style.display = 'none';
+          return;
+        }
+        selectedIdFile = file;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          previewImg.src = event.target.result;
+          idImagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Handle drag and drop
+    const idUploadLabel = document.querySelector('label[for="idImageInput"]');
+    if (idUploadLabel) {
+      idUploadLabel.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        idUploadLabel.style.backgroundColor = '#e0ecff';
+      });
+      idUploadLabel.addEventListener('dragleave', () => {
+        idUploadLabel.style.backgroundColor = '#f0f5ff';
+      });
+      idUploadLabel.addEventListener('drop', (e) => {
+        e.preventDefault();
+        idUploadLabel.style.backgroundColor = '#f0f5ff';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          idImageInput.files = files;
+          const event = new Event('change', { bubbles: true });
+          idImageInput.dispatchEvent(event);
+        }
+      });
+    }
+
+    // Remove image button
+    removeImageBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      idImageInput.value = '';
+      selectedIdFile = null;
+      idImagePreview.style.display = 'none';
+      previewImg.src = '';
+    });
+
+    // Final submit (Step 3)
+    step3.addEventListener('submit', async (e) => {
+      e.preventDefault();
       
+      // Validate that an ID image is selected
+      if (!selectedIdFile) {
+        Swal.fire({ icon: 'error', title: 'Missing ID Image', text: 'Please upload an ID image.' });
+        return;
+      }
+
       // Gather all data
-      saveStep2ToSession();
       const step1Data = JSON.parse(sessionStorage.getItem('signupStep1') || '{}');
       const step2Data = JSON.parse(sessionStorage.getItem('signupStep2') || '{}');
       
@@ -441,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `${step1Data.birthdayYear}-${step1Data.birthdayMonth}-${step1Data.birthdayDay}` 
         : '';
       
-      // Helper: Title-case a name (First letter uppercase, rest lowercase)
+      // Helper: Title-case a name
       function titleCase(str) {
         if (!str || typeof str !== 'string') return '';
         return str
@@ -453,25 +560,25 @@ document.addEventListener('DOMContentLoaded', () => {
           .join(' ');
       }
 
-      const payload = {
-        firstName: titleCase(step1Data.firstName || ''),
-        middleName: titleCase(step1Data.middleName || ''),
-        lastName: titleCase(step1Data.lastName || ''),
-        suffix: titleCase(step1Data.suffix || ''),
-        birthday: birthday,
-        username: step2Data.username || '',
-        email: step2Data.email || '',
-        password: step2Data.password || ''
-      };
+      // Create FormData for multipart/form-data (to handle file upload)
+      const formData = new FormData();
+      formData.append('firstName', titleCase(step1Data.firstName || ''));
+      formData.append('middleName', titleCase(step1Data.middleName || ''));
+      formData.append('lastName', titleCase(step1Data.lastName || ''));
+      formData.append('suffix', titleCase(step1Data.suffix || ''));
+      formData.append('birthday', birthday);
+      formData.append('username', step2Data.username || '');
+      formData.append('email', step2Data.email || '');
+      formData.append('password', step2Data.password || '');
+      formData.append('idImage', selectedIdFile);
 
       // Validate payload
-      if (!payload.firstName || !payload.lastName || !payload.birthday || !payload.username || !payload.email || !payload.password) {
+      if (!step1Data.firstName || !step1Data.lastName || !birthday || !step2Data.username || !step2Data.email || !step2Data.password) {
         Swal.fire({ 
           icon: 'error', 
           title: 'Missing Fields', 
-          text: 'Please complete all required fields in both steps.' 
+          text: 'Please complete all required fields in all steps.' 
         });
-        console.error('Payload validation failed:', payload);
         return;
       }
 
@@ -486,11 +593,8 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const response = await fetch(`${API_BASE}/api/users/smart/register`, {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload)
+          body: formData
+          // Don't set Content-Type header - browser will set it with boundary
         });
 
         const data = await response.json().catch((err) => {
@@ -503,11 +607,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.ok && data) {
           sessionStorage.removeItem('signupStep1');
           sessionStorage.removeItem('signupStep2');
-          sessionStorage.removeItem('signupStep2Active');
+          sessionStorage.removeItem('signupCurrentStep');
           Swal.fire({ 
             icon: 'success', 
             title: 'Registration Successful!', 
-            text: 'You can now log in.', 
+            text: 'Your ID has been submitted for verification. You will be notified once it is approved.', 
             timer: 2000, 
             showConfirmButton: false 
           }).then(() => {

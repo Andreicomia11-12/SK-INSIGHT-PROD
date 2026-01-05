@@ -74,12 +74,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = 'index.html';
                 });
             } else {
-                const errorMsg = (data && (data.error || data.message)) || 'Login failed. Please check your credentials.';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Failed',
-                    text: errorMsg
-                });
+                // Check if account is rejected
+                if (data && data.code === 'account_rejected') {
+                    let errorMsg = data.error || 'Your account ID has been rejected.';
+                    if (data.reason) {
+                        errorMsg += `\n\nReason: ${data.reason}`;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Account Rejected',
+                        text: errorMsg,
+                        confirmButtonColor: '#0A2C59'
+                    });
+                } else if (data && data.code === 'account_not_approved') {
+                    let errorMsg = data.error || 'Your account is pending ID verification.';
+                    if (data.rejectionReason) {
+                        errorMsg += `\n\nRejection Reason: ${data.rejectionReason}`;
+                    }
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Account Pending',
+                        text: errorMsg,
+                        confirmButtonColor: '#0A2C59'
+                    });
+                } else {
+                    const errorMsg = (data && (data.error || data.message)) || 'Login failed. Please check your credentials.';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Failed',
+                        text: errorMsg
+                    });
+                }
             }
         } catch (error) {
             Swal.close();

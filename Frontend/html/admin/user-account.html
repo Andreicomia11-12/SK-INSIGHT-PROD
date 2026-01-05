@@ -81,31 +81,38 @@
         </header>
       </div>
 
-      <section class="filters-bar">
-        <div class="filter-row">
-          <div class="filter-group">
-            <!-- You can add filter dropdowns here if needed -->
-          </div>
-        </div>
-      </section>
+      <!-- Tabs Section -->
+      <div class="tabs-container" style="margin: 20px 0;">
+        <button class="tab-btn active" id="tabAll" data-tab="all">All Users</button>
+        <button class="tab-btn" id="tabPending" data-tab="pending">Pending</button>
+        <button class="tab-btn" id="tabApproved" data-tab="approved">Approved</button>
+        <button class="tab-btn" id="tabRejected" data-tab="rejected">Rejected</button>
+      </div>
 
       <div class="tables">
-        <div class="search-container">
-          <span class="search-icon"><i class="fas fa-search"></i></span>
-          <input
-            type="text"
-            id="userSearch"
-            class="search-input"
-            placeholder="Search User"
-          />
+        <div class="table-header-row">
+          <div class="search-container">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+            <input
+              type="text"
+              id="userSearch"
+              class="search-input"
+              placeholder="Search User"
+            />
+          </div>
+          <label class="pending-filter-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="showPendingOnly" />
+            <span>Show Pending Approvals Only</span>
+          </label>
         </div>
         <table>
           <thead>
             <tr>
-              <th style="width: 10%; text-align: center;">No.</th>
-              <th style="width: 25%; text-align: center;">Username</th>
-              <th style="width: 30%;">Email</th>
-              <th style="width: 15%; text-align: center;">Birthday</th>
+              <th style="width: 8%; text-align: center;">No.</th>
+              <th style="width: 22%; text-align: center;">Username</th>
+              <th style="width: 25%;">Email</th>
+              <th style="width: 13%; text-align: center;">Birthday</th>
+              <th style="width: 12%; text-align: center;">Status</th>
               <th style="width: 20%; text-align: center;">Action</th>
             </tr>
           </thead>
@@ -113,6 +120,8 @@
             <!-- Table rows will be rendered by JS -->
           </tbody>
         </table>
+      </div>
+      <div id="pagination" class="pagination-container"></div>
       </div>
       </div>
     </div>

@@ -388,6 +388,7 @@ exports.verifyEmailOtp = asyncHandler(async (req, res) => {
   try {
     console.log('=== smartRegister called ===');
     console.log('Request body:', req.body);
+    console.log('File uploaded:', req.file ? req.file.filename : 'No file');
     
     const {
       lastName,
@@ -407,6 +408,15 @@ exports.verifyEmailOtp = asyncHandler(async (req, res) => {
         message: "Missing required fields.",
         code: "missing_fields",
         received: { lastName, firstName, username, email, password, birthday }
+      });
+    }
+
+    // Check if ID image was uploaded
+    if (!req.file) {
+      console.log('No ID image uploaded');
+      return res.status(400).json({
+        message: "ID image is required",
+        code: "missing_id_image"
       });
     }
 
@@ -430,7 +440,7 @@ exports.verifyEmailOtp = asyncHandler(async (req, res) => {
     const computedAge = calculateAge(normalizedBirthday);
     console.log('Computed age:', computedAge);
 
-    // Only allow age 15-30 inclusive
+    // Only allow age 11-30 inclusive
     if (computedAge < 11 || computedAge > 30) {
       return res.status(400).json({
         message: "Only users aged 11 to 30 are allowed to sign up.",
@@ -463,6 +473,9 @@ exports.verifyEmailOtp = asyncHandler(async (req, res) => {
       });
     }
 
+    // Store the uploaded file path
+    const idImagePath = req.file.path ? req.file.path.replace(/\\/g, '/') : req.file.filename;
+
     // Create user (single save; password hashing via schema pre-save)
     console.log('Creating new user...');
     const user = new User({
@@ -475,7 +488,10 @@ exports.verifyEmailOtp = asyncHandler(async (req, res) => {
       password,
       birthday: normalizedBirthday,
       age: computedAge,
-      accessLevel
+      accessLevel,
+      idImage: idImagePath,
+      accStatus: "pending",  // Default to pending, admin must approve
+      approvalRequestedAt: new Date()  // Set timestamp for 24-hour check
     });
 
     console.log('User object before save:', user);
@@ -486,7 +502,7 @@ exports.verifyEmailOtp = asyncHandler(async (req, res) => {
 
     console.log('Registration successful for user:', user.email);
     res.status(201).json({
-      message: "Registration successful",
+      message: "Registration successful. Your ID is pending verification.",
       user: {
         _id: user._id,
         lastName: user.lastName,
@@ -497,6 +513,7 @@ exports.verifyEmailOtp = asyncHandler(async (req, res) => {
         email: user.email,
         accessLevel: user.accessLevel,
         age: user.age,
+        accStatus: user.accStatus,
         createdAt: user.createdAt
       },
       token
@@ -992,3 +1009,53 @@ exports.updateMyInfo = asyncHandler(async (req, res) => {
   }
 });
 
+// POST /api/users/:userId/approve-id
+// Admin endpoint to approve a user's ID verification
+exports.approveUserID = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { accStatus: "approved" },
+    { new: true }
+  ).select('-password');
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  res.json({
+    message: "User ID approved successfully",
+    user
+  });
+});
+
+// POST /api/users/:userId/reject-id
+// Admin endpoint to reject a user's ID verification
+exports.rejectUserID = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const { reason } = req.body;
+
+  // Validate that reason is provided
+  if (!reason || typeof reason !== 'string' || reason.trim() === '') {
+    return res.status(400).json({ error: "Rejection reason is required" });
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  // Mark as rejected and store rejection reason
+  user.accStatus = "rejected";
+  user.rejectionReason = reason.trim();
+  await user.save();
+
+  const updatedUser = user.toObject();
+  delete updatedUser.password;
+
+  res.json({
+    message: "User ID rejected",
+    user: updatedUser
+  });
+});

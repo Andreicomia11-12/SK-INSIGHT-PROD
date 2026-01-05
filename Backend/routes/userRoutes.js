@@ -8,7 +8,8 @@ const fs = require('fs');
 const { changePassword, sendChangeEmailOtp, changeEmail } = require("../controllers/userControllers");
 
 router.post(
-  "/smart/register",                 
+  "/smart/register",
+  upload.single('idImage'),
   userCtrl.smartRegister
 );
 
@@ -45,6 +46,10 @@ router.post("/change-email/verify-otp", protect, userCtrl.verifyChangeEmailOtp);
 router.post("/change-email", protect, changeEmail);
 router.post("/change-email/unverified", protect, userCtrl.changeEmailUnverified);
 router.post("/me/update-info", protect, userCtrl.updateMyInfo);
+
+// Admin endpoints for ID verification
+router.post("/:userId/approve-id", protect, authorizeRoles('admin'), userCtrl.approveUserID);
+router.post("/:userId/reject-id", protect, authorizeRoles('admin'), userCtrl.rejectUserID);
 
 router.post('/create-admin', userCtrl.createAdmin);
 

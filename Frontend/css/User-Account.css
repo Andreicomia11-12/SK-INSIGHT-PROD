@@ -250,6 +250,15 @@ h1, h2 {
   flex-direction: column;
 }
 
+/* New table header row with search and filter */
+.table-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .tables table {
   width: 100%;
   border-collapse: collapse;
@@ -296,7 +305,7 @@ h1, h2 {
 
 .tables thead th {
   text-align: left;
-  padding: 10px 12px;
+  padding: 12px 12px;
   background: #f4f6f8;
   font-weight: 600;
   color: #222;
@@ -305,26 +314,39 @@ h1, h2 {
   top: 0;
   z-index: 1;
   white-space: nowrap;
+  vertical-align: middle;
 }
 
 .tables tbody td {
-  padding: 9px 12px;
+  padding: 12px 12px;
   border-bottom: 1px solid #f0f0f0;
   vertical-align: middle;
   white-space: nowrap;
+}
+
+.tables tbody tr {
+  background: #fff;
+  transition: background 0.18s;
 }
 
 .tables tbody tr:nth-child(even) {
   background: #fafbfd;
 }
 
-.tables tbody tr {
-  background: #f7f8fa;
-  transition: background 0.18s;
-}
-
 .tables tbody tr:hover {
   background: #e1e8ff;
+}
+
+/* Pending account highlight styling (matches LGBTQ unread style) */
+.tables tbody tr.row-pending {
+  background: #eaf3ff !important;
+  border-left: 5px solid #07B0F2;
+  font-weight: 600;
+  color: #174a8c;
+}
+
+.tables tbody tr.row-pending:hover {
+  background: #d4e8ff !important;
 }
 
 /* --- Page Header and Subtitle --- */
@@ -535,9 +557,71 @@ h1, h2 {
 }
 
 .modern-modal-body {
-  padding: 18px 22px;
+  padding: 25px 28px;
   background: #f8fafc;
-  color: #123;
+  color: #223;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* New container layout for modal with fixed footer */
+.modern-modal-container {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  background: #f8fafc;
+}
+
+/* Scrollable content area */
+.modern-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  border-radius: 0;
+}
+
+/* Fixed footer for buttons */
+.modern-modal-footer {
+  flex-shrink: 0;
+  padding: 16px 28px;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 12px;
+  border-radius: 0 0 28px 28px;
+}
+
+.modern-modal-footer button {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 14px;
+}
+
+.modern-modal-footer button:hover {
+  opacity: 0.9;
+}
+
+/* Approve button */
+.modern-modal-footer button#approveBtn {
+  background: #10b981;
+  color: white;
+}
+
+.modern-modal-footer button#approveBtn:hover {
+  background: #059669;
+}
+
+/* Reject button */
+.modern-modal-footer button#rejectBtn {
+  background: #ef4444;
+  color: white;
+}
+
+.modern-modal-footer button#rejectBtn:hover {
+  background: #dc2626;
 }
 
 /* Reuse view-btn style from KK Profile for the buttons inside modal */
@@ -563,6 +647,121 @@ h1, h2 {
   box-sizing: border-box;
   border-radius: 30px !important;
 }
+
+/* Tab Styles */
+.tabs-container {
+  display: flex;
+  gap: 12px;
+  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: #0A2C59;
+  background: #f5f5f5;
+}
+
+.tab-btn.active {
+  color: #0A2C59;
+  border-bottom-color: #0A2C59;
+}
+
+/* Filter checkbox style */
+#showPendingOnly {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: #0A2C59;
+}
+
+.filter-row label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Pending filter label in table header */
+.pending-filter-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.pending-filter-label:hover {
+  background: #f0f0f0;
+  border-color: #0A2C59;
+}
+
+.pending-filter-label input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: #0A2C59;
+}
+
+/* Pagination Styles */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 12px 0;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #e0e0e0;
+  border-color: #0A2C59;
+  color: #0A2C59;
+}
+
+.pagination-btn.active {
+  background: #0A2C59;
+  color: white;
+  border-color: #0A2C59;
+  font-weight: 600;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 
 
 

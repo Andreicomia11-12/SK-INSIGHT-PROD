@@ -46,6 +46,11 @@
                         <span class="step-number">2</span>
                         <span class="step-label">Account</span>
                     </div>
+                    <div class="step-connector"></div>
+                    <div class="step" id="step3-indicator">
+                        <span class="step-number">3</span>
+                        <span class="step-label">ID Verification</span>
+                    </div>
                 </div>
 
                 <!-- Step 1: Personal Info -->
@@ -187,13 +192,47 @@
                         <button type="button" id="prevStep" class="btn btn-secondary">
                             <i class="fa-solid fa-arrow-left"></i> Back
                         </button>
-                        <button type="submit" class="btn btn-primary">
-                            Create Account <i class="fa-solid fa-check"></i>
+                        <button type="button" id="nextStep2" class="btn btn-primary">
+                            Continue <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
 
                     <div class="signin-link">
                         Already have an account? <a href="/Frontend/html/user/login.html">Sign In</a>
+                    </div>
+                </form>
+
+                <!-- Step 3: ID Upload -->
+                <form id="signupStep3" class="signup-step">
+                    <div class="form-section">
+                        <div class="form-group full-width">
+                            <label for="idImage">Upload ID Image *</label>
+                            <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 12px;">
+                                Please upload a clear photo of your valid ID (National ID, Passport, Driver's License, etc.)
+                            </p>
+                            <div class="input-wrapper" style="display: flex; flex-direction: column; gap: 12px;">
+                                <div id="idImagePreview" style="display: none; text-align: center; margin: 16px 0;">
+                                    <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #2563EB;" />
+                                    <button type="button" id="removeImage" class="btn btn-secondary" style="margin-top: 8px; width: 100%; max-width: 150px; margin-left: auto; margin-right: auto;">
+                                        Remove Image
+                                    </button>
+                                </div>
+                                <label for="idImageInput" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 24px; border: 2px dashed #2563EB; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; background-color: #f0f5ff;">
+                                    <i class="fa-solid fa-cloud-arrow-up" style="margin-right: 8px; color: #2563EB;"></i>
+                                    <span style="color: #0A2C59; font-weight: 500;">Click to upload or drag and drop</span>
+                                </label>
+                                <input type="file" id="idImageInput" name="idImage" accept="image/*" style="display: none;" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="prevStep3" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Complete Registration <i class="fa-solid fa-check"></i>
+                        </button>
                     </div>
                 </form>
 

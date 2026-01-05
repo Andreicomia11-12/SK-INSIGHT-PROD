@@ -31,8 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 
   const tableBody = document.querySelector(".tables table tbody");
-  const token = sessionStorage.getItem("token") || localStorage.getItem("token"); // <-- Updated line
-  const searchInput = document.getElementById("userSearch"); // <-- Add this line
+  const token = sessionStorage.getItem("token") || localStorage.getItem("token");
+  const searchInput = document.getElementById("userSearch");
+  const showPendingCheckbox = document.getElementById("showPendingOnly");
+  const tabAllBtn = document.getElementById("tabAll");
+  const tabNewBtn = document.getElementById("tabNew");
+  const tabPendingBtn = document.getElementById("tabPending");
+  const tabApprovedBtn = document.getElementById("tabApproved");
+  const tabRejectedBtn = document.getElementById("tabRejected");
 
   const API_BASE = (typeof window !== 'undefined' && window.API_BASE)
     ? window.API_BASE
@@ -40,7 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
       ? 'http://localhost:5000'
       : 'https://sk-insight.online';
 
-  let allUsers = []; // Store all users for filtering
+  let allUsers = [];
+  let currentTab = "all"; // Track which tab is active (all, pending, approved, rejected)
+  let showPending = false; // Track if only showing pending
+  const USERS_PER_PAGE = 10;
+  let currentPage = 1;
 
   // Fetch all users
   async function fetchUsers() {
@@ -55,15 +65,44 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error("Failed to fetch users");
 
       const users = await res.json();
-      allUsers = users.filter(u => u.role !== "admin"); // Store non-admins
-      renderTable(allUsers);
+      // Filter non-admins and sort by newest first (by createdAt in descending order)
+      allUsers = users
+        .filter(u => u.role !== "admin")
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      renderTable(getFilteredUsers());
     } catch (err) {
       console.error("Error:", err);
-      tableBody.innerHTML = `<tr><td colspan="4">Error loading users</td></tr>`;
+      tableBody.innerHTML = `<tr><td colspan="5">Error loading users</td></tr>`;
     }
   }
 
-  // Render table rows
+  // Get filtered users based on tab, search, and pending status
+  function getFilteredUsers() {
+    let filtered = allUsers;
+
+    // Filter by tab (all, pending, approved, rejected)
+    if (currentTab === "pending") {
+      filtered = filtered.filter(u => u.accStatus === "pending");
+    } else if (currentTab === "approved") {
+      filtered = filtered.filter(u => u.accStatus === "approved");
+    } else if (currentTab === "rejected") {
+      filtered = filtered.filter(u => u.accStatus === "rejected");
+    }
+    // "all" shows everything
+
+    // Filter by search term
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    if (searchTerm) {
+      filtered = filtered.filter(u =>
+        (u.username && u.username.toLowerCase().includes(searchTerm)) ||
+        (u.email && u.email.toLowerCase().includes(searchTerm))
+      );
+    }
+
+    return filtered;
+  }
+
+  // Render table rows with highlighting for unapproved users
   function renderTable(data) {
     tableBody.innerHTML = "";
 
@@ -71,20 +110,43 @@ document.addEventListener("DOMContentLoaded", () => {
     const counter = document.getElementById("userAccCount");
     if (counter) counter.textContent = data.length;
 
-    if (!data.length) {
+    // Calculate pagination
+    const totalPages = Math.ceil(data.length / USERS_PER_PAGE);
+    const startIdx = (currentPage - 1) * USERS_PER_PAGE;
+    const endIdx = startIdx + USERS_PER_PAGE;
+    const pageUsers = data.slice(startIdx, endIdx);
+
+    if (!pageUsers.length) {
       tableBody.innerHTML = `<tr><td colspan="5">No users found</td></tr>`;
+      renderPagination(data.length, totalPages);
       return;
     }
 
-    data.forEach((u, index) => {
+    pageUsers.forEach((u, index) => {
       const tr = document.createElement("tr");
-      tr.setAttribute("data-id", u._id); // For modal
+      tr.setAttribute("data-id", u._id);
+      
+      // Add pending class if user is not approved
+      if (u.accStatus !== "approved") {
+        tr.classList.add("row-pending");
+      }
+
+      let statusBadge = '';
+      if (u.accStatus === "approved") {
+        statusBadge = '<span style="background: #22c55e; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">✓ APPROVED</span>';
+      } else if (u.accStatus === "rejected") {
+        statusBadge = '<span style="background: #ef4444; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">✗ REJECTED</span>';
+      } else {
+        statusBadge = '<span style="background: #f59e0b; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">⏱ PENDING</span>';
+      }
+      
       tr.innerHTML = `
-        <td style="text-align: center;">${index + 1}</td>
-        <td>${u.username}</td>
-        <td>${u.email}</td>
-        <td style="text-align: center;">${u.birthday ? new Date(u.birthday).toLocaleDateString() : "-"}</td>
-        <td style="text-align: center;">
+        <td style="width: 8%; text-align: center;">${startIdx + index + 1}</td>
+        <td style="width: 22%; text-align: center;">${u.username}</td>
+        <td style="width: 25%;">${u.email}</td>
+        <td style="width: 13%; text-align: center;">${u.birthday ? new Date(u.birthday).toLocaleDateString() : "-"}</td>
+        <td style="width: 12%; text-align: center;">${statusBadge}</td>
+        <td style="width: 20%; text-align: center;">
           <button class="view-btn" data-id="${u._id}" title="View">
             <i class="fa-solid fa-eye"></i>
           </button>
@@ -93,19 +155,67 @@ document.addEventListener("DOMContentLoaded", () => {
       tableBody.appendChild(tr);
     });
 
+    // Render pagination controls
+    renderPagination(data.length, totalPages);
+
     // Attach modal openers
     attachUserModalOpeners();
+  }
+
+  // Tab switching
+  function removeAllActiveTabs() {
+    tabAllBtn?.classList.remove("active");
+    tabPendingBtn?.classList.remove("active");
+    tabApprovedBtn?.classList.remove("active");
+    tabRejectedBtn?.classList.remove("active");
+  }
+
+  tabAllBtn?.addEventListener("click", () => {
+    currentTab = "all";
+    currentPage = 1;
+    removeAllActiveTabs();
+    tabAllBtn.classList.add("active");
+    renderTable(getFilteredUsers());
+  });
+
+  tabPendingBtn?.addEventListener("click", () => {
+    currentTab = "pending";
+    currentPage = 1;
+    removeAllActiveTabs();
+    tabPendingBtn.classList.add("active");
+    renderTable(getFilteredUsers());
+  });
+
+  tabApprovedBtn?.addEventListener("click", () => {
+    currentTab = "approved";
+    currentPage = 1;
+    removeAllActiveTabs();
+    tabApprovedBtn.classList.add("active");
+    renderTable(getFilteredUsers());
+  });
+
+  tabRejectedBtn?.addEventListener("click", () => {
+    currentTab = "rejected";
+    currentPage = 1;
+    removeAllActiveTabs();
+    tabRejectedBtn.classList.add("active");
+    renderTable(getFilteredUsers());
+  });
+
+  // Pending checkbox filter (deprecated, but kept for backward compatibility)
+  if (showPendingCheckbox) {
+    showPendingCheckbox.addEventListener("change", () => {
+      currentPage = 1; // Reset to first page
+      showPending = showPendingCheckbox.checked;
+      renderTable(getFilteredUsers());
+    });
   }
 
   // Search filter
   if (searchInput) {
     searchInput.addEventListener("input", () => {
-      const term = searchInput.value.trim().toLowerCase();
-      const filtered = allUsers.filter(u =>
-        (u.username && u.username.toLowerCase().includes(term)) ||
-        (u.email && u.email.toLowerCase().includes(term))
-      );
-      renderTable(filtered);
+      currentPage = 1; // Reset to first page
+      renderTable(getFilteredUsers());
     });
   }
 
@@ -124,14 +234,62 @@ document.addEventListener("DOMContentLoaded", () => {
       toast: true,
       position: 'top-end'
     });
-    // Optionally refresh or update something if needed
   });
+
+  // Pagination function
+  function renderPagination(totalUsers, totalPages) {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    if (totalPages <= 1) return;
+
+    // Previous button
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "pagination-btn";
+    prevBtn.textContent = "Prev";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable(getFilteredUsers());
+      }
+    };
+    pagination.appendChild(prevBtn);
+
+    // Page numbers (show max 5 pages at a time)
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + 4);
+    if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.className = "pagination-btn" + (i === currentPage ? " active" : "");
+      pageBtn.textContent = i;
+      pageBtn.onclick = () => {
+        currentPage = i;
+        renderTable(getFilteredUsers());
+      };
+      pagination.appendChild(pageBtn);
+    }
+
+    // Next button
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "pagination-btn";
+    nextBtn.textContent = "Next";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable(getFilteredUsers());
+      }
+    };
+    pagination.appendChild(nextBtn);
+  }
 
   function attachUserModalOpeners() {
     document.querySelectorAll(".view-btn").forEach(btn => {
       btn.addEventListener("click", async () => {
         const userId = btn.dataset.id;
-        // Fetch user details if needed, then show modal
         showUserModal(userId);
       });
     });
@@ -170,65 +328,240 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </div>
 
-        <div class="modern-modal-body" style="padding: 25px 28px; background: #f8fafc; color: #223; font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; overflow-y: auto; max-height: 520px; border-radius: 0 0 28px 28px;">
+        <div class="modern-modal-container" style="display: flex; flex-direction: column; height: 650px; background: #f8fafc;">
           
-          <!-- User Info Cards Grid (2 columns) - NO username/email here -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px;">
+          <!-- Scrollable Content Area -->
+          <div class="modern-modal-body" style="padding: 28px 32px; background: #f8fafc; color: #223; font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; overflow-y: auto; flex: 1; border-radius: 0;">
             
-            <!-- Birthday Card -->
-            <div class="profile-detail" style="background: #fff; padding: 16px 20px; border-radius: 14px; box-shadow: 0 2px 8px rgba(10,44,89,0.06); border: 1px solid #f0f4fa;">
-              <div style="font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Birthday</div>
-              <div style="font-weight: 700; color: #0A2C59; font-size: 16px;">${user.birthday ? new Date(user.birthday).toLocaleDateString() : '-'}</div>
+            <!-- Section 1: Approval Status -->
+            <div style="margin-bottom: 24px;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <h2 style="margin: 0; font-size: 14px; font-weight: 700; color: #0A2C59; text-transform: uppercase; letter-spacing: 0.8px;">Verification Status</h2>
+                <div style="padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; ${user.accStatus === "approved" ? "background: #d1fae5; color: #065f46;" : user.accStatus === "rejected" ? "background: #fee2e2; color: #991b1b;" : "background: #fed7aa; color: #92400e;"}">${user.accStatus === "approved" ? "✓ APPROVED" : user.accStatus === "rejected" ? "✗ REJECTED" : "⏱ PENDING"}</div>
+              </div>
+              ${user.rejectionReason ? `
+                <div style="padding: 12px 14px; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 8px;">
+                  <div style="font-weight: 700; color: #b91c1c; font-size: 11px; text-transform: uppercase; margin-bottom: 6px;">Rejection Reason</div>
+                  <div style="color: #7f1d1d; font-size: 13px; line-height: 1.5;">${user.rejectionReason}</div>
+                </div>
+              ` : ''}
             </div>
 
-            <!-- Age Card -->
-            <div class="profile-detail" style="background: #fff; padding: 16px 20px; border-radius: 14px; box-shadow: 0 2px 8px rgba(10,44,89,0.06); border: 1px solid #f0f4fa;">
-              <div style="font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Age</div>
-              <div style="font-weight: 700; color: #0A2C59; font-size: 16px;">${user.age ?? '-'}</div>
+            <!-- Section 2: User Info (Horizontal Layout) -->
+            <div style="margin-bottom: 24px;">
+              <h2 style="margin: 0 0 14px 0; font-size: 14px; font-weight: 700; color: #0A2C59; text-transform: uppercase; letter-spacing: 0.8px;">Account Information</h2>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+                
+                <!-- Birthday -->
+                <div style="background: #fff; padding: 14px 16px; border-radius: 10px; border: 1px solid #f0f4fa; box-shadow: 0 1px 3px rgba(10,44,89,0.04);">
+                  <div style="font-weight: 600; color: #64748b; font-size: 11px; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Birthday</div>
+                  <div style="font-weight: 700; color: #0A2C59; font-size: 15px;">${user.birthday ? new Date(user.birthday).toLocaleDateString() : '-'}</div>
+                </div>
+
+                <!-- Age -->
+                <div style="background: #fff; padding: 14px 16px; border-radius: 10px; border: 1px solid #f0f4fa; box-shadow: 0 1px 3px rgba(10,44,89,0.04);">
+                  <div style="font-weight: 600; color: #64748b; font-size: 11px; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Age</div>
+                  <div style="font-weight: 700; color: #0A2C59; font-size: 15px;">${user.age ?? '-'}</div>
+                </div>
+
+                <!-- Account Created -->
+                <div style="background: #fff; padding: 14px 16px; border-radius: 10px; border: 1px solid #f0f4fa; box-shadow: 0 1px 3px rgba(10,44,89,0.04);">
+                  <div style="font-weight: 600; color: #64748b; font-size: 11px; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Created</div>
+                  <div style="font-weight: 700; color: #0A2C59; font-size: 13px;">${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}</div>
+                </div>
+              </div>
             </div>
 
-            <!-- Account Created Card (Full Width) -->
-            <div class="profile-detail" style="background: #fff; padding: 16px 20px; border-radius: 14px; box-shadow: 0 2px 8px rgba(10,44,89,0.06); border: 1px solid #f0f4fa; grid-column: 1 / -1;">
-              <div style="font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Account Created</div>
-              <div style="font-weight: 700; color: #0A2C59; font-size: 16px;">${user.createdAt ? new Date(user.createdAt).toLocaleString() : '-'}</div>
+            <!-- Section 3: Submitted Forms -->
+            <div style="margin-bottom: 24px;">
+              <h2 style="margin: 0 0 14px 0; font-size: 14px; font-weight: 700; color: #0A2C59; text-transform: uppercase; letter-spacing: 0.8px;">Submitted Forms</h2>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                
+                <!-- KK Profiling -->
+                <div style="background: #fff; padding: 14px; border-radius: 10px; border: 1px solid #f0f4fa; box-shadow: 0 1px 3px rgba(10,44,89,0.04); display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                    <div style="width: 4px; height: 18px; background: #07B0F2; border-radius: 2px;"></div>
+                    <div style="font-weight: 700; color: #0A2C59; font-size: 13px;">KK Profile</div>
+                  </div>
+                  ${kkId ? `<a href="#" onclick="window.openProfileTabWithToken('/Frontend/html/admin/KK-Profile.html', '${kkId}'); return false;" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; background: #07B0F2; color: #fff; border: none; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.2s;">
+                    <i class="fas fa-external-link-alt"></i> View
+                  </a>` : `<div style="color: #aaa; font-size: 12px; font-weight: 500; text-align: center; padding: 8px 0;">Not submitted</div>`}
+                </div>
+
+                <!-- LGBTQIA+ Profiling -->
+                <div style="background: #fff; padding: 14px; border-radius: 10px; border: 1px solid #f0f4fa; box-shadow: 0 1px 3px rgba(10,44,89,0.04); display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                    <div style="width: 4px; height: 18px; background: #8b5cf6; border-radius: 2px;"></div>
+                    <div style="font-weight: 700; color: #0A2C59; font-size: 13px;">LGBTQ+ Profile</div>
+                  </div>
+                  ${lgbtqId ? `<a href="#" onclick="window.openProfileTabWithToken('/Frontend/html/admin/LGBTQ-Profile.html', '${lgbtqId}'); return false;" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; background: #8b5cf6; color: #fff; border: none; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.2s;">
+                    <i class="fas fa-external-link-alt"></i> View
+                  </a>` : `<div style="color: #aaa; font-size: 12px; font-weight: 500; text-align: center; padding: 8px 0;">Not submitted</div>`}
+                </div>
+
+                <!-- Educational Assistance -->
+                <div style="background: #fff; padding: 14px; border-radius: 10px; border: 1px solid #f0f4fa; box-shadow: 0 1px 3px rgba(10,44,89,0.04); display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                    <div style="width: 4px; height: 18px; background: #06b6d4; border-radius: 2px;"></div>
+                    <div style="font-weight: 700; color: #0A2C59; font-size: 13px;">Education Asst.</div>
+                  </div>
+                  ${educId ? `<a href="#" onclick="window.openProfileTabWithToken('/Frontend/html/admin/Educational-Assistance-admin.html', '${educId}'); return false;" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; background: #06b6d4; color: #fff; border: none; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.2s;">
+                    <i class="fas fa-external-link-alt"></i> View
+                  </a>` : `<div style="color: #aaa; font-size: 12px; font-weight: 500; text-align: center; padding: 8px 0;">Not submitted</div>`}
+                </div>
+              </div>
             </div>
+
+            <!-- Section 4: ID Document -->
+            <div>
+              <h2 style="margin: 0 0 14px 0; font-size: 14px; font-weight: 700; color: #0A2C59; text-transform: uppercase; letter-spacing: 0.8px;">ID Document</h2>
+              <div style="background: #fff; padding: 16px; border-radius: 10px; border: 1px solid #f0f4fa; box-shadow: 0 1px 3px rgba(10,44,89,0.04);">
+                ${user.idImage ? `
+                  <img src="${API_BASE}/${user.idImage}" alt="User ID" style="width: 100%; max-height: 280px; border-radius: 8px; border: 1px solid #e5e7eb; object-fit: contain;" />
+                ` : `<div style="color: #999; font-size: 13px; padding: 32px 20px; text-align: center; background: #f8fafc; border-radius: 8px; border: 1px dashed #d0d0d0;">📋 No ID document uploaded</div>`}
+              </div>
+            </div>
+
           </div>
 
-          <!-- Submitted Forms Section -->
-          <div style="background: #fff; padding: 20px; border-radius: 14px; box-shadow: 0 2px 8px rgba(10,44,89,0.06); border: 1px solid #f0f4fa;">
-            <h3 style="margin: 0 0 18px 0; font-size: 16px; font-weight: 700; color: #0A2C59; letter-spacing: 0.3px;">Submitted Forms</h3>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
-              
-              <!-- KK Profiling -->
-              <div style="display: flex; flex-direction: column; gap: 10px; padding: 14px; background: #f8fafc; border-radius: 10px; border-left: 4px solid #07B0F2;">
-                <div style="font-weight: 700; color: #0A2C59; font-size: 14px; letter-spacing: 0.2px;">KK Profiling</div>
-                ${kkId ? `<a href="#" onclick="window.openProfileTabWithToken('/Frontend/html/admin/KK-Profile.html', '${kkId}'); return false;" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; background: #07B0F2; color: #fff; border: none; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s;">
-                  <i class="fas fa-arrow-up-right-from-square"></i> View
-                </a>` : `<div style="color: #888; font-size: 13px; font-weight: 500;">Not submitted</div>`}
-              </div>
-
-              <!-- LGBTQIA+ Profiling -->
-              <div style="display: flex; flex-direction: column; gap: 10px; padding: 14px; background: #f8fafc; border-radius: 10px; border-left: 4px solid #8b5cf6;">
-                <div style="font-weight: 700; color: #0A2C59; font-size: 14px; letter-spacing: 0.2px;">LGBTQIA+ Profiling</div>
-                ${lgbtqId ? `<a href="#" onclick="window.openProfileTabWithToken('/Frontend/html/admin/LGBTQ-Profile.html', '${lgbtqId}'); return false;" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; background: #8b5cf6; color: #fff; border: none; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s;">
-                  <i class="fas fa-arrow-up-right-from-square"></i> View
-                </a>` : `<div style="color: #888; font-size: 13px; font-weight: 500;">Not submitted</div>`}
-              </div>
-
-              <!-- Educational Assistance -->
-              <div style="display: flex; flex-direction: column; gap: 10px; padding: 14px; background: #f8fafc; border-radius: 10px; border-left: 4px solid #06b6d4;">
-                <div style="font-weight: 700; color: #0A2C59; font-size: 14px; letter-spacing: 0.2px;">Educational Assistance</div>
-                ${educId ? `<a href="#" onclick="window.openProfileTabWithToken('/Frontend/html/admin/Educational-Assistance-admin.html', '${educId}'); return false;" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; background: #06b6d4; color: #fff; border: none; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s;">
-                  <i class="fas fa-arrow-up-right-from-square"></i> View
-                </a>` : `<div style="color: #888; font-size: 13px; font-weight: 500;">Not submitted</div>`}
-              </div>
+          <!-- Fixed Footer with Action Buttons -->
+          ${user.accStatus !== "approved" ? `
+            <div class="modern-modal-footer" style="padding: 14px 32px; background: #fff; border-top: 1px solid #e5e7eb; display: flex; gap: 10px; border-radius: 0 0 28px 28px; align-items: center;">
+              <button id="rejectBtn" data-user-id="${user._id}" style="flex: 1; padding: 11px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 13px;">
+                <i class="fas fa-times"></i> Reject
+              </button>
+              <button id="approveBtn" data-user-id="${user._id}" style="flex: 1; padding: 11px 16px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 13px;">
+                <i class="fas fa-check"></i> Approve
+              </button>
             </div>
-          </div>
+          ` : `
+            <div class="modern-modal-footer" style="padding: 14px 32px; background: #fff; border-top: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; border-radius: 0 0 28px 28px;">
+              <div style="color: #059669; font-size: 13px; font-weight: 600; letter-spacing: 0.3px;">✓ Approved • User can now login</div>
+            </div>
+          `}
 
         </div>
       `
     });
+
+    // Add event listeners for approve/reject buttons
+    setTimeout(() => {
+      const approveBtn = document.getElementById('approveBtn');
+      const rejectBtn = document.getElementById('rejectBtn');
+
+      if (approveBtn) {
+        approveBtn.addEventListener('click', async () => {
+          const confirmed = await Swal.fire({
+            icon: 'question',
+            title: 'Approve ID?',
+            text: 'Are you sure you want to approve this user\'s ID? They will be able to login.',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Approve'
+          });
+
+          if (confirmed.isConfirmed) {
+            try {
+              const response = await fetch(`${API_BASE}/api/users/${userId}/approve-id`, {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
+                  'Content-Type': 'application/json'
+                }
+              });
+
+              if (response.ok) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Approved!',
+                  text: 'User ID has been approved.',
+                  timer: 2000,
+                  showConfirmButton: false
+                });
+                fetchUsers();
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: 'Failed to approve user'
+                });
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while approving the user'
+              });
+            }
+          }
+        });
+      }
+
+      if (rejectBtn) {
+        rejectBtn.addEventListener('click', async () => {
+          const { value: reason, isConfirmed } = await Swal.fire({
+            icon: 'warning',
+            title: 'Reject ID?',
+            input: 'textarea',
+            inputLabel: 'Rejection Reason *',
+            inputPlaceholder: 'Enter reason for rejection',
+            inputAttributes: {
+              rows: 4,
+              style: 'min-height: 100px;',
+              required: 'required'
+            },
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Reject',
+            inputValidator: (value) => {
+              if (!value || value.trim() === '') {
+                return 'Rejection reason is required!';
+              }
+            }
+          });
+
+          if (isConfirmed && reason && reason.trim() !== '') {
+            try {
+              const response = await fetch(`${API_BASE}/api/users/${userId}/reject-id`, {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reason: reason.trim() })
+              });
+
+              if (response.ok) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Rejected!',
+                  text: 'User ID has been rejected.',
+                  timer: 2000,
+                  showConfirmButton: false
+                });
+                fetchUsers();
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: 'Failed to reject user'
+                });
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while rejecting the user'
+              });
+            }
+          }
+        });
+      }
+    }, 100);
   } catch (error) {
     console.error('Error fetching user details:', error);
     Swal.fire({
